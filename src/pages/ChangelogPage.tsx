@@ -94,7 +94,7 @@ const releases: Release[] = [
     tag: 'major',
     icon: <Rocket className="w-5 h-5" />,
     highlights: [
-      'Initial release of Lyra Web3 Playground',
+      'Initial release of BNB Chain AI Toolkit',
       'Interactive Solidity playground with Monaco Editor',
       'Browser-based Solidity compilation (no backend required)',
       'MetaMask wallet integration for testnet deployment',
@@ -114,7 +114,7 @@ const tagStyles: Record<Release['tag'], string> = {
 export default function ChangelogPage() {
   useSEO({
     title: 'Changelog',
-    description: 'View the latest updates, new features, and improvements to Lyra Web3 Playground. Stay up to date with our development progress.',
+    description: 'View the latest updates, new features, and improvements to BNB Chain AI Toolkit. Stay up to date with our development progress.',
     path: '/changelog'
   });
 
@@ -128,7 +128,7 @@ export default function ChangelogPage() {
           </div>
           <h1 className="text-4xl md:text-5xl font-black mt-4">What's New</h1>
           <p className="text-lg text-gray-600 dark:text-gray-400 mt-4 max-w-3xl mx-auto">
-            Track the latest updates and improvements to Lyra Web3 Playground.
+            Track the latest updates and improvements to BNB Chain AI Toolkit.
           </p>
         </div>
 
@@ -202,7 +202,7 @@ export default function ChangelogPage() {
             Want to contribute to the next release?
           </p>
           <a
-            href="https://github.com/nirholas/lyra-web3-playground"
+            href="https://github.com/nirholas/bnb-chain-toolkit"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center space-x-2 text-purple-600 dark:text-purple-400 font-medium hover:underline"

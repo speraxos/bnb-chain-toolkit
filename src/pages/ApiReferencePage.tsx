@@ -243,7 +243,7 @@ const apiSections: ApiSection[] = [
 export default function ApiReferencePage() {
   useSEO({
     title: 'API Reference',
-    description: 'Complete API documentation for Lyra Web3 Playground. Compilation, deployment, template, and project sharing endpoints with examples.',
+    description: 'Complete API documentation for BNB Chain AI Toolkit. Compilation, deployment, template, and project sharing endpoints with examples.',
     path: '/docs/api'
   });
 
@@ -291,7 +291,7 @@ export default function ApiReferencePage() {
               <h1 className="text-3xl md:text-4xl font-black">API Reference</h1>
             </div>
             <p className="text-xl text-blue-100">
-              Complete reference for the Lyra Web3 Playground REST API
+              Complete reference for the BNB Chain AI Toolkit REST API
             </p>
           </div>
         </div>
@@ -307,13 +307,13 @@ export default function ApiReferencePage() {
             </h2>
             <div className="flex items-center space-x-3">
               <code className="flex-1 px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg font-mono text-sm">
-                https://api.lyra.works
+                https://api.bnbchaintoolkit.com
               </code>
               <button
-                onClick={() => copyCode('https://api.lyra.works')}
+                onClick={() => copyCode('https://api.bnbchaintoolkit.com')}
                 className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
               >
-                {copiedCode === 'https://api.lyra.works' ? (
+                {copiedCode === 'https://api.bnbchaintoolkit.com' ? (
                   <CheckCircle className="w-5 h-5 text-green-500" />
                 ) : (
                   <Copy className="w-5 h-5" />
@@ -336,7 +336,7 @@ export default function ApiReferencePage() {
             </pre>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
               API keys are available for registered developers. Contact us on{' '}
-              <a href="https://github.com/nirholas/lyra-web3-playground/discussions" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+              <a href="https://github.com/nirholas/bnb-chain-toolkit/discussions" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
                 GitHub Discussions
               </a>{' '}
               to request access.
@@ -472,7 +472,7 @@ export default function ApiReferencePage() {
             <h3 className="font-bold mb-4">Need Help?</h3>
             <div className="flex flex-wrap gap-4">
               <a
-                href="https://github.com/nirholas/lyra-web3-playground/discussions"
+                href="https://github.com/nirholas/bnb-chain-toolkit/discussions"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center space-x-2 text-blue-600 dark:text-blue-400 hover:underline"

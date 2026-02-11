@@ -85,8 +85,8 @@ export default function ContributePage() {
     {
       step: 1,
       title: 'Fork the Repository',
-      description: 'Create your own fork of the nirholas/lyra-web3-playground repository on GitHub.',
-      code: 'gh repo fork nirholas/lyra-web3-playground --clone'
+      description: 'Create your own fork of the nirholas/bnb-chain-toolkit repository on GitHub.',
+      code: 'gh repo fork nirholas/bnb-chain-toolkit --clone'
     },
     {
       step: 2,
@@ -135,13 +135,13 @@ export default function ContributePage() {
             <h1 className="text-4xl font-bold">Contribute to Lyra</h1>
           </div>
           <p className="text-xl text-white/80 max-w-2xl mb-8">
-            Lyra Web3 Playground is open source and community-driven. 
+            BNB Chain AI Toolkit is open source and community-driven. 
             Every contribution, big or small, helps make blockchain development more accessible.
           </p>
           
           <div className="flex flex-wrap gap-4">
             <a
-              href="https://github.com/nirholas/lyra-web3-playground"
+              href="https://github.com/nirholas/bnb-chain-toolkit"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition-colors"
@@ -150,7 +150,7 @@ export default function ContributePage() {
               View on GitHub
             </a>
             <a
-              href="https://github.com/nirholas/lyra-web3-playground/issues"
+              href="https://github.com/nirholas/bnb-chain-toolkit/issues"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 bg-white/20 text-white font-semibold rounded-lg hover:bg-white/30 transition-colors"
@@ -291,7 +291,7 @@ export default function ContributePage() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
-              href="https://github.com/nirholas/lyra-web3-playground/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22"
+              href="https://github.com/nirholas/bnb-chain-toolkit/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition-colors"

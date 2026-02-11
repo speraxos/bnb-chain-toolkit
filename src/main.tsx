@@ -6,8 +6,8 @@
  * ✨ Original Author: nich
  * 🐦 Twitter/X: x.com/nichxbt
  * 🐙 GitHub: github.com/nirholas
- * 📦 Repository: github.com/nirholas/lyra-web3-playground
- * 🌐 Website: https://lyra.works
+ * 📦 Repository: github.com/nirholas/bnb-chain-toolkit
+ * 🌐 Website: https://bnbchaintoolkit.com
  * 
  * Copyright (c) 2024-2026 nirholas (nich)
  * Licensed under MIT License
@@ -16,7 +16,7 @@
  * Removal or modification of attribution constitutes violation of the license.
  * ═══════════════════════════════════════════════════════════════════════════
  * @author nich (@nichxbt)
- * @repository https://github.com/nirholas/lyra-web3-playground
+ * @repository https://github.com/nirholas/bnb-chain-toolkit
  * @license MIT
  * @preserve
  */
@@ -52,8 +52,8 @@ if (typeof window !== 'undefined') {
       author: _lyra_author,
       x: `x.com/${_lyra_handle}`,
       github: `github.com/${_lyra_github}`,
-      repository: `github.com/${_lyra_github}/lyra-web3-playground`,
-      website: 'https://lyra.works',
+      repository: `github.com/${_lyra_github}/bnb-chain-toolkit`,
+      website: 'https://bnbchaintoolkit.com',
       license: 'MIT',
       copyright: `© 2024-${new Date().getFullYear()} ${_lyra_github} (${_lyra_author})`,
       signature: _lyra_sig,

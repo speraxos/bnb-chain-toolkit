@@ -7,10 +7,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSEO } from '@/hooks/useSEO';
-import { 
-  BookOpen, 
-  Clock, 
-  Code, 
+import {
+  BookOpen,
+  Clock,
+  Code,
   Zap,
   CheckCircle,
   Search,
@@ -22,7 +22,7 @@ import { computeCompletionPercent } from '@/utils/tutorialProgress';
 export default function TutorialBrowser() {
   useSEO({
     title: 'Tutorials',
-    description: 'Learn blockchain development with 50+ interactive tutorials. From Solidity basics to advanced DeFi and NFT development, all levels welcome.',
+    description: 'Learn BNB Chain development with 50+ interactive tutorials. From MCP servers to DeFi agents, smart contracts to cross-chain tools.',
     path: '/tutorials'
   });
 
@@ -34,16 +34,16 @@ export default function TutorialBrowser() {
   const categories = ['all', ...new Set(tutorials.map(t => t.category))];
 
   const filteredTutorials = tutorials.filter(tutorial => {
-    const matchesSearch = 
+    const matchesSearch =
       tutorial.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tutorial.description.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesDifficulty = 
+
+    const matchesDifficulty =
       selectedDifficulty === 'all' || tutorial.difficulty === selectedDifficulty;
-    
-    const matchesCategory = 
+
+    const matchesCategory =
       selectedCategory === 'all' || tutorial.category === selectedCategory;
-    
+
     return matchesSearch && matchesDifficulty && matchesCategory;
   });
 
@@ -65,7 +65,7 @@ export default function TutorialBrowser() {
             Interactive Tutorials
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Learn Web3 development through hands-on, step-by-step tutorials with live code examples
+            Learn BNB Chain development through hands-on, step-by-step tutorials with live code examples
           </p>
         </div>
 

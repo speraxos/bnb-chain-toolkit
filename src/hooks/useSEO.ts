@@ -6,9 +6,9 @@ interface SEOProps {
   path?: string;
 }
 
-const BASE_TITLE = 'Lyra Web3 Playground';
+const BASE_TITLE = 'BNB Chain AI Toolkit';
 const BASE_DESCRIPTION = 'Learn blockchain development with interactive examples. Compile and deploy Solidity smart contracts directly in your browser.';
-const BASE_URL = 'https://lyra.works';
+const BASE_URL = 'https://bnbchaintoolkit.com';
 
 /**
  * SEO component for dynamic page titles and meta tags

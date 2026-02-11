@@ -55,23 +55,23 @@ const sortOptions: { id: SortBy; label: string; icon: any }[] = [
 export default function ExplorePage() {
   useSEO({
     title: 'Explore Projects',
-    description: 'Discover community-built smart contracts, dApps, and tutorials. Browse, fork, and learn from real Web3 projects built on Lyra.',
+    description: 'Discover community-built smart contracts, dApps, and tutorials. Browse, fork, and learn from real BNB Chain projects.',
     path: '/explore'
   });
 
   const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuthStore();
-  
+
   const [projects, setProjects] = useState<SharedProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
-  
+
   const [search, setSearch] = useState(searchParams.get('q') || '');
   const [category, setCategory] = useState<Category>((searchParams.get('category') as Category) || 'all');
   const [sortBy, setSortBy] = useState<SortBy>((searchParams.get('sort') as SortBy) || 'recent');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [showFilters, setShowFilters] = useState(false);
-  
+
   const [page, setPage] = useState(1);
   const limit = 20;
 
@@ -81,14 +81,14 @@ export default function ExplorePage() {
 
   const loadProjects = async () => {
     setLoading(true);
-    
+
     const { data, total: totalCount } = await getPublicProjects({
       category: category === 'all' ? undefined : category,
       sortBy,
       limit,
       offset: (page - 1) * limit
     });
-    
+
     setProjects(data);
     setTotal(totalCount);
     setLoading(false);
@@ -117,7 +117,7 @@ export default function ExplorePage() {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays === 0) return 'Today';
     if (diffDays === 1) return 'Yesterday';
     if (diffDays < 7) return `${diffDays} days ago`;
@@ -147,7 +147,7 @@ export default function ExplorePage() {
             <p className="text-xl text-gray-300 mb-8">
               Discover shared projects, templates, and tutorials from developers around the world
             </p>
-            
+
             {/* Search Bar */}
             <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
               <div className="relative">
@@ -206,7 +206,7 @@ export default function ExplorePage() {
                   {sortOptions.find(s => s.id === sortBy)?.label}
                   <ChevronDown className="w-4 h-4" />
                 </button>
-                
+
                 {showFilters && (
                   <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-lg shadow-xl border border-gray-200 dark:border-gray-800 py-1 z-30">
                     {sortOptions.map((option) => (

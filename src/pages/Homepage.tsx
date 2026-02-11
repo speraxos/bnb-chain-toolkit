@@ -1,1534 +1,587 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * LYRA WEB3 PLAYGROUND - Homepage
+ * BNB CHAIN AI TOOLKIT - Homepage
  * ═══════════════════════════════════════════════════════════════════════════
  * ✨ Author: nich | 🐦 x.com/nichxbt | 🐙 github.com/nirholas
- * 📦 github.com/nirholas/lyra-web3-playground | 🌐 https://lyra.works
+ * 📦 github.com/nirholas/bnb-chain-toolkit
  * Copyright (c) 2024-2026 nirholas (nich) - MIT License
  * @preserve
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
-// Attribution marker - nich | x.com/nichxbt | github.com/nirholas
-const __attr__ = { _n: 'nich', _x: 'nichxbt', _g: 'nirholas' };
-
 import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useSEO } from '@/hooks/useSEO';
-import Editor from '@monaco-editor/react';
 import { useThemeStore } from '@/stores/themeStore';
 import PriceTicker from '@/components/PriceTicker';
 import { TopProtocolsWidget, TopYieldsWidget, TopChainsWidget, DeFiSummaryBar } from '@/components/DeFiWidgets';
-import { useWalletStore } from '@/stores/walletStore';
-import { FullStackPlayground, PlaygroundFile } from '@/components/FullStackPlayground';
-import LivePreview from '@/components/Playground/LivePreview';
-import TemplateSelector from '@/components/Playground/TemplateSelector';
-import { ContractTemplate, contractTemplates } from '@/utils/contractTemplates';
-import { LyraChatPanel } from '@/components/Lyra/LyraChat';
-import { generateLyraResponse, getWelcomeMessage } from '@/services/lyraAI';
-import { 
-  Wallet, 
-  Code, 
-  Image, 
-  Vote, 
-  Layers,
-  Bot,
-  Brain,
-  Sparkles,
-  Search,
-  ChevronRight,
-  Zap,
-  Shield,
-  Globe,
-  ArrowDownUp,
-  Coins,
-  Lock,
-  DollarSign,
-  Sprout,
-  ShoppingCart,
-  BookOpen,
-  Monitor,
-  FileCode,
-  Terminal,
-  Cpu,
-  Users,
-  History,
-  Target,
-  Eye,
-  Palette,
-  Languages,
-  MousePointer,
-  TrendingUp,
-  BarChart3,
-  GitBranch,
-  TestTube,
-  Play,
-  Copy,
-  Check,
-  RefreshCw,
-  ExternalLink,
-  MessageCircle,
-  GraduationCap,
-  Map,
-  HelpCircle,
-  Heart,
-  FileText,
-  Calendar
+import {
+    Zap, Shield, Globe, Bot, Sparkles, ChevronRight,
+    Code, BookOpen, Terminal, Cpu, Users, Layers,
+    Coins, GitBranch, Play,
+    ExternalLink, GraduationCap, Wallet,
+    BarChart3, Eye, Database, Server, Wrench, Package,
+    Activity, Network, Blocks, Plug, FileCode
 } from 'lucide-react';
-import { Example } from '@/types';
-import { cn } from '@/utils/helpers';
 import useI18n from '@/stores/i18nStore';
 
-const examples: Example[] = [
-  // Basic Web3 Examples
-  {
-    id: 'wallet-connect',
-    title: 'Wallet Connection',
-    description: 'Connect MetaMask, view balance, and interact with Ethereum networks',
-    category: 'web3',
-    chain: 'ethereum',
-    difficulty: 'beginner',
-    tags: ['ethereum', 'wallet', 'metamask'],
-    component: () => null,
-    icon: Wallet,
-  },
-  {
-    id: 'token-swap',
-    title: 'Token Swapper',
-    description: 'Swap tokens using decentralized exchanges with live price quotes',
-    category: 'web3',
-    chain: 'ethereum',
-    difficulty: 'beginner',
-    tags: ['defi', 'swap', 'dex'],
-    component: () => null,
-    icon: ArrowDownUp,
-  },
-  
-  // DeFi Examples
-  {
-    id: 'defi-lending',
-    title: 'DeFi Lending Protocol',
-    description: 'Deposit assets to earn interest and borrow against collateral like Aave',
-    category: 'web3',
-    chain: 'ethereum',
-    difficulty: 'intermediate',
-    tags: ['defi', 'lending', 'borrowing', 'aave'],
-    component: () => null,
-    icon: DollarSign,
-  },
-  {
-    id: 'yield-farming',
-    title: 'Yield Farming',
-    description: 'Stake LP tokens to earn rewards from liquidity provision',
-    category: 'web3',
-    chain: 'ethereum',
-    difficulty: 'intermediate',
-    tags: ['defi', 'farming', 'liquidity', 'rewards'],
-    component: () => null,
-    icon: Sprout,
-  },
-  {
-    id: 'staking',
-    title: 'Token Staking',
-    description: 'Stake tokens to earn passive rewards with flexible or locked periods',
-    category: 'web3',
-    chain: 'ethereum',
-    difficulty: 'beginner',
-    tags: ['staking', 'rewards', 'passive-income'],
-    component: () => null,
-    icon: Lock,
-  },
-  
-  // NFT Examples
-  {
-    id: 'nft-minter',
-    title: 'NFT Minter',
-    description: 'Create and mint NFTs with IPFS storage and metadata',
-    category: 'web3',
-    chain: 'ethereum',
-    difficulty: 'intermediate',
-    tags: ['nft', 'ipfs', 'erc721'],
-    component: () => null,
-    icon: Image,
-  },
-  {
-    id: 'nft-marketplace',
-    title: 'NFT Marketplace',
-    description: 'Buy, sell, and trade unique digital collectibles like OpenSea',
-    category: 'web3',
-    chain: 'ethereum',
-    difficulty: 'intermediate',
-    tags: ['nft', 'marketplace', 'trading'],
-    component: () => null,
-    icon: ShoppingCart,
-  },
-  
-  // DAO Examples
-  {
-    id: 'dao-governance',
-    title: 'DAO Governance',
-    description: 'Create proposals and vote on DAO decisions with token-based voting',
-    category: 'web3',
-    chain: 'ethereum',
-    difficulty: 'intermediate',
-    tags: ['dao', 'governance', 'voting'],
-    component: () => null,
-    icon: Vote,
-  },
-  
-  // Token Examples
-  {
-    id: 'erc20-token',
-    title: 'ERC-20 Token',
-    description: 'Standard fungible token implementation with transfer and approval',
-    category: 'web3',
-    chain: 'ethereum',
-    difficulty: 'beginner',
-    tags: ['token', 'erc20', 'fungible'],
-    component: () => null,
-    icon: Coins,
-  },
-  {
-    id: 'token-vesting',
-    title: 'Token Vesting',
-    description: 'Time-locked token distribution for team members and investors',
-    category: 'web3',
-    chain: 'ethereum',
-    difficulty: 'intermediate',
-    tags: ['token', 'vesting', 'timelock'],
-    component: () => null,
-    icon: Lock,
-  },
-  
-  // Security Examples
-  {
-    id: 'multisig-wallet',
-    title: 'Multi-Signature Wallet',
-    description: 'Secure wallet requiring multiple approvals for transactions',
-    category: 'web3',
-    chain: 'ethereum',
-    difficulty: 'advanced',
-    tags: ['security', 'multisig', 'wallet'],
-    component: () => null,
-    icon: Shield,
-  },
-  
-  // Cross-Chain Examples
-  {
-    id: 'cross-chain-bridge',
-    title: 'Cross-Chain Bridge',
-    description: 'Transfer tokens between Ethereum, Polygon, Arbitrum, and Optimism',
-    category: 'web3',
-    chain: 'multi',
-    difficulty: 'advanced',
-    tags: ['bridge', 'cross-chain', 'layer2'],
-    component: () => null,
-    icon: Layers,
-  },
-  
-  // Solana Examples
-  {
-    id: 'solana-token',
-    title: 'Solana SPL Token',
-    description: 'Work with SOL and SPL tokens on the Solana blockchain',
-    category: 'web3',
-    chain: 'solana',
-    difficulty: 'intermediate',
-    tags: ['solana', 'spl', 'token'],
-    component: () => null,
-    icon: Coins,
-  },
-  
-  // Smart Contract Examples
-  {
-    id: 'smart-contract',
-    title: 'Smart Contract Deployer',
-    description: 'Write, compile, and deploy Solidity smart contracts to testnets',
-    category: 'web3',
-    chain: 'ethereum',
-    difficulty: 'intermediate',
-    tags: ['solidity', 'smart-contracts', 'deployment'],
-    component: () => null,
-    icon: Code,
-  },
-  
-  // AI Examples
-  {
-    id: 'ai-contract-generator',
-    title: 'AI Contract Generator',
-    description: 'Generate smart contracts using AI based on natural language',
-    category: 'hybrid',
-    chain: 'ethereum',
-    difficulty: 'intermediate',
-    tags: ['ai', 'smart-contracts', 'automation'],
-    component: () => null,
-    icon: Bot,
-  },
-  {
-    id: 'ai-fullstack-builder',
-    title: 'AI Full-Stack dApp Builder',
-    description: 'Generate complete dApps with smart contracts AND frontend using AI',
-    category: 'hybrid',
-    chain: 'ethereum',
-    difficulty: 'beginner',
-    tags: ['ai', 'fullstack', 'dapp', 'frontend'],
-    component: () => null,
-    icon: Sparkles,
-  },
-  {
-    id: 'ai-chat-assistant',
-    title: 'AI Chat Assistant',
-    description: 'Smart coding assistant using pattern matching - no API key needed!',
-    category: 'ai',
-    chain: 'ethereum',
-    difficulty: 'intermediate',
-    tags: ['ai', 'chat', 'assistant', 'free'],
-    component: () => null,
-    icon: MessageCircle,
-  },
-  {
-    id: 'blockchain-analyzer',
-    title: 'Blockchain Data Analyzer',
-    description: 'Analyze on-chain data with AI-powered insights',
-    category: 'hybrid',
-    chain: 'multi',
-    difficulty: 'advanced',
-    tags: ['ai', 'analytics', 'blockchain'],
-    component: () => null,
-    icon: Brain,
-  },
-  {
-    id: 'nft-art-generator',
-    title: 'AI NFT Art Generator',
-    description: 'Generate and mint AI-created artwork as NFTs',
-    category: 'hybrid',
-    chain: 'ethereum',
-    difficulty: 'intermediate',
-    tags: ['ai', 'nft', 'generative-art'],
-    component: () => null,
-    icon: Sparkles,
-  },
+// ═══════════════════════════════════════════════════════════════
+// BNB CHAIN TOOLKIT DATA
+// ═══════════════════════════════════════════════════════════════
+
+const mcpServers = [
+    {
+        name: 'BNB Chain MCP',
+        tools: '100+',
+        description: 'BSC, opBNB, Greenfield — swaps, transfers, contracts',
+        icon: Blocks,
+        color: 'from-yellow-500 to-amber-600',
+    },
+    {
+        name: 'Binance MCP',
+        tools: '478+',
+        description: 'Spot, futures, margin trading on Binance.com',
+        icon: BarChart3,
+        color: 'from-amber-400 to-yellow-500',
+    },
+    {
+        name: 'Binance US MCP',
+        tools: '—',
+        description: 'US regulatory-compliant Binance access',
+        icon: Shield,
+        color: 'from-blue-500 to-indigo-600',
+    },
+    {
+        name: 'Universal Crypto MCP',
+        tools: '100+',
+        description: '60+ networks, cross-chain DeFi',
+        icon: Globe,
+        color: 'from-emerald-500 to-teal-600',
+    },
+    {
+        name: 'Agenti',
+        tools: '50+',
+        description: 'EVM + Solana, AI-to-AI payments (x402)',
+        icon: Bot,
+        color: 'from-violet-500 to-purple-600',
+    },
+    {
+        name: 'UCAI',
+        tools: 'Dynamic',
+        description: 'Turn any smart contract ABI into an MCP server',
+        icon: Wrench,
+        color: 'from-pink-500 to-rose-600',
+    },
 ];
 
-// Simple inline wallet connect component (no modal overlay)
-function WalletConnectInline() {
-  const { address, isConnected, balance, disconnect, setWallet } = useWalletStore();
-  const [isConnecting, setIsConnecting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+const agentCategories = [
+    { name: 'BNB Chain Agents', count: 30, description: 'PancakeSwap, Venus, BNB Staking, opBNB, Greenfield & more', icon: Blocks, color: 'text-yellow-500' },
+    { name: 'Portfolio Management', count: 8, description: 'Tracking, rebalancing, tax optimization', icon: BarChart3, color: 'text-blue-500' },
+    { name: 'Trading Automation', count: 7, description: 'Grid trading, DCA, arbitrage, signals', icon: Activity, color: 'text-green-500' },
+    { name: 'Yield Optimization', count: 6, description: 'Auto-compounding, IL protection', icon: Coins, color: 'text-amber-500' },
+    { name: 'Risk & Security', count: 5, description: 'Auditing, rug detection, exploit analysis', icon: Shield, color: 'text-red-500' },
+    { name: 'Market Intelligence', count: 5, description: 'Sentiment analysis, whale tracking', icon: Eye, color: 'text-purple-500' },
+    { name: 'DeFi Protocols', count: 6, description: 'Lending, DEX, derivatives integration', icon: Layers, color: 'text-teal-500' },
+    { name: 'Infrastructure', count: 5, description: 'Bridge, gas, RPC, indexing tools', icon: Network, color: 'text-indigo-500' },
+];
 
-  const connectMetaMask = async () => {
-    setIsConnecting(true);
-    setError(null);
+const supportedChains = [
+    { name: 'BNB Smart Chain', type: 'L1', primary: true },
+    { name: 'opBNB', type: 'L2', primary: true },
+    { name: 'BNB Greenfield', type: 'Storage', primary: true },
+    { name: 'Ethereum', type: 'L1', primary: false },
+    { name: 'Polygon', type: 'L1/L2', primary: false },
+    { name: 'Arbitrum', type: 'L2', primary: false },
+    { name: 'Base', type: 'L2', primary: false },
+    { name: 'Optimism', type: 'L2', primary: false },
+    { name: 'Avalanche', type: 'L1', primary: false },
+    { name: 'Solana', type: 'L1', primary: false },
+];
 
-    try {
-      if (typeof window.ethereum === 'undefined') {
-        throw new Error('MetaMask is not installed. Please install it from metamask.io');
-      }
-
-      const { BrowserProvider } = await import('ethers');
-      const provider = new BrowserProvider(window.ethereum);
-      const accounts = await provider.send('eth_requestAccounts', []);
-      
-      if (accounts.length === 0) {
-        throw new Error('No accounts found');
-      }
-
-      const network = await provider.getNetwork();
-      const signer = await provider.getSigner();
-      const userAddress = await signer.getAddress();
-      const userBalance = await provider.getBalance(userAddress);
-
-      setWallet({
-        address: userAddress,
-        chainId: Number(network.chainId),
-        balance: (Number(userBalance) / 1e18).toFixed(4),
-        isConnected: true,
-        provider: window.ethereum,
-      });
-    } catch (err: any) {
-      setError(err.message || 'Failed to connect wallet');
-    } finally {
-      setIsConnecting(false);
-    }
-  };
-
-  const truncateAddress = (addr: string) => 
-    `${addr.slice(0, 6)}...${addr.slice(-4)}`;
-
-  if (isConnected && address) {
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center gap-3 p-4 bg-gray-100 dark:bg-black rounded-xl border border-gray-300 dark:border-white/10 dark:shadow-[0_0_20px_rgba(255,255,255,0.03)]">
-          <div className="w-10 h-10 bg-gray-700 dark:bg-gray-300 rounded-full flex items-center justify-center">
-            <Check className="w-5 h-5 text-white dark:text-black" />
-          </div>
-          <div className="flex-1">
-            <p className="font-semibold text-gray-800 dark:text-gray-200">Connected!</p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-mono">{truncateAddress(address)}</p>
-          </div>
-        </div>
-        {balance && (
-          <div className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
-            <span className="text-sm text-gray-600 dark:text-gray-400">Balance</span>
-            <span className="font-semibold">{balance} ETH</span>
-          </div>
-        )}
-        <button
-          onClick={disconnect}
-          className="w-full py-2 px-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg font-medium transition-colors"
-        >
-          Disconnect
-        </button>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-4">
-      <p className="text-sm text-gray-600 dark:text-gray-400">
-        Connect your wallet to interact with Web3 examples (optional).
-      </p>
-      {error && (
-        <div className="p-3 bg-gray-100 dark:bg-black border border-gray-400 dark:border-white/10 rounded-lg text-sm text-gray-800 dark:text-gray-200">
-          {error}
-        </div>
-      )}
-      <button
-        onClick={connectMetaMask}
-        disabled={isConnecting}
-        className="w-full btn-primary flex items-center justify-center gap-2 py-3"
-      >
-        <Wallet className="w-5 h-5" />
-        {isConnecting ? 'Connecting...' : 'Connect MetaMask'}
-      </button>
-      <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-        Don't have MetaMask?{' '}
-        <a href="https://metamask.io" target="_blank" rel="noopener noreferrer" className="text-gray-700 dark:text-gray-300 underline hover:text-gray-900 dark:hover:text-white">
-          Download it here
-        </a>
-      </p>
-    </div>
-  );
-}
+const toolkitComponents = [
+    { name: 'AI Agents', count: '72+', icon: Bot, description: 'Pre-built agent definitions for every major BNB Chain protocol' },
+    { name: 'MCP Servers', count: '6', icon: Server, description: 'Model Context Protocol servers for direct blockchain access' },
+    { name: 'Tools', count: '900+', icon: Wrench, description: 'On-chain tools, exchange APIs, market data endpoints' },
+    { name: 'Chains', count: '60+', icon: Network, description: 'Multi-chain support with unified interfaces' },
+    { name: 'Languages', count: '30+', icon: Globe, description: 'Global accessibility with translations' },
+    { name: 'Standards', count: '2', icon: FileCode, description: 'ERC-8004 agent trust + W3AG accessibility' },
+];
 
 export default function Homepage() {
-  const { t } = useI18n();
-  const { mode } = useThemeStore();
-  
-  useSEO({
-    title: 'Learn Blockchain Development',
-    description: 'Free interactive Web3 learning platform. Build smart contracts, DeFi apps, and NFTs with 50+ tutorials, 40+ templates, and a browser-based IDE.',
-    path: '/'
-  });
-  
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<'all' | 'web3' | 'ai' | 'hybrid'>('all');
-  const [selectedDifficulty, setSelectedDifficulty] = useState<'all' | 'beginner' | 'intermediate' | 'advanced'>('all');
-  
-  // State for interactive demo sections
-  const [demoCode, setDemoCode] = useState(`// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+    const { t } = useI18n();
+    const isDark = useThemeStore((s) => s.mode === 'dark');
+    const [copied, setCopied] = useState(false);
 
-contract HelloWorld {
-    string public message = "Hello, Blockchain!";
-    
-    function setMessage(string memory _message) public {
-        message = _message;
+    useSEO({
+        title: 'BNB Chain AI Toolkit — 72+ Agents, 6 MCP Servers, 900+ Tools',
+        description: 'The most comprehensive open-source AI toolkit for BNB Chain. 72+ specialized agents, 6 MCP servers, 900+ tools, 60+ chains.',
+    });
+
+    const quickStartCode = `# Clone the toolkit
+git clone https://github.com/nirholas/bnb-chain-toolkit.git
+cd bnb-chain-toolkit
+
+# Install & build
+bun install && bun run build
+
+# Start any MCP server
+cd mcp-servers/bnbchain-mcp && bun start`;
+
+    const claudeConfigCode = `{
+  "mcpServers": {
+    "bnbchain": {
+      "command": "npx",
+      "args": ["-y", "@nirholas/bnbchain-mcp"],
+      "env": {
+        "BSC_RPC_URL": "https://bsc-dataseed.binance.org"
+      }
     }
-    
-    function getMessage() public view returns (string memory) {
-        return message;
-    }
-}`);
-  const [showWalletDemo, setShowWalletDemo] = useState(false);
-  const [copied, setCopied] = useState(false);
-  
-  // Live HTML/CSS/JS demo
-  const [htmlDemo] = useState(`<div class="wallet-demo">
-  <h2>🦊 Web3 Connection</h2>
-  <button id="connectBtn" class="connect-btn">
-    Connect Wallet
-  </button>
-  <div id="status">Click to simulate</div>
-</div>`);
-  const [cssDemo] = useState(`.wallet-demo {
-  text-align: center;
-  padding: 2rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border-radius: 16px;
-  color: white;
-}
-.connect-btn {
-  background: white;
-  color: #667eea;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  margin: 1rem 0;
-}
-.connect-btn:hover {
-  transform: scale(1.05);
-}
-#status {
-  font-size: 0.9rem;
-  opacity: 0.9;
-}`);
-  const [jsDemo] = useState(`document.getElementById('connectBtn').onclick = function() {
-  const status = document.getElementById('status');
-  this.textContent = 'Connecting...';
-  
-  setTimeout(() => {
-    const addr = '0x' + Math.random().toString(16).slice(2, 10) + '...';
-    status.textContent = '✅ Connected: ' + addr;
-    this.textContent = 'Connected!';
-    this.style.background = '#10b981';
-    this.style.color = 'white';
-  }, 1000);
-};`);
+  }
+}`;
 
-  const handleCopyCode = useCallback(() => {
-    navigator.clipboard.writeText(demoCode);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }, [demoCode]);
+    const handleCopy = useCallback((text: string) => {
+        navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    }, []);
 
-  // Lyra AI Chat demo state
-  const [lyraChatMessages, setLyraChatMessages] = useState<Array<{id: string; content: string; role: 'user' | 'assistant'}>>([
-    getWelcomeMessage()
-  ]);
-  const [lyraLoading, setLyraLoading] = useState(false);
+    return (
+        <div className="min-h-screen">
+            {/* ═══════════════════════════════════════════════════════════════
+          HERO SECTION
+      ═══════════════════════════════════════════════════════════════ */}
+            <section className="relative pt-20 pb-16 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-yellow-50/50 via-transparent to-transparent dark:from-yellow-900/10 dark:via-transparent" />
+                <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-br from-yellow-400/20 via-amber-300/10 to-orange-400/5 dark:from-yellow-400/5 dark:via-amber-500/3 dark:to-transparent rounded-full blur-3xl" />
 
-  const handleLyraSend = useCallback(async (message: string) => {
-    const userMsg = { id: Date.now().toString(), content: message, role: 'user' as const };
-    setLyraChatMessages(prev => [...prev, userMsg]);
-    setLyraLoading(true);
-    
-    try {
-      // Use real Lyra AI service
-      const response = await generateLyraResponse(message);
-      const aiResponse = {
-        id: (Date.now() + 1).toString(),
-        content: response.message,
-        role: 'assistant' as const
-      };
-      setLyraChatMessages(prev => [...prev, aiResponse]);
-    } catch (error) {
-      console.error('Lyra AI error:', error);
-      const errorResponse = {
-        id: (Date.now() + 1).toString(),
-        content: "I encountered an issue processing your request. Please try asking about smart contracts, Solidity, or Web3 development!",
-        role: 'assistant' as const
-      };
-      setLyraChatMessages(prev => [...prev, errorResponse]);
-    } finally {
-      setLyraLoading(false);
-    }
-  }, []);
+                <div className="container relative mx-auto px-4">
+                    <div className="text-center max-w-4xl mx-auto">
+                        {/* Badge */}
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-full text-sm font-medium text-yellow-800 dark:text-yellow-300 mb-8 border border-yellow-200 dark:border-yellow-800/50">
+                            <Zap className="w-4 h-4" />
+                            Built for BNB Chain "Good Vibes Only" Hackathon — Track 1: Agent
+                        </div>
 
-  const filteredExamples = examples.filter((example) => {
-    const matchesSearch = 
-      example.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      example.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      example.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    
-    const matchesCategory = selectedCategory === 'all' || example.category === selectedCategory;
-    const matchesDifficulty = selectedDifficulty === 'all' || example.difficulty === selectedDifficulty;
+                        {/* Title */}
+                        <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+                            <span className="text-gray-900 dark:text-white">BNB Chain</span>
+                            <br />
+                            <span className="bg-gradient-to-r from-yellow-500 via-amber-500 to-orange-500 bg-clip-text text-transparent">
+                                AI Toolkit
+                            </span>
+                        </h1>
 
-    return matchesSearch && matchesCategory && matchesDifficulty;
-  });
+                        <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+                            The most comprehensive open-source AI toolkit for BNB Chain.
+                            Give AI assistants superpowers on the blockchain — agents, MCP servers,
+                            market data, DeFi tools, and Web3 standards. All in one repo.
+                        </p>
 
-  const categoryColors = {
-    web3: 'bg-gray-200 text-gray-800 dark:bg-white/5 dark:text-gray-200 dark:border dark:border-white/10',
-    ai: 'bg-gray-300 text-gray-900 dark:bg-gray-700 dark:text-gray-100',
-    hybrid: 'bg-gray-200 text-gray-800 dark:bg-white/5 dark:text-gray-200 dark:border dark:border-white/10',
-  };
+                        {/* CTA Buttons */}
+                        <div className="flex flex-wrap justify-center gap-4 mb-12">
+                            <a
+                                href="https://github.com/nirholas/bnb-chain-toolkit"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-white font-semibold rounded-xl transition-all shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40 hover:scale-105"
+                            >
+                                <GitBranch className="w-5 h-5" />
+                                View on GitHub
+                                <ExternalLink className="w-4 h-4" />
+                            </a>
+                            <Link
+                                to="/docs"
+                                className="inline-flex items-center gap-2 px-8 py-4 bg-gray-900 dark:bg-white dark:text-black text-white font-semibold rounded-xl hover:bg-gray-800 dark:hover:bg-gray-100 transition-all hover:scale-105"
+                            >
+                                <BookOpen className="w-5 h-5" />
+                                Documentation
+                            </Link>
+                            <Link
+                                to="/playground"
+                                className="inline-flex items-center gap-2 px-8 py-4 border-2 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:border-yellow-500 hover:text-yellow-600 dark:hover:border-yellow-500 dark:hover:text-yellow-400 transition-all"
+                            >
+                                <Play className="w-5 h-5" />
+                                Try Playground
+                            </Link>
+                        </div>
 
-  const difficultyColors = {
-    beginner: 'text-gray-600 dark:text-gray-400',
-    intermediate: 'text-gray-700 dark:text-gray-300',
-    advanced: 'text-gray-900 dark:text-gray-100',
-  };
-
-  return (
-    <div className="min-h-screen py-12">
-      <div className="container">
-        {/* Hero Section */}
-        <div className="text-center mb-12 animate-fade-in">
-          <div className="inline-flex items-center justify-center p-3 bg-gray-800 dark:bg-gray-200 rounded-2xl mb-6 shadow-lg">
-            <Zap className="w-12 h-12 text-white dark:text-black" />
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
-            {t('hero.title')} {t('hero.subtitle')}
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8">
-            {t('hero.description')}
-          </p>
-          
-          {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-6 mb-8">
-            <div className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-black dark:border dark:border-white/10 rounded-lg shadow-sm dark:shadow-[0_0_15px_rgba(255,255,255,0.02)]">
-              <Code className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-              <span className="font-semibold">40+ Templates</span>
-            </div>
-            <div className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-black dark:border dark:border-white/10 rounded-lg shadow-sm dark:shadow-[0_0_15px_rgba(255,255,255,0.02)]">
-              <BookOpen className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-              <span className="font-semibold">50+ Tutorials</span>
-            </div>
-            <div className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-black dark:border dark:border-white/10 rounded-lg shadow-sm dark:shadow-[0_0_15px_rgba(255,255,255,0.02)]">
-              <Shield className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-              <span className="font-semibold">Open Source</span>
-            </div>
-          </div>
-        </div>
-
-        {/* ═══════════════════════════════════════════════════════════════════
-            LYRA AI CHAT - Interactive AI assistant demo
-        ═══════════════════════════════════════════════════════════════════ */}
-        <div className="mb-12">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold mb-2 flex items-center justify-center gap-2">
-              <MessageCircle className="w-6 h-6 text-gray-600 dark:text-gray-400" />
-              Meet Lyra AI
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400">Your AI coding assistant - try asking about smart contracts!</p>
-          </div>
-          <div className="max-w-2xl mx-auto h-96">
-            <LyraChatPanel
-              messages={lyraChatMessages}
-              onSend={handleLyraSend}
-              loading={lyraLoading}
-              title="Lyra AI Assistant"
-              placeholder="Ask about Solidity, smart contracts, DeFi..."
-            />
-          </div>
-          
-          {/* Learn How to Build This */}
-          <div className="mt-6 bg-gray-100 dark:bg-black rounded-xl p-6 border border-gray-200 dark:border-white/10 max-w-2xl mx-auto dark:shadow-[0_0_20px_rgba(255,255,255,0.03)]">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="text-center md:text-left">
-                <h3 className="text-lg font-semibold mb-2 flex items-center gap-2 justify-center md:justify-start">
-                  <Code className="w-5 h-5" />
-                  Learn How to Build This
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm max-w-xl">
-                  Build your own AI-powered coding assistant using pattern matching and a knowledge base. 
-                  No API key required - works entirely in the browser!
-                </p>
-              </div>
-              <Link
-                to="/tutorial/react-web3-hooks"
-                className="flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors whitespace-nowrap"
-              >
-                <GraduationCap className="w-5 h-5" />
-                Start Tutorial
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* ═══════════════════════════════════════════════════════════════════
-            LIVE PRICE TICKER - Real-time crypto prices
-        ═══════════════════════════════════════════════════════════════════ */}
-        <div className="mb-12 p-4 bg-gray-900 rounded-xl shadow-lg">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-white font-semibold flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-gray-400" />
-              Live Market Data
-            </h3>
-            <Link to="/markets" className="text-sm text-gray-400 hover:text-gray-200 flex items-center gap-1">
-              View Full Dashboard <ExternalLink className="w-3 h-3" />
-            </Link>
-          </div>
-          <PriceTicker coins={['bitcoin', 'ethereum', 'solana', 'bnb']} showChange={true} />
-        </div>
-
-        {/* ═══════════════════════════════════════════════════════════════════
-            DEFI DASHBOARD - Live protocol data
-        ═══════════════════════════════════════════════════════════════════ */}
-        <div className="mb-12">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold mb-2">Live DeFi Analytics</h2>
-            <p className="text-gray-600 dark:text-gray-400">Real-time data from DeFiLlama API</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6 mb-6">
-            <div className="bg-gray-900 rounded-xl p-4 shadow-lg">
-              <TopProtocolsWidget limit={5} />
-            </div>
-            <div className="bg-gray-900 rounded-xl p-4 shadow-lg">
-              <TopYieldsWidget limit={5} />
-            </div>
-            <div className="bg-gray-900 rounded-xl p-4 shadow-lg">
-              <TopChainsWidget limit={5} />
-            </div>
-          </div>
-          
-          {/* Learn How to Build This */}
-          <div className="bg-gray-100 dark:bg-black rounded-xl p-6 border border-gray-200 dark:border-white/10 dark:shadow-[0_0_20px_rgba(255,255,255,0.03)]">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="text-center md:text-left">
-                <h3 className="text-lg font-semibold mb-2 flex items-center gap-2 justify-center md:justify-start">
-                  <Code className="w-5 h-5" />
-                  Learn How to Build This
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm max-w-xl">
-                  Build your own DeFi analytics dashboard using the DeFiLlama API. Learn how to fetch live protocol data, 
-                  display TVL rankings, yield opportunities, and chain statistics in React.
-                </p>
-              </div>
-              <Link
-                to="/tutorial/defi-dashboard-tutorial"
-                className="flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors whitespace-nowrap"
-              >
-                <GraduationCap className="w-5 h-5" />
-                Start Tutorial
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* ═══════════════════════════════════════════════════════════════════
-            LIVE SOLIDITY EDITOR - Working Monaco editor
-        ═══════════════════════════════════════════════════════════════════ */}
-        <div className="mb-12">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold mb-2">Try Our Code Editor</h2>
-            <p className="text-gray-600 dark:text-gray-400">Edit Solidity code right here - this is the same Monaco editor used in VS Code</p>
-          </div>
-          <div className="bg-gray-900 rounded-xl overflow-hidden shadow-2xl border border-gray-700">
-            {/* Editor Toolbar */}
-            <div className="flex items-center justify-between px-4 py-3 bg-gray-800 border-b border-gray-700">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-gray-500" />
-                  <div className="w-3 h-3 rounded-full bg-gray-400" />
-                  <div className="w-3 h-3 rounded-full bg-gray-300" />
-                </div>
-                <span className="text-sm text-gray-400 ml-2">HelloWorld.sol</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={handleCopyCode}
-                  className="flex items-center gap-2 px-3 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm text-white transition-colors"
-                >
-                  {copied ? <Check className="w-4 h-4 text-gray-300" /> : <Copy className="w-4 h-4" />}
-                  {copied ? 'Copied!' : 'Copy'}
-                </button>
-                <Link
-                  to="/ide"
-                  className="flex items-center gap-2 px-3 py-1.5 bg-primary-600 hover:bg-primary-700 rounded-lg text-sm text-white transition-colors"
-                >
-                  <Play className="w-4 h-4" />
-                  Open in IDE
-                </Link>
-              </div>
-            </div>
-            {/* Monaco Editor */}
-            <div className="h-80">
-              <Editor
-                height="100%"
-                language="sol"
-                theme={mode === 'dark' ? 'vs-dark' : 'light'}
-                value={demoCode}
-                onChange={(value) => setDemoCode(value || '')}
-                options={{
-                  minimap: { enabled: false },
-                  fontSize: 14,
-                  lineNumbers: 'on',
-                  scrollBeyondLastLine: false,
-                  automaticLayout: true,
-                  padding: { top: 16 },
-                }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* ═══════════════════════════════════════════════════════════════════
-            LIVE WEB PREVIEW - HTML/CSS/JS with live output
-        ═══════════════════════════════════════════════════════════════════ */}
-        <div className="mb-12">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold mb-2">Live Web3 Preview</h2>
-            <p className="text-gray-600 dark:text-gray-400">Interactive HTML/CSS/JS demo - click the button to see it work!</p>
-          </div>
-          <div className="bg-white dark:bg-black rounded-xl overflow-hidden shadow-lg dark:shadow-[0_0_30px_rgba(255,255,255,0.04)] border border-gray-200 dark:border-white/10">
-            <div className="p-4 border-b border-gray-200 dark:border-white/5 flex items-center justify-between">
-              <span className="text-sm font-medium">Live Preview</span>
-              <Link to="/ide?type=web" className="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1">
-                Open Web IDE <ExternalLink className="w-3 h-3" />
-              </Link>
-            </div>
-            <div className="h-64">
-              <LivePreview html={htmlDemo} css={cssDemo} javascript={jsDemo} title="Web3 Demo" />
-            </div>
-          </div>
-        </div>
-
-        {/* ═══════════════════════════════════════════════════════════════════
-            WALLET CONNECT DEMO - Real wallet connection
-        ═══════════════════════════════════════════════════════════════════ */}
-        <div className="mb-12">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold mb-2">Connect Your Wallet</h2>
-            <p className="text-gray-600 dark:text-gray-400">Real MetaMask integration - try connecting your wallet (optional)</p>
-          </div>
-          <div className="max-w-md mx-auto">
-            <div className="bg-white dark:bg-black rounded-xl p-6 shadow-lg dark:shadow-[0_0_30px_rgba(255,255,255,0.04)] border border-gray-200 dark:border-white/10">
-              <WalletConnectInline />
-            </div>
-          </div>
-        </div>
-
-        {/* ═══════════════════════════════════════════════════════════════════
-            FULL-STACK PLAYGROUND DEMO - React + Solidity live editor
-        ═══════════════════════════════════════════════════════════════════ */}
-        <div className="mb-12">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold mb-2">Full-Stack Playground</h2>
-            <p className="text-gray-600 dark:text-gray-400">Edit React components with live preview - this is a fully working editor</p>
-          </div>
-          <FullStackPlayground
-            title="Interactive Token Display"
-            description="A live React component you can edit - try changing the colors or text!"
-            files={[
-              {
-                id: 'component',
-                name: 'TokenCard',
-                language: 'typescript',
-                icon: 'react',
-                code: `function TokenCard() {
-  const [balance, setBalance] = useState(1000);
-  const [staked, setStaked] = useState(false);
-  
-  const handleStake = () => {
-    setStaked(!staked);
-    setBalance(staked ? balance + 100 : balance - 100);
-  };
-
-  return (
-    <div className="p-6 max-w-sm mx-auto bg-gray-900 rounded-2xl text-white">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-2xl">
-          🪙
-        </div>
-        <div>
-          <h3 className="font-bold text-xl">My Token</h3>
-          <p className="text-white/70 text-sm">MTK</p>
-        </div>
-      </div>
-      
-      <div className="bg-white/10 rounded-xl p-4 mb-4">
-        <p className="text-white/70 text-sm">Balance</p>
-        <p className="text-3xl font-bold">{balance.toLocaleString()}</p>
-      </div>
-      
-      <button
-        onClick={handleStake}
-        className={staked 
-          ? "w-full py-3 rounded-xl font-semibold transition-all bg-green-600 text-white hover:bg-green-700" 
-          : "w-full py-3 rounded-xl font-semibold transition-all bg-white text-gray-900 hover:bg-gray-100"
-        }
-      >
-        {staked ? '✓ Staked' : 'Stake Tokens'}
-      </button>
-    </div>
-  );
-}
-
-render(<TokenCard />);`
-              }
-            ]}
-          />
-        </div>
-
-        {/* ═══════════════════════════════════════════════════════════════════
-            TEMPLATE BROWSER - Browse all 41 templates
-        ═══════════════════════════════════════════════════════════════════ */}
-        <div className="mb-12">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold mb-2">41 Contract Templates</h2>
-            <p className="text-gray-600 dark:text-gray-400">Browse our library of production-ready smart contracts</p>
-          </div>
-          <div className="bg-white dark:bg-black rounded-xl shadow-lg dark:shadow-[0_0_30px_rgba(255,255,255,0.04)] border border-gray-200 dark:border-white/10 overflow-hidden">
-            <div className="max-h-96 overflow-y-auto p-4">
-              <TemplateSelector
-                onTemplateSelect={(template: ContractTemplate) => {
-                  setDemoCode(template.code);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                compact={true}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Interactive Sandbox CTA Banner */}
-        <Link 
-          to="/sandbox"
-          className="block mb-12 group"
-        >
-          <div className="bg-gradient-to-r from-primary-600 to-secondary-600 rounded-2xl p-8 shadow-2xl hover:shadow-3xl transition-all transform hover:scale-[1.02]">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="flex-1 text-white">
-                <div className="flex items-center gap-3 mb-3">
-                  <Sparkles className="w-8 h-8" />
-                  <h2 className="text-3xl font-bold">Interactive Sandbox</h2>
-                </div>
-                <p className="text-white/90 text-lg mb-4">
-                  Full-featured browser IDE with multi-file editing, live compilation, and
-                  testnet deployment support. AI-assisted features are listed as coming soon.
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-3 py-1 bg-white/20 rounded-full text-sm">Multi-File Editor</span>
-                  <span className="px-3 py-1 bg-white/20 rounded-full text-sm">Live Deployment</span>
-                  <span className="px-3 py-1 bg-white/20 rounded-full text-sm">AI Features (Coming Soon)</span>
-                  <span className="px-3 py-1 bg-white/20 rounded-full text-sm">Contract Testing</span>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 px-8 py-4 bg-white/20 hover:bg-white/30 rounded-xl transition-colors">
-                <span className="text-white font-semibold text-lg">Launch Sandbox</span>
-                <ChevronRight className="w-6 h-6 text-white group-hover:translate-x-1 transition-transform" />
-              </div>
-            </div>
-          </div>
-        </Link>
-
-        {/* Template Playground Link */}
-        <Link 
-          to="/playground"
-          className="block mb-8 group"
-        >
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary-600 via-secondary-600 to-primary-600 p-8 shadow-2xl hover:shadow-3xl transition-all duration-300 animate-gradient">
-            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between">
-              <div className="flex items-center space-x-4 mb-4 md:mb-0">
-                <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl group-hover:scale-110 transition-transform">
-                  <Sparkles className="w-8 h-8 text-white" />
-                </div>
-                <div className="text-left">
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-1">
-                    AI Contract Playground
-                  </h2>
-                  <p className="text-white/90 text-sm md:text-base">
-                    Generate, edit, and deploy smart contracts with AI assistance
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-2 px-6 py-3 bg-white text-gray-900 rounded-xl font-semibold group-hover:bg-gray-100 transition-colors">
-                <span>Try Now</span>
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 group-hover:translate-x-full transition-transform duration-1000" />
-          </div>
-        </Link>
-
-        {/* Development Environments Section */}
-        <div className="mb-12">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-3">Universal Development Environments</h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Professional-grade UDEs for web and blockchain development
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Web Sandbox */}
-            <Link to="/ide?type=web" className="group card hover:border-gray-500 dark:hover:border-gray-400 transition-all">
-              <div className="flex items-start justify-between mb-4">
-                <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl group-hover:scale-110 transition-transform">
-                  <Globe className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-                </div>
-                <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                  Production
-                </span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
-                Web Sandbox
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Full-featured web UDE with HTML, CSS, JavaScript, React, Vue, and Python support. Live preview with device presets.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Monaco Editor</span>
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Vim Mode</span>
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Live Preview</span>
-              </div>
-            </Link>
-
-            {/* Solidity UDE */}
-            <Link to="/ide?type=solidity" className="group card hover:border-gray-500 dark:hover:border-gray-400 transition-all">
-              <div className="flex items-start justify-between mb-4">
-                <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl group-hover:scale-110 transition-transform">
-                  <FileCode className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-                </div>
-                <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                  Production
-                </span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
-                Solidity UDE
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Smart contract development with multi-version compiler (0.6.x - 0.8.24), testnet deployment, and contract interaction.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Multi-Version</span>
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Deploy</span>
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Interact</span>
-              </div>
-            </Link>
-
-            {/* Full-Stack Playground */}
-            <Link to="/fullstack-demo" className="group card hover:border-gray-500 dark:hover:border-gray-400 transition-all">
-              <div className="flex items-start justify-between mb-4">
-                <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl group-hover:scale-110 transition-transform">
-                  <Layers className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-                </div>
-                <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                  Production
-                </span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
-                Full-Stack Playground
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Build complete dApps with smart contract and frontend side-by-side. Live preview and console output.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Contract + UI</span>
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Live Preview</span>
-              </div>
-            </Link>
-
-            {/* Learning Playground */}
-            <Link to="/learn" className="group card hover:border-gray-500 dark:hover:border-gray-400 transition-all">
-              <div className="flex items-start justify-between mb-4">
-                <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl group-hover:scale-110 transition-transform">
-                  <BookOpen className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-                </div>
-                <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                  Production
-                </span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
-                Learning Playground
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Guided tutorials with step-by-step instructions, interactive examples, and progress tracking.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Tutorials</span>
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Progress</span>
-              </div>
-            </Link>
-
-            {/* Markets */}
-            <Link to="/markets" className="group card hover:border-gray-500 dark:hover:border-gray-400 transition-all">
-              <div className="flex items-start justify-between mb-4">
-                <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl group-hover:scale-110 transition-transform">
-                  <TrendingUp className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-                </div>
-                <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                  Live Data
-                </span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
-                Market Data
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Live crypto prices, DeFi analytics, protocol TVL, and chain statistics from CoinGecko and DeFiLlama.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Prices</span>
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">DeFi TVL</span>
-              </div>
-            </Link>
-
-            {/* Community Explore */}
-            <Link to="/explore" className="group card hover:border-gray-500 dark:hover:border-gray-400 transition-all">
-              <div className="flex items-start justify-between mb-4">
-                <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl group-hover:scale-110 transition-transform">
-                  <Users className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-                </div>
-                <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                  Community
-                </span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
-                Explore Projects
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Discover community projects, templates, and tutorials. Like, comment, and fork other developers' work.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Share</span>
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Fork</span>
-              </div>
-            </Link>
-          </div>
-        </div>
-
-        {/* Innovation Lab Section */}
-        <div className="mb-12">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium mb-4">
-              <TestTube className="w-4 h-4" />
-              <span>Experimental Features</span>
-            </div>
-            <h2 className="text-3xl font-bold mb-3">Innovation Lab</h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Advanced AI-powered tools and experimental features. Enable Innovation Mode in the sandbox to try them.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* AI Code Whisperer */}
-            <Link to="/innovation" className="group card border-dashed hover:border-gray-500 dark:hover:border-gray-400 transition-all">
-              <div className="flex items-start justify-between mb-4">
-                <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl group-hover:scale-110 transition-transform">
-                  <Brain className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-                </div>
-                <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                  Experimental
-                </span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
-                AI Code Whisperer
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Real-time vulnerability detection, code suggestions, and voice control for hands-free development.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Vulnerabilities</span>
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Voice</span>
-              </div>
-            </Link>
-
-            {/* Contract Time Machine */}
-            <Link to="/innovation" className="group card border-dashed hover:border-gray-500 dark:hover:border-gray-400 transition-all">
-              <div className="flex items-start justify-between mb-4">
-                <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl group-hover:scale-110 transition-transform">
-                  <History className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-                </div>
-                <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                  Experimental
-                </span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
-                Contract Time Machine
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Version history with automatic snapshots, branching, and state simulation for exploring alternatives.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">History</span>
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Branching</span>
-              </div>
-            </Link>
-
-            {/* Security Testing Lab */}
-            <Link to="/innovation" className="group card border-dashed hover:border-gray-500 dark:hover:border-gray-400 transition-all">
-              <div className="flex items-start justify-between mb-4">
-                <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl group-hover:scale-110 transition-transform">
-                  <Shield className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-                </div>
-                <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                  Experimental
-                </span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
-                Security Testing Lab
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Test contracts against reentrancy, flash loans, overflow, and other attack vectors in a safe environment.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">6 Attacks</span>
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Defense</span>
-              </div>
-            </Link>
-
-            {/* Collaborative Arena */}
-            <Link to="/innovation" className="group card border-dashed hover:border-gray-500 dark:hover:border-gray-400 transition-all">
-              <div className="flex items-start justify-between mb-4">
-                <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl group-hover:scale-110 transition-transform">
-                  <Users className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-                </div>
-                <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                  Experimental
-                </span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
-                Collaborative Arena
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Code with AI teammates, participate in timed challenges, and learn from AI mentors in real-time.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Challenges</span>
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">AI Teams</span>
-              </div>
-            </Link>
-
-            {/* Neural Gas Oracle */}
-            <Link to="/innovation" className="group card border-dashed hover:border-gray-500 dark:hover:border-gray-400 transition-all">
-              <div className="flex items-start justify-between mb-4">
-                <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl group-hover:scale-110 transition-transform">
-                  <Cpu className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-                </div>
-                <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                  Experimental
-                </span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
-                Neural Gas Oracle
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Machine learning-powered gas prediction and optimization with multiple neural network models.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">ML Models</span>
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Optimize</span>
-              </div>
-            </Link>
-
-            {/* Cross-Chain Deployer */}
-            <Link to="/innovation" className="group card border-dashed hover:border-gray-500 dark:hover:border-gray-400 transition-all">
-              <div className="flex items-start justify-between mb-4">
-                <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl group-hover:scale-110 transition-transform">
-                  <GitBranch className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-                </div>
-                <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                  Experimental
-                </span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
-                Cross-Chain Deployer
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Deploy contracts to 8+ blockchains with automated bridge setup and cost optimization.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">8+ Chains</span>
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">Auto-Bridge</span>
-              </div>
-            </Link>
-          </div>
-        </div>
-
-        {/* Accessibility Features Section */}
-        <div className="mb-12">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-3">Accessibility Features</h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              WCAG 2.1 AAA compliant with advanced features for all users
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="card text-center">
-              <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl inline-block mb-3">
-                <MousePointer className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-              </div>
-              <h3 className="font-semibold mb-1">Dwell Click</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Click by hovering</p>
-            </div>
-            
-            <div className="card text-center">
-              <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl inline-block mb-3">
-                <Eye className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-              </div>
-              <h3 className="font-semibold mb-1">Reading Guide</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Line follows cursor</p>
-            </div>
-            
-            <div className="card text-center">
-              <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl inline-block mb-3">
-                <Palette className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-              </div>
-              <h3 className="font-semibold mb-1">Color Blind Filters</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Multiple modes</p>
-            </div>
-            
-            <div className="card text-center">
-              <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl inline-block mb-3">
-                <Languages className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-              </div>
-              <h3 className="font-semibold mb-1">10 Languages</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Including RTL</p>
-            </div>
-          </div>
-        </div>
-
-        {/* ═══════════════════════════════════════════════════════════════════
-            TUTORIAL BROWSER - 50+ Interactive Tutorials
-        ═══════════════════════════════════════════════════════════════════ */}
-        <div className="mb-12">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-3 flex items-center justify-center gap-2">
-              <GraduationCap className="w-8 h-8 text-primary-600" />
-              50+ Interactive Tutorials
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Learn Web3 development step-by-step with hands-on coding exercises
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-6 mb-6">
-            {/* Beginner Track */}
-            <div className="card border-2 border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl">
-                  <Sprout className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Beginner</h3>
-                  <p className="text-sm text-gray-500">20+ tutorials</p>
-                </div>
-              </div>
-              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                <li>• Solidity Basics</li>
-                <li>• Your First Smart Contract</li>
-                <li>• Variables & Data Types</li>
-                <li>• Functions & Modifiers</li>
-              </ul>
-            </div>
-
-            {/* Intermediate Track */}
-            <div className="card border-2 border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl">
-                  <Zap className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Intermediate</h3>
-                  <p className="text-sm text-gray-500">20+ tutorials</p>
-                </div>
-              </div>
-              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                <li>• ERC-20 Token Standard</li>
-                <li>• NFT Minting (ERC-721)</li>
-                <li>• DeFi Fundamentals</li>
-                <li>• Testing & Debugging</li>
-              </ul>
-            </div>
-
-            {/* Advanced Track */}
-            <div className="card border-2 border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 bg-gray-200 dark:bg-gray-700 rounded-xl">
-                  <Brain className="w-6 h-6 text-gray-700 dark:text-gray-300" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Advanced</h3>
-                  <p className="text-sm text-gray-500">15+ tutorials</p>
-                </div>
-              </div>
-              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                <li>• Gas Optimization</li>
-                <li>• Security & Auditing</li>
-                <li>• Upgradeable Contracts</li>
-                <li>• Cross-Chain Development</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="text-center">
-            <Link
-              to="/tutorials"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-xl font-semibold hover:bg-primary-700 transition-colors"
-            >
-              <BookOpen className="w-5 h-5" />
-              Browse All Tutorials
-              <ChevronRight className="w-5 h-5" />
-            </Link>
-          </div>
-        </div>
-
-        {/* Search and Filters */}
-        <div className="mb-8 space-y-4">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search examples..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 dark:border-white/10 bg-white dark:bg-black focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-shadow text-base"
-            />
-          </div>
-
-          {/* Mobile-friendly horizontal scrollable filters */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            {/* Category Filter */}
-            <div className="flex items-center">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2 shrink-0">Category:</span>
-              <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0 -mx-1 px-1 scrollbar-hide">
-                {(['all', 'web3', 'ai', 'hybrid'] as const).map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={cn(
-                      'px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap min-h-[40px]',
-                      selectedCategory === cat
-                        ? 'bg-primary-600 text-white'
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 active:bg-gray-400 dark:active:bg-gray-500'
-                    )}
-                  >
-                    {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Difficulty Filter */}
-            <div className="flex items-center">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2 shrink-0">Level:</span>
-              <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0 -mx-1 px-1 scrollbar-hide">
-                {(['all', 'beginner', 'intermediate', 'advanced'] as const).map((diff) => (
-                  <button
-                    key={diff}
-                    onClick={() => setSelectedDifficulty(diff)}
-                    className={cn(
-                      'px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap min-h-[40px]',
-                      selectedDifficulty === diff
-                        ? 'bg-primary-600 text-white'
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 active:bg-gray-400 dark:active:bg-gray-500'
-                    )}
-                  >
-                    {diff.charAt(0).toUpperCase() + diff.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Examples Grid */}
-        {filteredExamples.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-gray-500 dark:text-gray-400">
-              No examples found. Try adjusting your filters.
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredExamples.map((example, index) => {
-              const Icon = example.icon || Code;
-              return (
-                <Link
-                  key={example.id}
-                  to={`/example/${example.id}`}
-                  className="group card hover:border-primary-500 dark:hover:border-primary-400 transition-all duration-300"
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className={cn(
-                      'p-3 rounded-xl transition-transform group-hover:scale-110',
-                      categoryColors[example.category]
-                    )}>
-                      <Icon className="w-6 h-6" />
+                        {/* Stats Bar */}
+                        <div className="flex flex-wrap justify-center gap-4 md:gap-8">
+                            {toolkitComponents.slice(0, 5).map((item) => (
+                                <div key={item.name} className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
+                                    <item.icon className="w-5 h-5 text-yellow-500" />
+                                    <span className="font-bold text-gray-900 dark:text-white">{item.count}</span>
+                                    <span className="text-sm text-gray-500 dark:text-gray-400">{item.name}</span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                    <span className={cn(
-                      'text-xs font-medium px-2 py-1 rounded-full',
-                      difficultyColors[example.difficulty]
-                    )}>
-                      {example.difficulty}
-                    </span>
-                  </div>
+                </div>
+            </section>
 
-                  <h3 className="text-xl font-semibold mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                    {example.title}
-                  </h3>
+            {/* ═══════════════════════════════════════════════════════════════
+          LIVE MARKET DATA
+      ═══════════════════════════════════════════════════════════════ */}
+            <section className="py-4 border-y border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50">
+                <PriceTicker />
+            </section>
 
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
-                    {example.description}
-                  </p>
+            {/* ═══════════════════════════════════════════════════════════════
+          WHAT IS THIS?
+      ═══════════════════════════════════════════════════════════════ */}
+            <section className="py-20 container mx-auto px-4">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+                        What Is BNB Chain AI Toolkit?
+                    </h2>
+                    <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                        Imagine giving Claude or ChatGPT a crypto wallet, a trading terminal, and 72 expert advisors.
+                        That's what this toolkit does. Everything you need to build AI-powered applications on BNB Chain.
+                    </p>
+                </div>
 
-                  <div className="flex items-center justify-between">
-                    <div className="flex flex-wrap gap-2">
-                      {example.tags.slice(0, 2).map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded"
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                    {toolkitComponents.map((comp) => (
+                        <div key={comp.name} className="group p-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-yellow-500/50 dark:hover:border-yellow-500/30 transition-all hover:shadow-lg hover:shadow-yellow-500/5">
+                            <div className="flex items-center gap-4 mb-3">
+                                <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl group-hover:bg-yellow-100 dark:group-hover:bg-yellow-900/30 transition-colors">
+                                    <comp.icon className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-gray-900 dark:text-white">{comp.name}</h3>
+                                    <span className="text-2xl font-bold text-yellow-500">{comp.count}</span>
+                                </div>
+                            </div>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">{comp.description}</p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════════
+          MCP SERVERS
+      ═══════════════════════════════════════════════════════════════ */}
+            <section className="py-20 bg-gray-50 dark:bg-gray-900/50">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-12">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-violet-100 dark:bg-violet-900/30 rounded-full text-sm font-medium text-violet-700 dark:text-violet-300 mb-4">
+                            <Plug className="w-4 h-4" />
+                            Model Context Protocol
+                        </div>
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+                            6 MCP Servers, 900+ Tools
+                        </h2>
+                        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                            Give AI assistants direct blockchain access. Connect Claude, ChatGPT, or any LLM
+                            to BNB Chain, Binance, and 60+ networks.
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-12">
+                        {mcpServers.map((server) => (
+                            <div key={server.name} className="group p-6 bg-white dark:bg-black rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-violet-500/50 transition-all hover:shadow-lg">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className={`p-3 bg-gradient-to-br ${server.color} rounded-xl shadow-lg`}>
+                                        <server.icon className="w-5 h-5 text-white" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-gray-900 dark:text-white">{server.name}</h3>
+                                        <span className="text-sm text-gray-500 dark:text-gray-400">{server.tools} tools</span>
+                                    </div>
+                                </div>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">{server.description}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Claude Config Code Block */}
+                    <div className="max-w-2xl mx-auto">
+                        <div className="bg-gray-900 dark:bg-black rounded-2xl border border-gray-700 dark:border-gray-800 overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700 dark:border-gray-800">
+                                <div className="flex items-center gap-2">
+                                    <Terminal className="w-4 h-4 text-gray-400" />
+                                    <span className="text-sm text-gray-400">claude_desktop_config.json</span>
+                                </div>
+                                <button
+                                    onClick={() => handleCopy(claudeConfigCode)}
+                                    className="text-xs text-gray-400 hover:text-white transition-colors px-2 py-1 rounded"
+                                >
+                                    {copied ? '✓ Copied' : 'Copy'}
+                                </button>
+                            </div>
+                            <pre className="p-4 text-sm text-gray-300 overflow-x-auto">
+                                <code>{claudeConfigCode}</code>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════════
+          AI AGENTS
+      ═══════════════════════════════════════════════════════════════ */}
+            <section className="py-20 container mx-auto px-4">
+                <div className="text-center mb-12">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-100 dark:bg-amber-900/30 rounded-full text-sm font-medium text-amber-700 dark:text-amber-300 mb-4">
+                        <Bot className="w-4 h-4" />
+                        72+ Specialized Agents
+                    </div>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+                        Pre-Built AI Agents for Every Protocol
+                    </h2>
+                    <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                        From PancakeSwap trading to Venus lending, BNB staking to opBNB optimization —
+                        purpose-built agents for every major BNB Chain protocol and DeFi use case.
+                    </p>
+                </div>
+
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
+                    {agentCategories.map((cat) => (
+                        <div key={cat.name} className="p-5 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-amber-500/50 transition-all group">
+                            <div className="flex items-center gap-3 mb-2">
+                                <cat.icon className={`w-5 h-5 ${cat.color}`} />
+                                <span className="text-2xl font-bold text-gray-900 dark:text-white">{cat.count}</span>
+                            </div>
+                            <h3 className="font-semibold text-sm text-gray-900 dark:text-white mb-1">{cat.name}</h3>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{cat.description}</p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════════
+          QUICK START
+      ═══════════════════════════════════════════════════════════════ */}
+            <section className="py-20 bg-gray-50 dark:bg-gray-900/50">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+                            Get Started in 60 Seconds
+                        </h2>
+                        <p className="text-lg text-gray-600 dark:text-gray-400">
+                            Clone, install, run. It's that simple.
+                        </p>
+                    </div>
+
+                    <div className="max-w-3xl mx-auto">
+                        <div className="bg-gray-900 dark:bg-black rounded-2xl border border-gray-700 dark:border-gray-800 overflow-hidden shadow-2xl">
+                            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700 dark:border-gray-800">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-3 h-3 rounded-full bg-red-500" />
+                                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                                    <span className="ml-2 text-sm text-gray-400">terminal</span>
+                                </div>
+                                <button
+                                    onClick={() => handleCopy(quickStartCode)}
+                                    className="text-xs text-gray-400 hover:text-white transition-colors px-2 py-1 rounded"
+                                >
+                                    {copied ? '✓ Copied' : 'Copy'}
+                                </button>
+                            </div>
+                            <pre className="p-6 text-sm text-green-400 overflow-x-auto leading-relaxed">
+                                <code>{quickStartCode}</code>
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════════
+          SUPPORTED CHAINS
+      ═══════════════════════════════════════════════════════════════ */}
+            <section className="py-20 container mx-auto px-4">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+                        60+ Supported Networks
+                    </h2>
+                    <p className="text-lg text-gray-600 dark:text-gray-400">
+                        BNB Chain first, but cross-chain by design.
+                    </p>
+                </div>
+
+                <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+                    {supportedChains.map((chain) => (
+                        <div
+                            key={chain.name}
+                            className={`px-4 py-2.5 rounded-xl border transition-all ${chain.primary
+                                    ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-300 dark:border-yellow-700 text-yellow-800 dark:text-yellow-300 font-semibold shadow-sm'
+                                    : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300'
+                                }`}
                         >
-                          {tag}
-                        </span>
-                      ))}
+                            <span className="text-sm">{chain.name}</span>
+                            <span className="ml-2 text-xs opacity-60">{chain.type}</span>
+                        </div>
+                    ))}
+                    <div className="px-4 py-2.5 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400 text-sm">
+                        + 50 more networks
                     </div>
-                    <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 group-hover:translate-x-1 transition-all" />
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        )}
+                </div>
+            </section>
 
-        {/* CTA Section */}
-        <div className="mt-16 text-center p-8 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-2xl border border-primary-200 dark:border-primary-800">
-          <h2 className="text-2xl font-bold mb-4">Ready to Build?</h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-2xl mx-auto">
-            Start exploring our interactive examples, connect your wallet, and dive into the world of Web3 and AI.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            <a
-              href="https://github.com/nirholas/lyra-web3-playground"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary"
-            >
-              View on GitHub
-            </a>
-            <Link
-              to="/docs"
-              className="btn-secondary"
-            >
-              Read Documentation
-            </Link>
-          </div>
+            {/* ═══════════════════════════════════════════════════════════════
+          DeFi DASHBOARD
+      ═══════════════════════════════════════════════════════════════ */}
+            <section className="py-16 bg-gray-50 dark:bg-gray-900/50">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-8">
+                        <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
+                            Live DeFi Data
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-400">
+                            Real-time market data from CoinGecko, DeFiLlama, and 200+ sources
+                        </p>
+                    </div>
+                    <div className="max-w-7xl mx-auto">
+                        <DeFiSummaryBar />
+                        <div className="grid md:grid-cols-3 gap-6 mt-6">
+                            <TopProtocolsWidget />
+                            <TopYieldsWidget />
+                            <TopChainsWidget />
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-          {/* Quick Links */}
-          <div className="border-t border-primary-200 dark:border-primary-700 pt-6">
-            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-4">QUICK LINKS</h3>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/tutorials" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                <GraduationCap className="w-4 h-4" />
-                <span>Tutorials</span>
-              </Link>
-              <Link to="/roadmap" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                <Map className="w-4 h-4" />
-                <span>Roadmap</span>
-              </Link>
-              <Link to="/faq" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                <HelpCircle className="w-4 h-4" />
-                <span>FAQ</span>
-              </Link>
-              <Link to="/community" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                <Users className="w-4 h-4" />
-                <span>Community</span>
-              </Link>
-              <Link to="/api" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                <FileText className="w-4 h-4" />
-                <span>API Reference</span>
-              </Link>
-              <Link to="/changelog" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                <Calendar className="w-4 h-4" />
-                <span>Changelog</span>
-              </Link>
-              <Link to="/about" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                <Heart className="w-4 h-4" />
-                <span>About</span>
-              </Link>
-              <Link to="/contribute" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                <GitBranch className="w-4 h-4" />
-                <span>Contribute</span>
-              </Link>
-            </div>
-          </div>
+            {/* ═══════════════════════════════════════════════════════════════
+          ARCHITECTURE OVERVIEW
+      ═══════════════════════════════════════════════════════════════ */}
+            <section className="py-20 container mx-auto px-4">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+                        Repository Architecture
+                    </h2>
+                    <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                        A single monorepo with everything integrated and production-ready.
+                    </p>
+                </div>
+
+                <div className="max-w-4xl mx-auto">
+                    <div className="bg-gray-900 dark:bg-black rounded-2xl border border-gray-700 dark:border-gray-800 p-6 font-mono text-sm text-gray-300 leading-relaxed overflow-x-auto">
+                        <div className="text-yellow-400 mb-2">bnb-chain-toolkit/</div>
+                        <div className="ml-4 space-y-1">
+                            <div><span className="text-blue-400">├── agents/</span><span className="text-gray-500 ml-4"># 72+ AI Agent definitions</span></div>
+                            <div className="ml-4 text-gray-500">
+                                <div>├── bnb-chain-agents/ <span className="text-gray-600"># 30 BNB-specific agents</span></div>
+                                <div>└── defi-agents/ <span className="text-gray-600"># 42 general DeFi agents</span></div>
+                            </div>
+                            <div><span className="text-blue-400">├── mcp-servers/</span><span className="text-gray-500 ml-4"># 6 MCP servers</span></div>
+                            <div className="ml-4 text-gray-500">
+                                <div>├── bnbchain-mcp/ <span className="text-gray-600"># BSC + opBNB (100+ tools)</span></div>
+                                <div>├── binance-mcp/ <span className="text-gray-600"># Binance.com (478+ tools)</span></div>
+                                <div>├── universal-crypto-mcp/ <span className="text-gray-600"># 60+ networks</span></div>
+                                <div>├── agenti/ <span className="text-gray-600"># EVM + Solana</span></div>
+                                <div>└── ucai/ <span className="text-gray-600"># ABI-to-MCP generator</span></div>
+                            </div>
+                            <div><span className="text-blue-400">├── market-data/</span><span className="text-gray-500 ml-4"># Market data &amp; news</span></div>
+                            <div><span className="text-blue-400">├── defi-tools/</span><span className="text-gray-500 ml-4"># DeFi utilities</span></div>
+                            <div><span className="text-blue-400">├── wallets/</span><span className="text-gray-500 ml-4"># Wallet tooling</span></div>
+                            <div><span className="text-blue-400">├── standards/</span><span className="text-gray-500 ml-4"># ERC-8004 + W3AG</span></div>
+                            <div><span className="text-blue-400">└── docs/</span><span className="text-gray-500 ml-4"># Documentation</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════════
+          WHY THIS TOOLKIT
+      ═══════════════════════════════════════════════════════════════ */}
+            <section className="py-20 bg-gradient-to-br from-gray-900 to-black text-white">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                            Why BNB Chain AI Toolkit?
+                        </h2>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                        {[
+                            { icon: Package, title: 'Comprehensive Coverage', desc: 'No other project covers the entire BNB Chain AI stack in one repo' },
+                            { icon: Plug, title: 'Production-Ready MCP', desc: '6 servers, 900+ tools, ready for Claude and other LLMs today' },
+                            { icon: FileCode, title: 'Original Standards', desc: 'ERC-8004 for agent trust and W3AG for Web3 accessibility' },
+                            { icon: Wrench, title: 'Real DeFi Tooling', desc: 'Dust sweeper, market data, wallet toolkit — not just demos' },
+                            { icon: Bot, title: '72+ Specialized Agents', desc: 'Purpose-built for every major BNB Chain protocol' },
+                            { icon: Globe, title: '30+ Languages', desc: 'Global accessibility with translations for worldwide reach' },
+                        ].map((item) => (
+                            <div key={item.title} className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-yellow-500/30 transition-all">
+                                <item.icon className="w-8 h-8 text-yellow-400 mb-4" />
+                                <h3 className="font-bold text-lg mb-2">{item.title}</h3>
+                                <p className="text-gray-400 text-sm">{item.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════════
+          EXPLORE MORE
+      ═══════════════════════════════════════════════════════════════ */}
+            <section className="py-20 container mx-auto px-4">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+                        Explore the Toolkit
+                    </h2>
+                </div>
+
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
+                    {[
+                        { title: 'Documentation', desc: 'Comprehensive guides and API references', icon: BookOpen, href: '/docs', color: 'text-blue-500' },
+                        { title: 'Tutorials', desc: 'Step-by-step interactive learning paths', icon: GraduationCap, href: '/tutorials', color: 'text-emerald-500' },
+                        { title: 'Playground', desc: 'Try BNB Chain smart contracts live', icon: Code, href: '/playground', color: 'text-amber-500' },
+                        { title: 'Sandbox', desc: 'AI-powered development environment', icon: Terminal, href: '/sandbox', color: 'text-violet-500' },
+                        { title: 'IDE', desc: 'Solidity and Web3 development studio', icon: Cpu, href: '/ide', color: 'text-purple-500' },
+                        { title: 'Full-Stack Demo', desc: 'Contract + frontend builder', icon: Layers, href: '/fullstack-demo', color: 'text-green-500' },
+                        { title: 'Innovation Lab', desc: 'AI tools & experimental features', icon: Sparkles, href: '/innovation', color: 'text-pink-500' },
+                        { title: 'Community', desc: 'Connect with BNB Chain builders', icon: Users, href: '/community', color: 'text-indigo-500' },
+                    ].map((item) => (
+                        <Link
+                            key={item.title}
+                            to={item.href}
+                            className="group p-5 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-yellow-500/50 transition-all hover:shadow-lg"
+                        >
+                            <item.icon className={`w-6 h-6 ${item.color} mb-3`} />
+                            <h3 className="font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">
+                                {item.title}
+                            </h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">{item.desc}</p>
+                            <ChevronRight className="w-4 h-4 text-gray-400 mt-2 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    ))}
+                </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════════
+          CTA
+      ═══════════════════════════════════════════════════════════════ */}
+            <section className="py-20 bg-gradient-to-r from-yellow-500 to-amber-500">
+                <div className="container mx-auto px-4 text-center">
+                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                        Ready to Build on BNB Chain?
+                    </h2>
+                    <p className="text-yellow-100 text-lg mb-8 max-w-2xl mx-auto">
+                        72+ agents, 6 MCP servers, 900+ tools. Open source. Start building now.
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-4">
+                        <a
+                            href="https://github.com/nirholas/bnb-chain-toolkit"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-8 py-4 bg-white text-yellow-600 font-bold rounded-xl hover:bg-gray-100 transition-all shadow-lg hover:scale-105"
+                        >
+                            <GitBranch className="w-5 h-5" />
+                            Star on GitHub
+                        </a>
+                        <Link
+                            to="/docs"
+                            className="inline-flex items-center gap-2 px-8 py-4 bg-yellow-600 text-white font-bold rounded-xl hover:bg-yellow-700 transition-all shadow-lg hover:scale-105 border border-yellow-400"
+                        >
+                            <BookOpen className="w-5 h-5" />
+                            Get Started
+                            <ChevronRight className="w-4 h-4" />
+                        </Link>
+                    </div>
+                </div>
+            </section>
         </div>
-      </div>
-    </div>
-  );
+    );
 }

@@ -51,10 +51,10 @@ const docCategories: DocCategory[] = [
     icon: <Rocket className="w-6 h-6" />,
     description: 'New to the platform? Start here',
     articles: [
-      { id: 'intro', title: 'Introduction to Lyra Web3 Playground', description: 'Learn what this platform can do for you', readTime: '5 min', difficulty: 'beginner' },
+      { id: 'intro', title: 'Introduction to BNB Chain AI Toolkit', description: 'Learn what 72+ agents, 6 MCP servers, and 900+ tools can do', readTime: '5 min', difficulty: 'beginner' },
       { id: 'first-contract', title: 'Your First Smart Contract', description: 'Write, compile, and deploy in 10 minutes', readTime: '10 min', difficulty: 'beginner' },
       { id: 'sandbox-basics', title: 'Understanding the Sandbox', description: 'Navigate the interactive development environment', readTime: '7 min', difficulty: 'beginner' },
-      { id: 'innovation-mode', title: 'Activating Innovation Mode', description: 'Unlock AI-powered features', readTime: '5 min', difficulty: 'beginner' }
+      { id: 'innovation-mode', title: 'Connecting MCP Servers', description: 'Connect AI assistants to BNB Chain', readTime: '5 min', difficulty: 'beginner' }
     ]
   },
   {
@@ -88,7 +88,7 @@ const docCategories: DocCategory[] = [
     icon: <Zap className="w-6 h-6" />,
     description: 'Write efficient, cost-effective code',
     articles: [
-      { id: 'gas-basics', title: 'Understanding Gas', description: 'How Ethereum pricing works', readTime: '10 min', difficulty: 'beginner' },
+      { id: 'gas-basics', title: 'Understanding Gas', description: 'How BNB Chain gas pricing works', readTime: '10 min', difficulty: 'beginner' },
       { id: 'storage-optimization', title: 'Storage Optimization', description: 'Reduce costly storage operations', readTime: '15 min', difficulty: 'intermediate' },
       { id: 'loop-optimization', title: 'Optimizing Loops', description: 'Avoid expensive iterations', readTime: '12 min', difficulty: 'intermediate' },
       { id: 'packed-storage', title: 'Packed Storage', description: 'Advanced variable packing', readTime: '10 min', difficulty: 'advanced' }
@@ -113,7 +113,7 @@ const docCategories: DocCategory[] = [
     description: 'How to use contract templates and the interactive playground',
     articles: [
       { id: 'using-templates', title: 'Using Contract Templates', description: 'Browse, customize, and deploy templates', readTime: '8 min', difficulty: 'beginner' },
-      { id: 'deploy-testnets', title: 'Deploying to Testnets', description: 'Guide to deploying contracts to Sepolia, Mumbai, and other testnets', readTime: '10 min', difficulty: 'intermediate' },
+      { id: 'deploy-testnets', title: 'Deploying to Testnets', description: 'Guide to deploying contracts to BSC Testnet and opBNB Testnet', readTime: '10 min', difficulty: 'intermediate' },
       { id: 'tutorials-guide', title: 'Following Tutorials', description: 'How tutorial progress and checkpoints work', readTime: '6 min', difficulty: 'beginner' },
       { id: 'contributing-docs', title: 'Contributing to Docs & Templates', description: 'How to submit improvements and new templates', readTime: '6 min', difficulty: 'beginner' }
     ]
@@ -130,7 +130,7 @@ const quickLinks = [
 export default function DocsPage() {
   useSEO({
     title: 'Documentation',
-    description: 'Comprehensive documentation for Lyra Web3 Playground. Learn Solidity, smart contract development, DeFi protocols, NFT standards, and more.',
+    description: 'Comprehensive documentation for BNB Chain AI Toolkit. Learn about agents, MCP servers, DeFi tools, market data, and smart contract development.',
     path: '/docs'
   });
 
@@ -143,7 +143,7 @@ export default function DocsPage() {
     const query = searchQuery.toLowerCase();
     return (
       category.title.toLowerCase().includes(query) ||
-      category.articles.some(article => 
+      category.articles.some(article =>
         article.title.toLowerCase().includes(query) ||
         article.description.toLowerCase().includes(query)
       )
@@ -174,9 +174,9 @@ export default function DocsPage() {
             <BookOpen className="w-16 h-16 mx-auto mb-6 opacity-80" />
             <h1 className="text-4xl md:text-5xl font-black mb-4">Documentation</h1>
             <p className="text-xl text-blue-100 mb-8">
-              Everything you need to build amazing smart contracts
+              Everything you need to build AI-powered applications on BNB Chain
             </p>
-            
+
             {/* Search */}
             <div className="relative max-w-2xl mx-auto">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -280,7 +280,7 @@ export default function DocsPage() {
         {/* Sample Code Section */}
         <div className="max-w-6xl mx-auto mt-16">
           <h2 className="text-2xl font-bold mb-6">Quick Code Examples</h2>
-          
+
           <div className="grid md:grid-cols-2 gap-6">
             {/* Example 1 */}
             <div className="bg-gray-900 rounded-xl overflow-hidden">
@@ -345,7 +345,7 @@ contract MyNFT is ERC721 {
           </p>
           <div className="flex items-center justify-center space-x-4">
             <a
-              href="https://github.com/nirholas/lyra-web3-playground/discussions"
+              href="https://github.com/nirholas/bnb-chain-toolkit/discussions"
               target="_blank"
               rel="noopener noreferrer"
               className="px-6 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-all"

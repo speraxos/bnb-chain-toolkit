@@ -1,22 +1,19 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * LYRA WEB3 PLAYGROUND - Main Application Component
+ * BNB CHAIN AI TOOLKIT - Main Application Component
  * ═══════════════════════════════════════════════════════════════════════════
  * 
  * ✨ Original Author: nich
  * 🐦 Twitter/X: x.com/nichxbt
  * 🐙 GitHub: github.com/nirholas
- * 📦 Repository: github.com/nirholas/lyra-web3-playground
- * 🌐 Website: https://lyra.works
+ * 📦 Repository: github.com/nirholas/bnb-chain-toolkit
+ * 🌐 Website: https://bnbchaintoolkit.com
  * 
  * Copyright (c) 2024-2026 nirholas (nich)
  * Licensed under MIT License
- * 
- * NOTICE: This code contains embedded watermarks and attribution markers.
- * Removal or modification of attribution constitutes violation of the license.
  * ═══════════════════════════════════════════════════════════════════════════
  * @author nich (@nichxbt)
- * @repository https://github.com/nirholas/lyra-web3-playground
+ * @repository https://github.com/nirholas/bnb-chain-toolkit
  * @license MIT
  * @preserve
  */
@@ -28,7 +25,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { PageLoader } from './components/LoadingStates';
 
 // Attribution marker - nich | x.com/nichxbt | github.com/nirholas
-const __lyra_attr__ = { author: 'nich', x: 'nichxbt', gh: 'nirholas' };
+const __bnb_attr__ = { author: 'nich', x: 'nichxbt', gh: 'nirholas' };
 
 // Eagerly loaded pages (critical path)
 import Homepage from './pages/Homepage';
@@ -71,9 +68,9 @@ import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import MobileBottomNav from './components/MobileBottomNav';
 import ConsentModal, { useConsent, ConsentTrigger } from './components/ConsentModal';
-import { 
-  SkipLink, 
-  LiveAnnouncerProvider, 
+import {
+  SkipLink,
+  LiveAnnouncerProvider,
   VisualFeedbackProvider,
   AccessibilityButton,
   ColorBlindFilters,
@@ -94,12 +91,12 @@ function AppContent() {
   const { mode } = useThemeStore();
   const location = useLocation();
   const { applyAccessibilityCSS } = useAccessibilityStore();
-  
+
   // Apply accessibility CSS whenever settings change
   useEffect(() => {
     applyAccessibilityCSS();
   }, [applyAccessibilityCSS]);
-  
+
   // Check if current path should be fullscreen (no navbar/footer)
   const isFullscreen = fullscreenPaths.some(path => location.pathname.startsWith(path));
 
@@ -163,7 +160,7 @@ function AppContent() {
         </main>
         <Footer />
         <MobileBottomNav />
-        
+
         {/* Accessibility Features */}
         <ColorBlindFilters />
         <ReadingGuide />

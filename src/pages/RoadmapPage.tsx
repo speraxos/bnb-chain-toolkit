@@ -264,7 +264,7 @@ export default function RoadmapPage() {
             Have a feature request or suggestion? We'd love to hear from you!
           </p>
           <a
-            href="https://github.com/nirholas/lyra-web3-playground/issues"
+            href="https://github.com/nirholas/bnb-chain-toolkit/issues"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-bold hover:from-purple-700 hover:to-pink-700 transition-all"

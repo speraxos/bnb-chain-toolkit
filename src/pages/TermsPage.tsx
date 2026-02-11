@@ -10,7 +10,7 @@ import { useSEO } from '@/hooks/useSEO';
 export default function TermsPage() {
   useSEO({
     title: 'Terms of Service',
-    description: 'Lyra Web3 Playground terms of service. Understand your rights and responsibilities when using our blockchain development and smart contract learning platform.',
+    description: 'BNB Chain AI Toolkit terms of service. Understand your rights and responsibilities when using our blockchain development and smart contract learning platform.',
     path: '/terms'
   });
 
@@ -20,7 +20,7 @@ export default function TermsPage() {
     {
       icon: CheckCircle,
       title: '1. Acceptance of Terms',
-      content: `By accessing and using Lyra Web3 Playground ("the Platform"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Platform.
+      content: `By accessing and using BNB Chain AI Toolkit ("the Platform"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Platform.
 
 The Platform is designed for educational purposes and to help developers learn blockchain development. It is provided as-is for learning and experimentation.
 
@@ -29,7 +29,7 @@ YOU MUST BE AT LEAST 18 YEARS OLD OR HAVE PARENTAL CONSENT TO USE THIS PLATFORM.
     {
       icon: Zap,
       title: '2. Description of Service',
-      content: `Lyra Web3 Playground provides:
+      content: `BNB Chain AI Toolkit provides:
 
 • Interactive code editors for writing and testing smart contracts
 • Educational examples and tutorials for blockchain development  
@@ -105,7 +105,7 @@ You are SOLELY RESPONSIBLE for reviewing, testing, and auditing any code before 
     {
       icon: Shield,
       title: '7. Indemnification',
-      content: `You agree to indemnify, defend, and hold harmless Lyra Web3 Playground, its creators, contributors, maintainers, and affiliates from and against any and all claims, damages, losses, costs, and expenses (including reasonable attorneys' fees) arising from:
+      content: `You agree to indemnify, defend, and hold harmless BNB Chain AI Toolkit, its creators, contributors, maintainers, and affiliates from and against any and all claims, damages, losses, costs, and expenses (including reasonable attorneys' fees) arising from:
 
 • Your use or misuse of the Platform
 • Your violation of these Terms
@@ -163,7 +163,7 @@ We encourage you to review these terms periodically.`
             <h1 className="text-4xl font-bold">Terms of Service</h1>
           </div>
           <p className="text-xl text-white/80 max-w-2xl">
-            Please read these terms carefully before using Lyra Web3 Playground.
+            Please read these terms carefully before using BNB Chain AI Toolkit.
           </p>
           <div className="flex items-center gap-2 mt-4 text-white/60">
             <Calendar className="w-4 h-4" />
@@ -229,7 +229,7 @@ We encourage you to review these terms periodically.`
             Questions about these terms? Open an issue on GitHub.
           </p>
           <a 
-            href="https://github.com/nirholas/lyra-web3-playground/issues"
+            href="https://github.com/nirholas/bnb-chain-toolkit/issues"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"

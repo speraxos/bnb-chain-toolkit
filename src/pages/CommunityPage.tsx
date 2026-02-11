@@ -38,15 +38,15 @@ const channels: CommunityChannel[] = [
     name: 'GitHub Repository',
     description: 'View source code, report issues, and contribute to the project',
     icon: <Github className="w-8 h-8" />,
-    link: 'https://github.com/nirholas/lyra-web3-playground',
+    link: 'https://github.com/nirholas/bnb-chain-toolkit',
     action: 'View Repository',
     color: 'bg-gray-800'
   },
   {
     name: 'GitHub Discussions',
-    description: 'Ask questions, share ideas, and connect with other developers',
+    description: 'Ask questions, share ideas, and connect with BNB Chain builders',
     icon: <MessageSquare className="w-8 h-8" />,
-    link: 'https://github.com/nirholas/lyra-web3-playground/discussions',
+    link: 'https://github.com/nirholas/bnb-chain-toolkit/discussions',
     action: 'Join Discussion',
     color: 'bg-purple-600'
   },
@@ -73,28 +73,28 @@ const contributionWays: ContributionWay[] = [
     icon: <Code2 className="w-8 h-8" />,
     title: 'Contribute Code',
     description: 'Fix bugs, add features, or improve existing functionality',
-    link: 'https://github.com/nirholas/lyra-web3-playground/pulls',
+    link: 'https://github.com/nirholas/bnb-chain-toolkit/pulls',
     linkText: 'Open a Pull Request'
   },
   {
     icon: <Bug className="w-8 h-8" />,
     title: 'Report Issues',
     description: 'Found a bug? Let us know so we can fix it',
-    link: 'https://github.com/nirholas/lyra-web3-playground/issues/new',
+    link: 'https://github.com/nirholas/bnb-chain-toolkit/issues/new',
     linkText: 'Report an Issue'
   },
   {
     icon: <BookOpen className="w-8 h-8" />,
     title: 'Improve Docs',
     description: 'Help us improve documentation and tutorials',
-    link: 'https://github.com/nirholas/lyra-web3-playground',
+    link: 'https://github.com/nirholas/bnb-chain-toolkit',
     linkText: 'Edit Documentation'
   },
   {
     icon: <Lightbulb className="w-8 h-8" />,
     title: 'Suggest Features',
     description: "Have an idea? We'd love to hear it",
-    link: 'https://github.com/nirholas/lyra-web3-playground/discussions/categories/ideas',
+    link: 'https://github.com/nirholas/bnb-chain-toolkit/discussions/categories/ideas',
     linkText: 'Share Your Idea'
   }
 ];
@@ -102,7 +102,7 @@ const contributionWays: ContributionWay[] = [
 export default function CommunityPage() {
   useSEO({
     title: 'Community',
-    description: 'Join the Lyra Web3 community. Contribute to open source, share projects, get help from fellow developers, and shape the future of blockchain education.',
+    description: 'Join the BNB Chain AI Toolkit community. Contribute to open source, build agents, get help from fellow developers, and shape the future of AI-powered Web3.',
     path: '/community'
   });
 
@@ -116,13 +116,13 @@ export default function CommunityPage() {
             Join Our Community
           </h1>
           <p className="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
-            Connect with developers learning and building the future of Web3.
-            This is an open source project and we welcome all contributions!
+            Connect with developers building AI-powered applications on BNB Chain.
+            72+ agents, 6 MCP servers, 900+ tools — all open source!
           </p>
-          
+
           <div className="flex items-center justify-center space-x-4 flex-wrap gap-4">
             <a
-              href="https://github.com/nirholas/lyra-web3-playground"
+              href="https://github.com/nirholas/bnb-chain-toolkit"
               target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-4 bg-white text-purple-600 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all shadow-lg"
@@ -146,7 +146,7 @@ export default function CommunityPage() {
       {/* Channels */}
       <div className="container mx-auto px-4 py-16">
         <h2 className="text-3xl font-bold text-center mb-12">Connect With Us</h2>
-        
+
         <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
           {channels.map((channel, index) => (
             <a
@@ -180,7 +180,7 @@ export default function CommunityPage() {
             Every contribution helps make Web3 education more accessible.
             Here's how you can get involved:
           </p>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             {contributionWays.map((way, index) => (
               <div
@@ -271,7 +271,7 @@ export default function CommunityPage() {
             If you find this project helpful, consider giving it a star on GitHub!
           </p>
           <a
-            href="https://github.com/nirholas/lyra-web3-playground"
+            href="https://github.com/nirholas/bnb-chain-toolkit"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center space-x-2 px-6 py-3 bg-gray-900 text-white rounded-lg font-bold hover:bg-gray-800 transition-all"

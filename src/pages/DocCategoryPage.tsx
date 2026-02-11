@@ -41,7 +41,7 @@ const docCategories: DocCategory[] = [
     icon: <Rocket className="w-6 h-6" />,
     description: 'New to the platform? Start here',
     articles: [
-      { id: 'intro', title: 'Introduction to Lyra Web3 Playground', description: 'Learn what this platform can do for you', readTime: '5 min', difficulty: 'beginner' },
+      { id: 'intro', title: 'Introduction to BNB Chain AI Toolkit', description: 'Learn what this platform can do for you', readTime: '5 min', difficulty: 'beginner' },
       { id: 'first-contract', title: 'Your First Smart Contract', description: 'Write, compile, and deploy in 10 minutes', readTime: '10 min', difficulty: 'beginner' },
       { id: 'sandbox-basics', title: 'Understanding the Sandbox', description: 'Navigate the interactive development environment', readTime: '7 min', difficulty: 'beginner' },
       { id: 'innovation-mode', title: 'Activating Innovation Mode', description: 'Unlock AI-powered features', readTime: '5 min', difficulty: 'beginner' }

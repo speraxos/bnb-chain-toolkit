@@ -29,33 +29,33 @@ import {
 
 /** Platform statistics - real counts */
 const stats = [
-  { icon: <Code2 className="w-6 h-6" />, value: '40+', label: 'Contract Templates' },
-  { icon: <BookOpen className="w-6 h-6" />, value: '50+', label: 'Tutorials' },
-  { icon: <Layers className="w-6 h-6" />, value: '8', label: 'Chains Supported' },
-  { icon: <Shield className="w-6 h-6" />, value: '100%', label: 'Open Source' }
+  { icon: <Code2 className="w-6 h-6" />, value: '72+', label: 'AI Agents' },
+  { icon: <BookOpen className="w-6 h-6" />, value: '6', label: 'MCP Servers' },
+  { icon: <Layers className="w-6 h-6" />, value: '900+', label: 'Tools' },
+  { icon: <Shield className="w-6 h-6" />, value: '60+', label: 'Chains Supported' }
 ];
 
 /** Core values of the platform */
 const values = [
   {
     icon: <BookOpen className="w-8 h-8" />,
-    title: 'Education First',
-    description: 'Everyone should have access to Web3 education, regardless of background or experience level.'
+    title: 'AI-First',
+    description: 'Purpose-built for AI agents. 72+ agent definitions, 6 MCP servers, and 900+ tools.'
   },
   {
     icon: <Shield className="w-8 h-8" />,
-    title: 'Security Focused',
-    description: 'Every template and tutorial emphasizes security best practices to help developers write safer code.'
+    title: 'BNB Chain Native',
+    description: 'Deep integration with BSC, opBNB, and Greenfield. 30 BNB-specific agents out of the box.'
   },
   {
     icon: <Sparkles className="w-8 h-8" />,
-    title: 'Hands-On Learning',
-    description: 'Learn by doing with interactive examples, live code editing, and real testnet deployments.'
+    title: 'Production Ready',
+    description: 'Not just demos — real market data, DeFi tools, wallet management, and cross-chain support.'
   },
   {
     icon: <Heart className="w-8 h-8" />,
-    title: 'Community Driven',
-    description: 'Built by the community, for the community. Open source and welcoming contributions.'
+    title: 'Open Source',
+    description: 'MIT licensed, community-driven, and built for the BNB Chain hackathon community.'
   }
 ];
 
@@ -63,40 +63,40 @@ const values = [
 const features = [
   {
     icon: <FileCode className="w-6 h-6" />,
-    title: 'Interactive Playground',
-    description: 'Write, compile, and deploy Solidity smart contracts directly in your browser with Monaco Editor.'
+    title: '72+ AI Agents',
+    description: 'Pre-built agent definitions for PancakeSwap, Venus, BNB Staking, and every major BNB Chain protocol.'
   },
   {
     icon: <Layers className="w-6 h-6" />,
-    title: 'Multi-Chain Support',
-    description: 'Deploy to Ethereum, Base, Polygon, Avalanche, BSC, Arbitrum, Solana, and Monad.'
+    title: '6 MCP Servers',
+    description: 'Model Context Protocol servers for BNB Chain, Binance, Universal Crypto, Agenti, and UCAI.'
   },
   {
     icon: <BookOpen className="w-6 h-6" />,
-    title: 'Comprehensive Tutorials',
-    description: '50+ tutorials covering everything from Solidity basics to advanced DeFi development.'
+    title: 'Market Data',
+    description: 'CoinGecko, DeFiLlama, and 200+ news sources integrated for real-time market intelligence.'
   },
   {
     icon: <Code2 className="w-6 h-6" />,
-    title: 'Production Templates',
-    description: '40+ battle-tested smart contract templates for tokens, NFTs, DeFi, DAOs, and more.'
+    title: 'DeFi Tools',
+    description: 'Dust sweeper, wallet toolkit, HD wallet generation, vanity addresses, and transaction signing.'
   },
   {
     icon: <Coins className="w-6 h-6" />,
-    title: 'Multi-Chain Support',
-    description: 'Deploy to Ethereum, Base, Polygon, Arbitrum, Avalanche, and more testnets with one click.'
+    title: '60+ Chains',
+    description: 'BSC, opBNB, Greenfield primary. Plus Ethereum, Polygon, Arbitrum, Base, Solana, and 50+ more.'
   },
   {
     icon: <Zap className="w-6 h-6" />,
-    title: 'Testnet Deployment',
-    description: 'Connect your wallet and deploy contracts to testnets with built-in faucet integration.'
+    title: 'Web3 Standards',
+    description: 'ERC-8004 for agent trust verification and W3AG for Web3 accessibility compliance.'
   }
 ];
 
 export default function AboutPage() {
   useSEO({
-    title: 'About Lyra',
-    description: 'Lyra is a free, open-source Web3 learning platform. Our mission is to make blockchain development accessible to everyone through interactive tutorials and hands-on coding.',
+    title: 'About BNB Chain AI Toolkit',
+    description: 'The most comprehensive open-source AI toolkit for BNB Chain. 72+ agents, 6 MCP servers, 900+ tools, 60+ chains. Built for the Good Vibes Only hackathon.',
     path: '/about'
   });
 
@@ -111,14 +111,14 @@ export default function AboutPage() {
               <Heart className="w-5 h-5 text-red-500" />
               <span className="text-sm font-bold text-blue-700 dark:text-blue-300">About Us</span>
             </div>
-            
-            <h1 className="text-5xl md:text-6xl font-black mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Lyra Web3 Playground
+
+            <h1 className="text-5xl md:text-6xl font-black mb-6 bg-gradient-to-r from-yellow-500 to-amber-500 bg-clip-text text-transparent">
+              BNB Chain AI Toolkit
             </h1>
-            
+
             <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
-              An open-source educational platform for learning blockchain development.
-              Created by <a href="https://x.com/nichxbt" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">nich (@nichxbt)</a> as a community resource.
+              The most comprehensive open-source AI toolkit for BNB Chain.
+              Created by <a href="https://x.com/nichxbt" target="_blank" rel="noopener noreferrer" className="text-yellow-600 hover:underline">nich (@nichxbt)</a> for the Good Vibes Only hackathon.
             </p>
 
             <div className="flex items-center justify-center space-x-4">
@@ -130,7 +130,7 @@ export default function AboutPage() {
                 Start Building
               </Link>
               <a
-                href="https://github.com/nirholas/lyra-web3-playground"
+                href="https://github.com/nirholas/bnb-chain-toolkit"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg font-bold hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
@@ -149,8 +149,8 @@ export default function AboutPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="inline-flex p-4 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-4">
-                  <span className="text-blue-600 dark:text-blue-400">{stat.icon}</span>
+                <div className="inline-flex p-4 bg-yellow-100 dark:bg-yellow-900/30 rounded-full mb-4">
+                  <span className="text-yellow-600 dark:text-yellow-400">{stat.icon}</span>
                 </div>
                 <div className="text-4xl font-black text-gray-900 dark:text-white mb-2">
                   {stat.value}
@@ -166,21 +166,21 @@ export default function AboutPage() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-            <div className="p-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl text-white">
+            <div className="p-8 bg-gradient-to-br from-yellow-500 to-amber-600 rounded-2xl text-white">
               <Target className="w-12 h-12 mb-6" />
               <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
-              <p className="text-lg text-blue-100">
-                Make blockchain development accessible to everyone through interactive 
-                learning, production-ready examples, and hands-on experience.
+              <p className="text-lg text-yellow-100">
+                Give AI assistants superpowers on BNB Chain. Make it trivial to build, deploy,
+                and operate AI-powered DeFi applications across 60+ networks.
               </p>
             </div>
-            
-            <div className="p-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl text-white">
+
+            <div className="p-8 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl text-white">
               <Sparkles className="w-12 h-12 mb-6" />
               <h2 className="text-3xl font-bold mb-4">Our Vision</h2>
-              <p className="text-lg text-purple-100">
-                A world where every developer can build secure, efficient smart contracts 
-                with confidence, supported by comprehensive educational resources.
+              <p className="text-lg text-amber-100">
+                A world where every AI assistant can interact with BNB Chain natively —
+                trading, lending, staking, and building with full blockchain access.
               </p>
             </div>
           </div>
@@ -192,9 +192,9 @@ export default function AboutPage() {
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-black text-center mb-4">What We Offer</h2>
           <p className="text-xl text-gray-600 dark:text-gray-400 text-center mb-12">
-            Everything you need to learn and build on blockchain
+            Everything you need to build AI-powered applications on BNB Chain
           </p>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {features.map((feature, index) => (
               <div
@@ -219,7 +219,7 @@ export default function AboutPage() {
           <p className="text-xl text-gray-600 dark:text-gray-400 text-center mb-12">
             The principles that guide everything we build
           </p>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
             {values.map((value, index) => (
               <div
@@ -244,7 +244,7 @@ export default function AboutPage() {
             <div className="text-6xl mb-6">👨‍💻</div>
             <h2 className="text-3xl font-black mb-4">Created by nich</h2>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Building tools to make Web3 development accessible to everyone.
+              Building the most comprehensive AI toolkit for BNB Chain.
               This project is open source and community-driven.
             </p>
             <div className="flex items-center justify-center space-x-4">
@@ -279,11 +279,11 @@ export default function AboutPage() {
             <h2 className="text-4xl font-black mb-4">100% Open Source</h2>
             <p className="text-xl text-green-100 mb-8">
               This project is MIT licensed and welcomes contributions from the community.
-              Help us build the future of Web3 education.
+              Help us build the future of AI-powered Web3.
             </p>
             <div className="flex items-center justify-center space-x-4">
               <a
-                href="https://github.com/nirholas/lyra-web3-playground"
+                href="https://github.com/nirholas/bnb-chain-toolkit"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 bg-white text-green-600 rounded-lg font-bold hover:bg-gray-100 transition-all"
@@ -313,7 +313,7 @@ export default function AboutPage() {
             </p>
             <div className="flex items-center justify-center space-x-4">
               <a
-                href="https://github.com/nirholas/lyra-web3-playground"
+                href="https://github.com/nirholas/bnb-chain-toolkit"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 bg-white text-blue-600 rounded-lg font-bold hover:bg-gray-100 transition-all"

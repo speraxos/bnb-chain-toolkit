@@ -47,14 +47,14 @@ const docCategories: DocCategory[] = [
     articles: [
       { 
         id: 'intro', 
-        title: 'Introduction to Lyra Web3 Playground', 
+        title: 'Introduction to BNB Chain AI Toolkit', 
         description: 'Learn what this platform can do for you', 
         readTime: '5 min', 
         difficulty: 'beginner',
         content: `
-## Welcome to Lyra Web3 Playground
+## Welcome to BNB Chain AI Toolkit
 
-Lyra Web3 Playground is your interactive development environment for learning and building smart contracts. Whether you're just starting your Web3 journey or you're an experienced developer, our platform provides the tools you need to write, compile, test, and deploy smart contracts.
+BNB Chain AI Toolkit is your interactive development environment for learning and building smart contracts. Whether you're just starting your Web3 journey or you're an experienced developer, our platform provides the tools you need to write, compile, test, and deploy smart contracts.
 
 ### What You Can Do
 

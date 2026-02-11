@@ -44,14 +44,14 @@ const faqs: FAQItem[] = [
   // General
   {
     id: 'what-is-platform',
-    question: 'What is Lyra Web3 Playground?',
-    answer: 'Lyra Web3 Playground is an open-source, browser-based platform for learning blockchain development. It provides an interactive code playground, a library of contract templates, and step-by-step tutorials to help developers learn and build.',
+    question: 'What is BNB Chain AI Toolkit?',
+    answer: 'BNB Chain AI Toolkit is an open-source, browser-based platform for learning blockchain development. It provides an interactive code playground, a library of contract templates, and step-by-step tutorials to help developers learn and build.',
     category: 'general',
     helpful: 156
   },
   {
     id: 'is-it-free',
-    question: 'Is Lyra Web3 Playground free to use?',
+    question: 'Is BNB Chain AI Toolkit free to use?',
     answer: 'Yes — the core features (playground, templates, and tutorials) are free and open source. Some advanced or experimental features may be gated or listed as coming soon.',
     category: 'general',
     helpful: 243
@@ -338,7 +338,7 @@ export default function FAQPage() {
             </p>
             <div className="flex items-center justify-center space-x-4">
               <a
-                href="https://github.com/nirholas/lyra-web3-playground/discussions"
+                href="https://github.com/nirholas/bnb-chain-toolkit/discussions"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-all flex items-center space-x-2"

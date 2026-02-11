@@ -1,9 +1,9 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * LYRA WEB3 PLAYGROUND - Navigation Bar Component
+ * BNB CHAIN AI TOOLKIT - Navigation Bar Component
  * ═══════════════════════════════════════════════════════════════════════════
  * ✨ Author: nich | 🐦 x.com/nichxbt | 🐙 github.com/nirholas
- * 📦 github.com/nirholas/lyra-web3-playground | 🌐 https://lyra.works
+ * 📦 github.com/nirholas/bnb-chain-toolkit
  * Copyright (c) 2024-2026 nirholas (nich) - MIT License
  * @preserve
  * ═══════════════════════════════════════════════════════════════════════════
@@ -11,8 +11,8 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  Moon, Sun, Menu, X, Zap, BookOpen, Users, 
+import {
+  Moon, Sun, Menu, X, Zap, BookOpen, Users,
   Compass, ChevronDown, Code2, GraduationCap, Rocket,
   FileCode, Terminal, Layers, ArrowRight, Play, Sparkles,
   FlaskConical, Code
@@ -62,18 +62,17 @@ function NavDropdown({ label, items, icon: Icon }: NavDropdownProps) {
   }, []);
 
   return (
-    <div 
+    <div
       ref={dropdownRef}
       className="relative"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <button
-        className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-          isOpen 
-            ? 'text-gray-900 dark:text-white bg-gray-100/80 dark:bg-white/10' 
+        className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${isOpen
+            ? 'text-gray-900 dark:text-white bg-gray-100/80 dark:bg-white/10'
             : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/60 dark:hover:bg-white/5'
-        }`}
+          }`}
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
@@ -83,12 +82,11 @@ function NavDropdown({ label, items, icon: Icon }: NavDropdownProps) {
       </button>
 
       {/* Dropdown Panel */}
-      <div 
-        className={`absolute top-full left-0 mt-1 w-80 origin-top-left transition-all duration-200 ${
-          isOpen 
-            ? 'opacity-100 scale-100 translate-y-0' 
+      <div
+        className={`absolute top-full left-0 mt-1 w-80 origin-top-left transition-all duration-200 ${isOpen
+            ? 'opacity-100 scale-100 translate-y-0'
             : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'
-        }`}
+          }`}
       >
         <div className="bg-white dark:bg-black rounded-xl shadow-xl shadow-black/10 dark:shadow-[0_0_30px_rgba(255,255,255,0.05)] border border-gray-200/80 dark:border-white/10 overflow-hidden backdrop-blur-xl">
           <div className="p-2">
@@ -199,52 +197,51 @@ export default function NavBar() {
 
   // Navigation items for dropdowns
   const learnItems: DropdownItem[] = [
-    { label: 'Documentation', href: '/docs', icon: BookOpen, description: 'Comprehensive guides and API references', iconColor: 'text-blue-500' },
-    { label: 'Tutorials', href: '/tutorials', icon: GraduationCap, description: 'Step-by-step learning paths', iconColor: 'text-emerald-500' },
-    { label: 'Examples', href: '/playground', icon: FileCode, description: 'Ready-to-use code templates', iconColor: 'text-amber-500' },
+    { label: 'Documentation', href: '/docs', icon: BookOpen, description: 'Guides for agents, MCP servers & tools', iconColor: 'text-blue-500' },
+    { label: 'Tutorials', href: '/tutorials', icon: GraduationCap, description: 'Step-by-step BNB Chain integration', iconColor: 'text-emerald-500' },
+    { label: 'Examples', href: '/playground', icon: FileCode, description: 'Smart contract templates for BSC', iconColor: 'text-amber-500' },
   ];
 
   const buildItems: DropdownItem[] = [
-    { label: 'AI Sandbox', href: '/sandbox', icon: Sparkles, description: 'AI-powered coding environment', badge: 'New', iconColor: 'text-violet-500' },
+    { label: 'AI Sandbox', href: '/sandbox', icon: Sparkles, description: 'AI-powered BNB Chain dev environment', badge: 'New', iconColor: 'text-violet-500' },
     { label: 'Web Sandbox', href: '/ide?type=web', icon: Terminal, description: 'HTML, CSS, JS, React, Vue', iconColor: 'text-blue-500' },
-    { label: 'Solidity IDE', href: '/ide?type=solidity', icon: Code, description: 'Smart contract development', iconColor: 'text-purple-500' },
-    { label: 'Full-Stack Playground', href: '/fullstack-demo', icon: Layers, description: 'Contract + Frontend builder', iconColor: 'text-green-500' },
-    { label: 'Innovation Lab', href: '/innovation', icon: FlaskConical, description: 'AI tools & experimental features', badge: 'Beta', iconColor: 'text-pink-500' },
+    { label: 'Solidity IDE', href: '/ide?type=solidity', icon: Code, description: 'BSC smart contract development', iconColor: 'text-purple-500' },
+    { label: 'Full-Stack Playground', href: '/fullstack-demo', icon: Layers, description: 'Contract + Frontend on BNB Chain', iconColor: 'text-green-500' },
+    { label: 'Innovation Lab', href: '/innovation', icon: FlaskConical, description: 'MCP tools & experimental features', badge: 'Beta', iconColor: 'text-pink-500' },
   ];
 
   const isActiveLink = (path: string) => location.pathname === path || location.pathname.startsWith(path + '/');
 
   return (
     <>
-      <nav 
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled 
-            ? 'bg-white/80 dark:bg-black/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-white/5 shadow-sm shadow-black/5 dark:shadow-[0_1px_20px_rgba(255,255,255,0.03)]' 
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+            ? 'bg-white/80 dark:bg-black/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-white/5 shadow-sm shadow-black/5 dark:shadow-[0_1px_20px_rgba(255,255,255,0.03)]'
             : 'bg-white/60 dark:bg-black/60 backdrop-blur-md'
-        }`}
+          }`}
         role="navigation"
         aria-label="Main navigation"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="flex items-center gap-2.5 group"
-              aria-label="Lyra Web3 Playground - Home"
+              aria-label="BNB Chain AI Toolkit - Home"
             >
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-xl blur-lg opacity-40 group-hover:opacity-60 transition-opacity" />
-                <div className="relative p-2 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-xl group-hover:scale-105 transition-transform duration-200">
+                <div className="absolute inset-0 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-xl blur-lg opacity-40 group-hover:opacity-60 transition-opacity" />
+                <div className="relative p-2 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-xl group-hover:scale-105 transition-transform duration-200">
                   <Zap className="w-5 h-5 text-white" />
                 </div>
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-lg tracking-tight text-gray-900 dark:text-white">
-                  Lyra
+                  BNB Chain
                 </span>
                 <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400 -mt-0.5 tracking-wide hidden sm:block">
-                  Web3 Playground
+                  AI Toolkit
                 </span>
               </div>
             </Link>
@@ -253,14 +250,13 @@ export default function NavBar() {
             <div className="hidden lg:flex items-center gap-1">
               <NavDropdown label="Learn" items={learnItems} icon={GraduationCap} />
               <NavDropdown label="Build" items={buildItems} icon={Code2} />
-              
+
               <Link
                 to="/explore"
-                className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-                  isActiveLink('/explore')
+                className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${isActiveLink('/explore')
                     ? 'text-gray-900 dark:text-white bg-gray-100/80 dark:bg-white/10'
                     : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/60 dark:hover:bg-white/5'
-                }`}
+                  }`}
               >
                 <Compass className="w-4 h-4" />
                 <span>Explore</span>
@@ -268,11 +264,10 @@ export default function NavBar() {
 
               <Link
                 to="/community"
-                className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-                  isActiveLink('/community')
+                className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${isActiveLink('/community')
                     ? 'text-gray-900 dark:text-white bg-gray-100/80 dark:bg-white/10'
                     : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/60 dark:hover:bg-white/5'
-                }`}
+                  }`}
               >
                 <Users className="w-4 h-4" />
                 <span>{t('nav.community')}</span>
@@ -282,7 +277,7 @@ export default function NavBar() {
             {/* Right Side Actions */}
             <div className="hidden lg:flex items-center gap-2">
               <LanguageSelector compact />
-              
+
               <button
                 onClick={handleThemeToggle}
                 className="p-2.5 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/60 dark:hover:bg-white/5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:ring-offset-2 dark:focus:ring-offset-black"
@@ -302,11 +297,11 @@ export default function NavBar() {
 
               <Link
                 to="/sandbox"
-                className="group relative flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                className="group relative flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-gradient-to-r from-yellow-500 to-amber-500 text-white shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
               >
                 <Play className="w-4 h-4" />
                 <span>Start Building</span>
-                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-violet-400 to-fuchsia-400 opacity-0 group-hover:opacity-100 blur-xl transition-opacity -z-10" />
+                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-yellow-400 to-amber-400 opacity-0 group-hover:opacity-100 blur-xl transition-opacity -z-10" />
               </Link>
             </div>
 
@@ -319,7 +314,7 @@ export default function NavBar() {
               >
                 {mode === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </button>
-              
+
               <button
                 ref={menuButtonRef}
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -335,17 +330,16 @@ export default function NavBar() {
         </div>
 
         {/* Mobile Menu */}
-        <div 
+        <div
           id="mobile-menu"
           ref={mobileMenuRef}
           role="dialog"
           aria-modal="true"
           aria-label="Navigation menu"
-          className={`lg:hidden fixed inset-x-0 top-16 bottom-0 bg-white dark:bg-black transition-all duration-300 ease-out ${
-            isMenuOpen 
-              ? 'opacity-100 translate-y-0' 
+          className={`lg:hidden fixed inset-x-0 top-16 bottom-0 bg-white dark:bg-black transition-all duration-300 ease-out ${isMenuOpen
+              ? 'opacity-100 translate-y-0'
               : 'opacity-0 -translate-y-4 pointer-events-none'
-          }`}
+            }`}
           aria-hidden={!isMenuOpen}
         >
           <nav className="h-full overflow-y-auto overscroll-contain px-4 py-6 space-y-6">
@@ -456,7 +450,7 @@ export default function NavBar() {
                   </div>
                   <div>
                     <div className="font-medium text-gray-900 dark:text-white">About</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Learn about Lyra</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">Learn about BNB Chain AI Toolkit</div>
                   </div>
                 </Link>
               </div>
@@ -468,11 +462,11 @@ export default function NavBar() {
             {/* Actions */}
             <div className="space-y-3 pb-20">
               <LanguageSelector />
-              
+
               <Link
                 to="/sandbox"
                 onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-center gap-2 w-full px-4 py-3.5 rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-semibold shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 transition-all"
+                className="flex items-center justify-center gap-2 w-full px-4 py-3.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-500 text-white font-semibold shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40 transition-all"
               >
                 <Play className="w-5 h-5" />
                 <span>Start Building</span>
@@ -488,8 +482,8 @@ export default function NavBar() {
 
       {/* Mobile menu backdrop */}
       {isMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden" 
+        <div
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setIsMenuOpen(false)}
           aria-hidden="true"
         />

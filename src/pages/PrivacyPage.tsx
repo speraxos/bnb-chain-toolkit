@@ -21,7 +21,7 @@ interface Section {
 export default function PrivacyPage() {
   useSEO({
     title: 'Privacy Policy',
-    description: 'Lyra Web3 Playground privacy policy. Learn how we protect your data, handle wallet connections, and respect your privacy in our blockchain development platform.',
+    description: 'BNB Chain AI Toolkit privacy policy. Learn how we protect your data, handle wallet connections, and respect your privacy in our blockchain development platform.',
     path: '/privacy'
   });
 
@@ -228,7 +228,7 @@ export default function PrivacyPage() {
                 please reach out.
               </p>
               <a 
-                href="https://github.com/nirholas/lyra-web3-playground/issues"
+                href="https://github.com/nirholas/bnb-chain-toolkit/issues"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
@@ -242,14 +242,14 @@ export default function PrivacyPage() {
         {/* Open Source Note */}
         <div className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
           <p>
-            Lyra Web3 Playground is open source. You can review our code at{' '}
+            BNB Chain AI Toolkit is open source. You can review our code at{' '}
             <a 
-              href="https://github.com/nirholas/lyra-web3-playground"
+              href="https://github.com/nirholas/bnb-chain-toolkit"
               className="text-blue-600 hover:underline"
               target="_blank"
               rel="noopener noreferrer"
             >
-              github.com/nirholas/lyra-web3-playground
+              github.com/nirholas/bnb-chain-toolkit
             </a>
           </p>
         </div>

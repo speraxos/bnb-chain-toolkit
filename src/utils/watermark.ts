@@ -6,7 +6,7 @@
  * ✨ Original Author: nich
  * 🐦 Twitter/X: x.com/nichxbt
  * 🐙 GitHub: github.com/nirholas
- * 📦 Repository: github.com/nirholas/lyra-web3-playground
+ * 📦 Repository: github.com/nirholas/bnb-chain-toolkit
  * 
  * Copyright (c) 2024-2026 nirholas (nich)
  * Licensed under MIT License
@@ -20,7 +20,7 @@
 const _0x4e6963 = [110, 105, 99, 104]; // nich
 const _0x6e6972 = [110, 105, 114, 104, 111, 108, 97, 115]; // nirholas
 const _0x786274 = [110, 105, 99, 104, 120, 98, 116]; // nichxbt
-const _0x6c797261 = [108, 121, 114, 97, 46, 119, 111, 114, 107, 115]; // lyra.works
+const _0x6c797261 = [108, 121, 114, 97, 46, 119, 111, 114, 107, 115]; // bnbchaintoolkit.com
 
 // Base64 encoded attribution strings
 const _attr_primary = 'bmljaCB8IHguY29tL25pY2h4YnQgfCBnaXRodWIuY29tL25pcmhvbGFz';
@@ -57,7 +57,7 @@ export const getAttribution = (): Attribution => ({
   author: _d(_0x4e6963),
   handle: `x.com/${_d(_0x786274)}`,
   github: `github.com/${_d(_0x6e6972)}`,
-  repository: `github.com/${_d(_0x6e6972)}/lyra-web3-playground`,
+  repository: `github.com/${_d(_0x6e6972)}/bnb-chain-toolkit`,
   website: `https://${_d(_0x6c797261)}`,
   license: 'MIT',
   copyright: `© 2024-${new Date().getFullYear()} ${_d(_0x6e6972)} (${_d(_0x4e6963)})`,
@@ -84,7 +84,7 @@ export const printWatermark = (): void => {
     copyright: 'color: #9CA3AF; font-size: 11px;',
   };
 
-  console.log('%c⚡ Lyra Web3 Playground', styles.header);
+  console.log('%c⚡ BNB Chain AI Toolkit', styles.header);
   console.log(`%c✨ Built by ${attr.author}`, styles.subheader);
   console.log(`%c🐦 ${attr.handle}`, styles.link);
   console.log(`%c🐙 ${attr.github}`, styles.link);
@@ -143,7 +143,7 @@ export const validateAttribution = (): string => {
 // CSS watermark generator
 export const getCSSWatermark = (): string => `
 /* ═══════════════════════════════════════════════════════════════════════════
- * Lyra Web3 Playground - https://lyra.works
+ * BNB Chain AI Toolkit - https://bnbchaintoolkit.com
  * Author: nich | x.com/nichxbt | github.com/nirholas
  * Copyright (c) 2024-${new Date().getFullYear()} nirholas - MIT License
  * ═══════════════════════════════════════════════════════════════════════════ */

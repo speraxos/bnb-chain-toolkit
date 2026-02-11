@@ -1,9 +1,9 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * LYRA WEB3 PLAYGROUND - Footer Component
+ * BNB CHAIN AI TOOLKIT - Footer Component
  * ═══════════════════════════════════════════════════════════════════════════
  * ✨ Author: nich | 🐦 x.com/nichxbt | 🐙 github.com/nirholas
- * 📦 github.com/nirholas/lyra-web3-playground | 🌐 https://lyra.works
+ * 📦 github.com/nirholas/bnb-chain-toolkit
  * Copyright (c) 2024-2026 nirholas (nich) - MIT License
  * @preserve
  * ═══════════════════════════════════════════════════════════════════════════
@@ -16,7 +16,7 @@ import useI18n from '@/stores/i18nStore';
 
 export default function Footer() {
   const { t } = useI18n();
-  
+
   return (
     <footer className="bg-black text-gray-200 pt-12 pb-24 md:pb-8 mt-16 border-t border-white/5" role="contentinfo">
       <div className="container mx-auto px-4">
@@ -26,7 +26,7 @@ export default function Footer() {
               <div className="p-2 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg" aria-hidden="true">
                 <Globe2 className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-lg md:text-xl">Lyra Web3 Playground</span>
+              <span className="font-bold text-lg md:text-xl">BNB Chain AI Toolkit</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
               {t('hero.description')}
@@ -59,18 +59,18 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-1">
             <h3 className="font-semibold mb-3 text-sm md:text-base">Stay in touch</h3>
             <div className="flex space-x-4 mb-3 text-gray-300">
-              <a 
-                href="https://github.com/nirholas/lyra-web3-playground" 
-                className="hover:text-white p-2 -ml-2 touch-target" 
+              <a
+                href="https://github.com/nirholas/bnb-chain-toolkit"
+                className="hover:text-white p-2 -ml-2 touch-target"
                 aria-label="Visit our GitHub repository (opens in new tab)"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <Github className="w-5 h-5" aria-hidden="true" />
               </a>
-              <a 
-                href="https://x.com/nichxbt" 
-                className="hover:text-white p-2 touch-target" 
+              <a
+                href="https://x.com/nichxbt"
+                className="hover:text-white p-2 touch-target"
                 aria-label="Follow us on Twitter (opens in new tab)"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -87,7 +87,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-4 flex flex-col md:flex-row items-center justify-between text-sm text-gray-500 text-center md:text-left">
-          <span>© {new Date().getFullYear()} Lyra Web3 Playground. {t('footer.rights')}.</span>
+          <span>© {new Date().getFullYear()} BNB Chain AI Toolkit. {t('footer.rights')}.</span>
           <nav aria-label="Legal links" className="space-x-6 mt-3 md:mt-0">
             <Link to="/privacy" className="hover:text-white py-2 inline-block">{t('footer.privacy')}</Link>
             <Link to="/terms" className="hover:text-white py-2 inline-block">{t('footer.terms')}</Link>

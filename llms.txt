@@ -1,10 +1,34 @@
 # BNB Chain AI Toolkit
 
-> The most comprehensive open-source AI toolkit for BNB Chain. 72+ AI agents, 6 MCP servers with 600+ tools, market data, DeFi tools, wallet utilities, and Web3 standards.
+> https://github.com/nirholas/bnb-agents
 
-## Links
+The most comprehensive open-source AI toolkit for BNB Chain, BSC, opBNB, and the Binance ecosystem.
 
-- Repository: https://github.com/nirholas/bnb-agents
-- Author: https://github.com/nirholas
-- Full documentation: https://raw.githubusercontent.com/nirholas/bnb-agents/main/llms-full.txt
+## What It Is
+
+A monorepo with 72+ AI agents, 6 MCP servers (900+ tools), market data, DeFi tools, wallets, and Web3 standards — all for building AI-powered blockchain applications.
+
+## Components
+
+- agents/ — 72+ AI agent definitions (30 BNB Chain + 42 DeFi)
+- mcp-servers/ — 6 Model Context Protocol servers
+- market-data/ — CoinGecko, DeFiLlama, 200+ news sources
+- defi-tools/ — Multi-chain dust sweeper
+- wallets/ — Offline-capable wallet operations
+- standards/ — ERC-8004 (agent trust) + W3AG (accessibility)
+
+## MCP Servers
+
+- bnbchain-mcp: BNB Chain + EVM operations (100+ tools)
+- binance-mcp: Binance.com exchange (478+ tools)
+- binance-us-mcp: Binance.US (US compliance)
+- universal-crypto-mcp: 60+ networks (100+ tools)
+- agenti: Universal EVM + Solana
+- ucai: ABI-to-MCP generator (Python)
+
+## More Info
+
+- Documentation: https://github.com/nirholas/bnb-agents/tree/main/docs
+- Full context: https://github.com/nirholas/bnb-agents/blob/main/llms-full.txt
+- License: MIT
 

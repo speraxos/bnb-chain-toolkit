@@ -1,8 +1,26 @@
 # BNB Chain AI Toolkit
 
-> The most comprehensive open-source AI toolkit for BNB Chain. 72+ AI agents, 6 MCP servers with 600+ tools, market data, DeFi tools, wallet utilities, and Web3 standards.
+> 72+ AI agents, 6 MCP servers, 900+ tools for BNB Chain and 60+ networks.
 
-### Terminal Management
+## Project Structure
+
+- `agents/` — 72+ AI agent definitions (JSON)
+- `mcp-servers/` — 6 MCP servers (TypeScript + Python)
+- `market-data/` — Price feeds and news aggregation
+- `defi-tools/` — Dust sweeper and DeFi utilities
+- `wallets/` — Offline wallet operations
+- `standards/` — ERC-8004 and W3AG specifications
+- `docs/` — Comprehensive documentation
+
+## Commands
+
+```bash
+bun install           # Install dependencies
+bun run build         # Build agent index
+bun run format        # Format agent JSONs
+```
+
+## Terminal Management
 
 - **Always use background terminals** (`isBackground: true`) for every command so a terminal ID is returned
 - **Always kill the terminal** after the command completes, whether it succeeds or fails — never leave terminals open

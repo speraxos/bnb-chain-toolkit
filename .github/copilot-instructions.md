@@ -1,6 +1,24 @@
-# defi-agents
+# BNB Chain AI Toolkit
 
-> DeFi agent definitions JSON API + MCP - Production-ready agents for Web3, crypto trading, portfolio management, and blockchain automation. MCP compatible.
+> 72+ AI agents, 6 MCP servers, 900+ tools for BNB Chain and 60+ networks.
+
+## Structure
+
+- `agents/` — 72+ AI agent definitions (JSON)
+- `mcp-servers/` — 6 MCP servers (TypeScript + Python)
+- `market-data/` — Price feeds and news aggregation
+- `defi-tools/` — Dust sweeper and DeFi utilities
+- `wallets/` — Offline wallet operations
+- `standards/` — ERC-8004 and W3AG specifications
+- `docs/` — Comprehensive documentation
+
+## Commands
+
+```bash
+bun install           # Install dependencies
+bun run build         # Build agent index
+bun run format        # Format agent JSONs
+```
 
 ### Terminal Management
 

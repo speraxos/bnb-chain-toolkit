@@ -1,0 +1,220 @@
+# Troubleshooting
+
+Step-by-step solutions for common problems.
+
+---
+
+## Installation Issues
+
+### `bun: command not found`
+
+**Cause:** bun is not installed.
+
+**Fix:**
+```bash
+curl -fsSL https://bun.sh/install | bash
+source ~/.bashrc  # or restart your terminal
+```
+
+### `bun install` fails with permission errors
+
+**Fix:** Don't use `sudo`. Instead:
+```bash
+# Remove existing node_modules
+rm -rf node_modules
+
+# Try again
+bun install
+```
+
+### Node.js version too old
+
+**Symptom:** Errors about unsupported syntax or missing features.
+
+**Fix:**
+```bash
+# Check your version
+node --version
+
+# If below 18, update via nvm:
+nvm install 18
+nvm use 18
+```
+
+---
+
+## MCP Server Issues
+
+### Server won't start
+
+**Checklist:**
+1. Are you in the right directory? (`cd mcp-servers/<server-name>`)
+2. Did you run `bun install`?
+3. Are required environment variables set?
+4. Is the port already in use? (`lsof -i :3000`)
+
+**Quick fix:**
+```bash
+cd mcp-servers/<server-name>
+rm -rf node_modules
+bun install
+bun start
+```
+
+### Claude Desktop doesn't show MCP tools
+
+**Checklist:**
+1. Is the server running? Check with `ps aux | grep mcp`
+2. Is `claude_desktop_config.json` valid JSON? Use `jq . claude_desktop_config.json`
+3. Did you restart Claude Desktop after editing config?
+4. Is the command path correct?
+
+**Config file location:**
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+- Linux: `~/.config/Claude/claude_desktop_config.json`
+
+### "Rate limited" errors
+
+**Cause:** Too many API requests in a short time.
+
+**Fix:**
+- Add delays between requests
+- Use caching (most components have built-in caching)
+- Upgrade your API plan if available
+- Reduce the number of concurrent requests
+
+### "Invalid API key" errors
+
+**Cause:** API key not set or expired.
+
+**Fix:**
+```bash
+# Check if the variable is set
+echo $BINANCE_API_KEY
+
+# Set it
+export BINANCE_API_KEY="your-key-here"
+export BINANCE_SECRET_KEY="your-secret-here"
+
+# Or add to .env file
+echo 'BINANCE_API_KEY=your-key' >> .env
+```
+
+---
+
+## Build Issues
+
+### `bun run build` fails
+
+**Checklist:**
+1. Are you in the project root? (`/path/to/bnb-agents/`)
+2. Did you run `bun install` first?
+3. Check for JSON syntax errors in `src/` files
+
+**Quick fix:**
+```bash
+# Validate JSON files
+for f in src/*.json; do jq . "$f" > /dev/null 2>&1 || echo "Invalid: $f"; done
+
+# Rebuild
+bun run build
+```
+
+### `public/index.json` is empty or missing
+
+**Cause:** Build didn't complete successfully.
+
+**Fix:**
+```bash
+bun run format    # Format source files first
+bun run build     # Then build
+ls -la public/    # Verify output exists
+```
+
+---
+
+## Agent Issues
+
+### Agent answers are too generic
+
+**Cause:** System prompt isn't loaded properly.
+
+**Fix:**
+- Make sure you copied the entire `systemRole` field from the agent JSON
+- Check that your AI assistant is using the prompt (not ignoring it)
+- Some AI platforms have character limits on system prompts — try a shorter version
+
+### Agent doesn't know about recent events
+
+**Cause:** Agents are based on static system prompts. They don't have live data unless connected to MCP servers.
+
+**Fix:** Connect an MCP server for real-time data:
+1. Start the relevant MCP server
+2. Add it to your AI assistant's config
+3. The agent can now query live blockchain data
+
+---
+
+## Network Issues
+
+### "Connection refused" to blockchain
+
+**Cause:** RPC endpoint is down or blocked.
+
+**Fix:** Try alternative RPC endpoints:
+
+```bash
+# BSC alternatives
+export BSC_RPC_URL="https://bsc-dataseed1.binance.org"
+# or
+export BSC_RPC_URL="https://bsc-dataseed2.binance.org"
+# or
+export BSC_RPC_URL="https://rpc.ankr.com/bsc"
+```
+
+### Transactions stuck or failing
+
+**Checklist:**
+1. **Sufficient balance?** Check wallet has enough BNB for gas
+2. **Gas price adequate?** BSC usually needs 3-5 Gwei minimum
+3. **Nonce correct?** If resubmitting, use same nonce with higher gas
+4. **Contract interaction?** Make sure ABI is correct
+
+---
+
+## Performance Issues
+
+### Slow market data responses
+
+**Fix:**
+```typescript
+// Enable caching
+const client = new CoinGecko({ cacheTtl: 60_000 }); // Cache for 60 seconds
+```
+
+### High memory usage
+
+**Cause:** Running too many MCP servers simultaneously.
+
+**Fix:** Only run the servers you need:
+```json
+{
+  "mcpServers": {
+    "bnbchain": { ... }
+  }
+}
+```
+
+---
+
+## Still Stuck?
+
+1. Check the [FAQ](faq.md) for more common questions
+2. Search [existing issues](https://github.com/nirholas/bnb-agents/issues)
+3. [Open a new issue](https://github.com/nirholas/bnb-agents/issues/new) with:
+   - What you expected to happen
+   - What actually happened
+   - Steps to reproduce
+   - Your Node.js version (`node --version`)
+   - Your OS

@@ -61,8 +61,8 @@ export default function ExampleWithPlayground({
   // Fullscreen mode - code only
   if (isFullscreen) {
     return (
-      <div className="fixed inset-0 z-50 bg-gray-900">
-        <div className="flex items-center justify-between p-3 bg-gray-800 border-b border-gray-700">
+      <div className="fixed inset-0 z-50 bg-black">
+        <div className="flex items-center justify-between p-3 bg-[#0a0a0a] border-b border-gray-700">
           <div className="flex items-center space-x-3 text-white">
             <Code2 className="w-5 h-5" />
             <span className="font-semibold">{contractName}</span>
@@ -70,14 +70,14 @@ export default function ExampleWithPlayground({
           <div className="flex items-center space-x-2">
             <button
               onClick={handleCopy}
-              className="flex items-center space-x-1 px-3 py-1.5 text-sm bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+              className="flex items-center space-x-1 px-3 py-1.5 text-sm bg-zinc-800 hover:bg-zinc-800 text-white rounded-lg transition-colors"
             >
               {copied ? <CheckCircle className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
               <span>{copied ? 'Copied!' : 'Copy'}</span>
             </button>
             <button
               onClick={() => setIsFullscreen(false)}
-              className="p-2 hover:bg-gray-700 rounded-lg text-white transition-colors"
+              className="p-2 hover:bg-zinc-900 rounded-lg text-white transition-colors"
             >
               <Minimize2 className="w-5 h-5" />
             </button>

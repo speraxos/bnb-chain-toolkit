@@ -200,7 +200,7 @@ export default function MCPServerPage() {
             </h2>
 
             {/* Install command */}
-            <div className="rounded-lg border border-gray-700 bg-gray-900 p-1">
+            <div className="rounded-lg border border-gray-700 bg-black p-1">
               <div className="flex items-center justify-between px-3 py-1.5">
                 <span className="text-xs text-gray-400">Install</span>
                 <button
@@ -221,7 +221,7 @@ export default function MCPServerPage() {
             </div>
 
             {/* Config snippet */}
-            <div className="rounded-lg border border-gray-700 bg-gray-900 p-1">
+            <div className="rounded-lg border border-gray-700 bg-black p-1">
               <div className="flex items-center justify-between px-3 py-1.5">
                 <span className="text-xs text-gray-400">
                   claude_desktop_config.json
@@ -246,7 +246,7 @@ export default function MCPServerPage() {
             {server.npmPackage && (
               <p className="text-center text-xs text-gray-400">
                 npm:{' '}
-                <code className="rounded bg-gray-800 px-1.5 py-0.5 text-[#F0B90B]">
+                <code className="rounded bg-[#0a0a0a] px-1.5 py-0.5 text-[#F0B90B]">
                   {server.npmPackage}
                 </code>
               </p>

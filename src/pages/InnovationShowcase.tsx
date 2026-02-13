@@ -88,12 +88,12 @@ export default function InnovationShowcase() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900 text-white relative overflow-hidden">
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute w-96 h-96 bg-purple-500/20 rounded-full blur-3xl -top-48 -left-48 animate-pulse" />
-        <div className="absolute w-96 h-96 bg-blue-500/20 rounded-full blur-3xl top-1/2 -right-48 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute w-96 h-96 bg-pink-500/20 rounded-full blur-3xl -bottom-48 left-1/2 animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute w-96 h-96 bg-[#F0B90B]/10 rounded-full blur-3xl -top-48 -left-48 animate-pulse" />
+        <div className="absolute w-96 h-96 bg-[#F0B90B]/5 rounded-full blur-3xl top-1/2 -right-48 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute w-96 h-96 bg-[#F0B90B]/10 rounded-full blur-3xl -bottom-48 left-1/2 animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
 
       <div className="relative z-10 container mx-auto px-4 py-20">
@@ -101,7 +101,7 @@ export default function InnovationShowcase() {
         <div className="text-center mb-20">
           <div className="inline-flex items-center space-x-2 px-4 py-2 bg-amber-500/20 backdrop-blur-lg rounded-full mb-6 border border-amber-500/40">
             <Sparkles className="w-5 h-5 text-amber-400" />
-            <span className="text-sm font-bold text-amber-300">🧪 Concept Demos • Experimental Features</span>
+            <span className="text-sm font-bold text-purple-300">🧪 Experimental Features • Innovation Lab</span>
             <Sparkles className="w-5 h-5 text-amber-400" />
           </div>
           
@@ -114,9 +114,9 @@ export default function InnovationShowcase() {
             that makes building smart contracts feel like magic ✨
           </p>
           
-          <p className="text-sm text-amber-300/80 mb-8 max-w-2xl mx-auto bg-amber-500/10 px-4 py-2 rounded-lg border border-amber-500/20">
-            ⚠️ These features are concept demonstrations showcasing future capabilities.
-            Some functionality is simulated for illustration purposes.
+          <p className="text-sm text-purple-300/80 mb-8 max-w-2xl mx-auto bg-purple-500/10 px-4 py-2 rounded-lg border border-purple-500/20">
+            🧪 Experimental features — real code analysis, voice commands, and live gas tracking.
+            Some tools require browser permissions (microphone) or testnet wallets.
           </p>
 
           <div className="flex items-center justify-center space-x-4 mb-12">
@@ -161,10 +161,10 @@ export default function InnovationShowcase() {
           <div className="text-center mb-12">
             <h2 className="text-5xl font-black mb-4">Innovation Lab</h2>
             <p className="text-xl text-purple-200">
-              Exploring the future of Web3 development. These concept demos showcase what's possible.
+              Exploring the future of Web3 development with real code analysis, live network data, and browser APIs.
             </p>
             <span className="inline-block mt-3 px-3 py-1 bg-amber-500/20 text-amber-300 text-sm rounded-full border border-amber-500/30">
-              🔬 Experimental • Concept Demos
+              🔬 Experimental Features • Innovation Lab
             </span>
           </div>
 
@@ -183,8 +183,8 @@ export default function InnovationShowcase() {
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-3">
                     <h3 className="text-3xl font-bold">{feature.title}</h3>
-                    <span className="px-2 py-0.5 text-xs font-medium bg-amber-500/20 text-amber-300 rounded border border-amber-500/30">
-                      Concept Demo
+                    <span className="px-2 py-0.5 text-xs font-medium bg-purple-500/20 text-purple-300 rounded border border-purple-500/30">
+                      Experimental
                     </span>
                   </div>
                   <p className="text-lg text-purple-200 mb-4">{feature.description}</p>

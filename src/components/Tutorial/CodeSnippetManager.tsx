@@ -144,7 +144,7 @@ export default function CodeSnippetManager({
               className={`px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
                 selectedCategory === category
                   ? 'bg-primary-600 text-white'
-                  : 'bg-gray-100 dark:bg-zinc-900 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  : 'bg-gray-100 dark:bg-zinc-900 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-800'
               }`}
             >
               {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -203,7 +203,7 @@ export default function CodeSnippetManager({
                 </div>
 
                 {/* Code Preview */}
-                <div className="bg-gray-900 p-4 overflow-x-auto">
+                <div className="bg-black p-4 overflow-x-auto">
                   <pre className="text-sm text-gray-100 font-mono">
                     <code>{snippet.code}</code>
                   </pre>

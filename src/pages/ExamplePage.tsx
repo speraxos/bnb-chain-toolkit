@@ -439,7 +439,7 @@ export default function ExamplePage() {
     return (
       <div className="h-screen flex flex-col">
         {/* Mini header with back button and view toggle */}
-        <div className="bg-gray-800 border-b border-gray-700 px-4 py-2 flex items-center justify-between">
+        <div className="bg-[#0a0a0a] border-b border-gray-700 px-4 py-2 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link 
               to="/examples" 
@@ -448,7 +448,7 @@ export default function ExamplePage() {
               <ArrowLeft className="w-4 h-4" />
               <span className="text-sm">Examples</span>
             </Link>
-            <div className="w-px h-5 bg-gray-700" />
+            <div className="w-px h-5 bg-zinc-800" />
             <span className="text-white font-medium">{meta.title}</span>
           </div>
           
@@ -458,7 +458,7 @@ export default function ExamplePage() {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-colors ${
                 viewParam !== 'tutorial' 
                   ? 'bg-purple-600 text-white' 
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  : 'bg-zinc-800 text-gray-300 hover:bg-zinc-800'
               }`}
             >
               <Layers className="w-4 h-4" />
@@ -469,7 +469,7 @@ export default function ExamplePage() {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-colors ${
                 viewParam === 'tutorial' 
                   ? 'bg-purple-600 text-white' 
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  : 'bg-zinc-800 text-gray-300 hover:bg-zinc-800'
               }`}
             >
               <Code2 className="w-4 h-4" />

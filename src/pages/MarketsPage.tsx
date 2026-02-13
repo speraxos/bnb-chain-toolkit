@@ -825,7 +825,7 @@ function ChainsTab() {
                   className={cn(barColors[i], 'transition-all relative group/bar cursor-pointer')}
                   style={{ width: `${percent}%` }}
                 >
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded bg-gray-900 dark:bg-white text-white dark:text-black text-xs font-medium opacity-0 group-hover/bar:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50">
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded bg-black dark:bg-white text-white dark:text-black text-xs font-medium opacity-0 group-hover/bar:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50">
                     {chain.name}: {percent.toFixed(1)}%
                   </div>
                 </div>

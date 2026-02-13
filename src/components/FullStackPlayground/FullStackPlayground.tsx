@@ -45,13 +45,13 @@ interface FullStackPlaygroundProps {
 
 const getFileIcon = (icon?: string, language?: string) => {
   if (icon === 'react' || language === 'typescript' || language === 'javascript') {
-    return <FileCode className="w-4 h-4 text-blue-500" />;
+    return <FileCode className="w-4 h-4 text-[#F0B90B]" />;
   }
   if (icon === 'contract' || language === 'solidity') {
-    return <FileText className="w-4 h-4 text-purple-500" />;
+    return <FileText className="w-4 h-4 text-[#F0B90B]/70" />;
   }
   if (icon === 'style' || language === 'css') {
-    return <Palette className="w-4 h-4 text-pink-500" />;
+    return <Palette className="w-4 h-4 text-[#F0B90B]/60" />;
   }
   return <FileCode className="w-4 h-4 text-gray-500" />;
 };
@@ -224,8 +224,8 @@ export default function FullStackPlayground({
                   onClick={() => setActiveFileId(file.id)}
                   className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-t-lg transition-colors whitespace-nowrap ${
                     activeFileId === file.id
-                      ? 'bg-white dark:bg-[#0a0a0a] text-blue-600 dark:text-blue-400 border-t-2 border-x border-blue-500'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-900'
+                      ? 'bg-white dark:bg-[#0a0a0a] text-[#F0B90B] border-t-2 border-x border-[#F0B90B]'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/5'
                   }`}
                 >
                   {getFileIcon(file.icon, file.language)}
@@ -261,21 +261,21 @@ export default function FullStackPlayground({
               <div className="h-4 w-px bg-gray-300 dark:bg-gray-600 mx-1" />
               <button
                 onClick={() => setLayout('editor')}
-                className={`p-1.5 rounded ${layout === 'editor' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600' : 'hover:bg-gray-200 dark:hover:bg-zinc-900'}`}
+                className={`p-1.5 rounded ${layout === 'editor' ? 'bg-[#F0B90B]/10 text-[#F0B90B]' : 'hover:bg-gray-200 dark:hover:bg-white/5'}`}
                 title="Editor only"
               >
                 <Code2 className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setLayout('split')}
-                className={`p-1.5 rounded ${layout === 'split' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600' : 'hover:bg-gray-200 dark:hover:bg-zinc-900'}`}
+                className={`p-1.5 rounded ${layout === 'split' ? 'bg-[#F0B90B]/10 text-[#F0B90B]' : 'hover:bg-gray-200 dark:hover:bg-white/5'}`}
                 title="Split view"
               >
                 <Layers className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setLayout('preview')}
-                className={`p-1.5 rounded ${layout === 'preview' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600' : 'hover:bg-gray-200 dark:hover:bg-zinc-900'}`}
+                className={`p-1.5 rounded ${layout === 'preview' ? 'bg-[#F0B90B]/10 text-[#F0B90B]' : 'hover:bg-gray-200 dark:hover:bg-white/5'}`}
                 title="Preview only"
               >
                 <Eye className="w-4 h-4" />
@@ -288,10 +288,10 @@ export default function FullStackPlayground({
         <div className={`flex ${layout === 'split' ? 'flex-row' : 'flex-col'}`} style={{ height: isFullscreen ? 'calc(100vh - 200px)' : '600px' }}>
           {/* Editor Panel */}
           {layout !== 'preview' && (
-            <div className={`${layout === 'split' ? 'w-1/2 border-r dark:border-gray-700' : 'w-full h-full'} flex flex-col`}>
+            <div className={`${layout === 'split' ? 'w-1/2 border-r dark:border-white/10' : 'w-full h-full'} flex flex-col`>
               {/* File description */}
               {activeFile && (
-                <div className="px-4 py-2 bg-gray-100 dark:bg-[#0a0a0a] border-b border-gray-200 dark:border-gray-700 text-xs text-gray-500">
+                <div className="px-4 py-2 bg-gray-100 dark:bg-[#0a0a0a] border-b border-gray-200 dark:border-white/10 text-xs text-gray-500">
                   {activeFile.language === 'solidity' && '📝 Smart Contract - Compile and deploy to testnet'}
                   {activeFile.language === 'typescript' && '⚛️ React Component - Edit to see live changes'}
                   {activeFile.language === 'css' && '🎨 Styles - Customize the appearance'}
@@ -323,7 +323,7 @@ export default function FullStackPlayground({
           {layout !== 'editor' && (
             <div className={`${layout === 'split' ? 'w-1/2' : 'w-full h-full'} flex flex-col bg-gray-50 dark:bg-black`}>
               {/* Preview Header */}
-              <div className="flex items-center justify-between px-4 py-2 bg-gradient-to-r from-primary-600 to-secondary-600 text-white">
+              <div className="flex items-center justify-between px-4 py-2 bg-neutral-900 dark:bg-[#111] text-white border-b border-white/10">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
                   <span className="font-medium text-sm">Live Preview</span>
@@ -370,28 +370,28 @@ export default function FullStackPlayground({
       </div>
 
       {/* Help Section */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+      <div className="bg-[#F0B90B]/5 dark:bg-[#F0B90B]/10 border border-[#F0B90B]/20 rounded-lg p-4">
         <h3 className="font-semibold text-sm mb-3 flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+          <Sparkles className="w-4 h-4 text-[#F0B90B]" />
           Full-Stack Playground
         </h3>
         <div className="grid sm:grid-cols-3 gap-4 text-sm">
           <div className="flex items-start gap-2">
-            <FileCode className="w-4 h-4 text-blue-500 mt-0.5" />
+            <FileCode className="w-4 h-4 text-[#F0B90B] mt-0.5" />
             <div>
               <span className="font-medium">React Components</span>
               <p className="text-gray-600 dark:text-gray-400">Edit TSX/JSX with live preview</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
-            <FileText className="w-4 h-4 text-purple-500 mt-0.5" />
+            <FileText className="w-4 h-4 text-[#F0B90B]/70 mt-0.5" />
             <div>
               <span className="font-medium">Smart Contracts</span>
               <p className="text-gray-600 dark:text-gray-400">Solidity with syntax highlighting</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
-            <Palette className="w-4 h-4 text-pink-500 mt-0.5" />
+            <Palette className="w-4 h-4 text-[#F0B90B]/60 mt-0.5" />
             <div>
               <span className="font-medium">Styles</span>
               <p className="text-gray-600 dark:text-gray-400">CSS applied in real-time</p>

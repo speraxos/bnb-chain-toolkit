@@ -347,7 +347,7 @@ export default function UniversalLivePreview({
             Powered by Pyodide - Python runs directly in your browser!
           </p>
         </div>
-        <div className="flex-1 bg-gray-900 p-4 font-mono text-sm overflow-auto">
+        <div className="flex-1 bg-black p-4 font-mono text-sm overflow-auto">
           {error ? (
             <div className="text-red-400">{error}</div>
           ) : pythonOutput.length > 0 ? (

@@ -39,7 +39,7 @@ const variants = {
   `,
   secondary: `
     bg-gray-100 dark:bg-zinc-900 text-gray-900 dark:text-white
-    hover:bg-gray-200 dark:hover:bg-gray-600
+    hover:bg-gray-200 dark:hover:bg-zinc-800
     focus:ring-gray-500
   `,
   ghost: `

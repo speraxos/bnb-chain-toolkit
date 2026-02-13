@@ -408,7 +408,7 @@ export default function InteractiveSandbox() {
           <button
             onClick={handleCompile}
             disabled={isCompiling || !activeFile}
-            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded text-sm font-medium flex items-center gap-2"
+            className="px-3 py-1.5 bg-black dark:bg-white text-white dark:text-black hover:bg-[#0a0a0a] dark:hover:bg-gray-200 disabled:bg-gray-400 disabled:text-gray-600 rounded text-sm font-medium flex items-center gap-2"
           >
             {isCompiling ? (
               <>
@@ -580,7 +580,7 @@ export default function InteractiveSandbox() {
               onClick={() => setActivePanel('preview')}
               className={`px-3 py-1.5 text-sm rounded ${
                 activePanel === 'preview'
-                  ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                  ? 'bg-black dark:bg-white text-white dark:text-black'
                   : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-900'
               }`}
             >
@@ -591,7 +591,7 @@ export default function InteractiveSandbox() {
               onClick={() => setActivePanel('interaction')}
               className={`px-3 py-1.5 text-sm rounded ${
                 activePanel === 'interaction'
-                  ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                  ? 'bg-black dark:bg-white text-white dark:text-black'
                   : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-900'
               }`}
             >
@@ -602,7 +602,7 @@ export default function InteractiveSandbox() {
               onClick={() => setActivePanel('console')}
               className={`px-3 py-1.5 text-sm rounded ${
                 activePanel === 'console'
-                  ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                  ? 'bg-black dark:bg-white text-white dark:text-black'
                   : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-900'
               }`}
             >
@@ -614,7 +614,7 @@ export default function InteractiveSandbox() {
                 onClick={() => setActivePanel('ai')}
                 className={`px-3 py-1.5 text-sm rounded ${
                   activePanel === 'ai'
-                    ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                    ? 'bg-black dark:bg-white text-white dark:text-black'
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-900'
                 }`}
               >

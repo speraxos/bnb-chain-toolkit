@@ -250,7 +250,7 @@ export default function ContributePage() {
                   <div className="flex-1">
                     <h3 className="text-lg font-bold mb-1">{step.title}</h3>
                     <p className="text-gray-600 dark:text-gray-400 mb-3">{step.description}</p>
-                    <pre className="bg-gray-900 text-green-400 p-3 rounded-lg text-sm overflow-x-auto">
+                    <pre className="bg-black text-green-400 p-3 rounded-lg text-sm overflow-x-auto">
                       <code>{step.code}</code>
                     </pre>
                   </div>

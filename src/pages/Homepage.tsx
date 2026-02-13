@@ -205,16 +205,16 @@ function SectionHeading({ badge, badgeIcon: BadgeIcon, title, subtitle }: {
     return (
         <div className="text-center mb-16">
             {badge && (
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium mb-6 border backdrop-blur-sm bg-neutral-100 text-neutral-600 border-neutral-200/60 dark:bg-white/[0.03] dark:text-neutral-400 dark:border-white/[0.06]">
-                    {BadgeIcon && <BadgeIcon className="w-3.5 h-3.5 text-[#F0B90B]" />}
+                <div className="badge-pro mb-6">
+                    {BadgeIcon && <BadgeIcon className="w-3.5 h-3.5" />}
                     {badge}
                 </div>
             )}
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-neutral-900 dark:text-white mb-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-[-0.04em] text-neutral-900 dark:text-white mb-4">
                 {title}
             </h2>
             {subtitle && (
-                <p className="text-base md:text-lg text-neutral-500 dark:text-neutral-400 max-w-2xl mx-auto leading-relaxed">
+                <p className="text-base md:text-lg text-neutral-500 dark:text-neutral-400 max-w-2xl mx-auto leading-relaxed font-light">
                     {subtitle}
                 </p>
             )}
@@ -260,72 +260,78 @@ export default function Homepage() {
                 {/* Spotlight effect */}
                 <Spotlight className="absolute -top-40 left-0 md:left-60 md:-top-20" fill="#F0B90B" />
 
-                {/* Subtle radial glow — not a blob gradient */}
+                {/* Grid background with radial mask */}
+                <div className="absolute inset-0 pointer-events-none bg-grid-pro bg-grid-pro-mask opacity-60" />
+
+                {/* Subtle radial glow */}
                 <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#F0B90B]/[0.03] blur-[120px]" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-[#F0B90B]/[0.04] blur-[150px]" />
                 </div>
 
                 <div className="relative z-10 container mx-auto px-4 pt-24 pb-20 text-center">
-                    {/* Hackathon badge */}
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-10 border backdrop-blur-sm bg-neutral-100 border-neutral-200/60 text-neutral-600 dark:bg-white/[0.03] dark:border-white/[0.08] dark:text-neutral-400">
-                        <span className="w-2 h-2 rounded-full bg-[#F0B90B] animate-pulse" />
+                    {/* Hackathon badge — professional pill */}
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold tracking-wide mb-10 border backdrop-blur-md bg-[#F0B90B]/[0.04] border-[#F0B90B]/20 text-[#F0B90B] uppercase animate-border-glow">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#F0B90B] opacity-75" />
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F0B90B]" />
+                        </span>
                         BNB Chain &quot;Good Vibes Only&quot; Hackathon — Track 1: Agent
                     </div>
 
-                    {/* Main headline */}
-                    <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-[-0.04em] mb-6">
+                    {/* Main headline — tighter, bolder */}
+                    <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold tracking-[-0.05em] mb-6 leading-[0.95]">
                         <span className="text-neutral-900 dark:text-white">BNB Chain</span>
                         <br />
                         <TextGenerateEffect
                             words="AI Toolkit"
-                            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-[-0.04em] bg-gradient-to-r from-[#F0B90B] via-amber-400 to-[#F0B90B] bg-clip-text text-transparent"
+                            className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold tracking-[-0.05em] bg-gradient-to-r from-[#F0B90B] via-amber-300 to-[#F0B90B] bg-clip-text text-transparent animate-text-shimmer"
                         />
                     </h1>
 
-                    {/* Sub-headline */}
-                    <p className="text-lg md:text-xl text-neutral-500 dark:text-neutral-400 max-w-xl mx-auto mb-10 leading-relaxed font-light">
-                        72+ AI Agents. 6 MCP Servers. 900+ Tools. One Repo.
+                    {/* Sub-headline — sharper */}
+                    <p className="text-lg md:text-xl text-neutral-500 dark:text-neutral-400 max-w-lg mx-auto mb-12 leading-relaxed font-light tracking-wide">
+                        72+ AI Agents &middot; 6 MCP Servers &middot; 900+ Tools &middot; One Repo
                     </p>
 
-                    {/* CTA buttons */}
-                    <div className="flex flex-wrap justify-center gap-4 mb-14">
+                    {/* CTA buttons — hierarchy: primary > secondary > tertiary */}
+                    <div className="flex flex-wrap justify-center gap-3 mb-16">
                         <Link
                             to="/fullstack-demo"
-                            className="group relative inline-flex items-center gap-2.5 px-8 py-4 bg-[#F0B90B] text-black font-bold rounded-xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(240,185,11,0.45)] hover:-translate-y-0.5 active:translate-y-0 shadow-[0_0_20px_rgba(240,185,11,0.2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0B90B] focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black"
+                            className="group relative inline-flex items-center gap-2.5 px-8 py-4 bg-[#F0B90B] text-black font-bold rounded-xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(240,185,11,0.45)] hover:-translate-y-0.5 active:translate-y-0 animate-glow-pulse focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0B90B] focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black"
                         >
                             <Zap className="w-5 h-5" />
                             Start Building
-                            <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                            <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                         </Link>
                         <a
                             href="https://github.com/nirholas/bnb-chain-toolkit"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group inline-flex items-center gap-2.5 px-7 py-3.5 font-semibold rounded-xl transition-all duration-300 border border-neutral-300 dark:border-white/[0.12] text-neutral-700 dark:text-neutral-300 hover:border-[#F0B90B]/50 hover:text-[#F0B90B] dark:hover:border-[#F0B90B]/40 dark:hover:text-[#F0B90B] hover:-translate-y-0.5"
+                            className="group inline-flex items-center gap-2.5 px-7 py-3.5 font-semibold rounded-xl transition-all duration-300 border border-neutral-200 dark:border-white/[0.1] text-neutral-600 dark:text-neutral-300 hover:border-[#F0B90B]/40 hover:text-[#F0B90B] hover:-translate-y-0.5 bg-white/50 dark:bg-white/[0.02] backdrop-blur-sm"
                         >
                             <GitBranch className="w-5 h-5" />
                             View on GitHub
-                            <ExternalLink className="w-4 h-4 opacity-60 group-hover:opacity-100 transition-opacity" />
+                            <ExternalLink className="w-3.5 h-3.5 opacity-40 group-hover:opacity-100 transition-opacity" />
                         </a>
                         <Link
                             to="/docs"
-                            className="inline-flex items-center gap-2.5 px-7 py-3.5 font-semibold rounded-xl transition-all duration-300 border border-neutral-300 dark:border-white/[0.12] text-neutral-700 dark:text-neutral-300 hover:border-[#F0B90B]/50 hover:text-[#F0B90B] dark:hover:border-[#F0B90B]/40 dark:hover:text-[#F0B90B] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0B90B] focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black"
+                            className="inline-flex items-center gap-2 px-7 py-3.5 font-semibold rounded-xl transition-all duration-300 text-neutral-500 dark:text-neutral-400 hover:text-[#F0B90B] hover:-translate-y-0.5"
                         >
                             <BookOpen className="w-5 h-5" />
-                            Read Docs
+                            Docs
                         </Link>
                     </div>
 
-                    {/* Stats */}
-                    <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+                    {/* Stats — sharp professional counters */}
+                    <div className="flex flex-wrap justify-center gap-4 md:gap-6">
                         {heroStats.map(({ label, value, Icon }) => (
                             <div
                                 key={label}
-                                className="flex items-center gap-2 px-4 py-2 rounded-xl border bg-white dark:bg-white/[0.03] border-neutral-200 dark:border-white/[0.06] backdrop-blur-sm"
+                                className="flex items-center gap-2.5 px-5 py-2.5 rounded-xl border bg-white/80 dark:bg-white/[0.03] border-neutral-200/80 dark:border-white/[0.06] backdrop-blur-sm"
                             >
                                 <Icon className="w-4 h-4 text-[#F0B90B]" />
-                                <span className="font-bold text-neutral-900 dark:text-white text-sm">{value}</span>
-                                <span className="text-xs text-neutral-500 dark:text-neutral-500">{label}</span>
+                                <span className="font-bold text-neutral-900 dark:text-white text-sm stat-number">{value}</span>
+                                <span className="text-[11px] text-neutral-400 dark:text-neutral-500 uppercase tracking-wider font-medium">{label}</span>
                             </div>
                         ))}
                     </div>
@@ -359,25 +365,25 @@ export default function Homepage() {
                         {howItWorks.map((item, i) => (
                             <div
                                 key={item.step}
-                                className="relative group p-6 rounded-2xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] hover:border-[#F0B90B]/30 transition-all duration-300"
+                                className="relative group p-7 rounded-2xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.02] hover:border-[#F0B90B]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:hover:shadow-[#F0B90B]/[0.03]"
                             >
                                 {/* Step number */}
-                                <div className="flex items-center gap-3 mb-4">
-                                    <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#F0B90B]/[0.08] border border-[#F0B90B]/[0.15] text-sm font-bold text-[#F0B90B]">
+                                <div className="flex items-center gap-3 mb-5">
+                                    <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#F0B90B]/10 text-sm font-extrabold text-[#F0B90B] stat-number">
                                         {item.step}
                                     </span>
                                     <item.icon className="w-5 h-5 text-neutral-400 dark:text-neutral-500" />
                                 </div>
 
-                                <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">
+                                <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2 tracking-tight">
                                     {item.title}
                                 </h3>
-                                <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed mb-4">
+                                <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed mb-5">
                                     {item.description}
                                 </p>
                                 <Link
                                     to={item.link}
-                                    className="inline-flex items-center gap-1.5 text-xs font-medium text-[#F0B90B] hover:underline"
+                                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#F0B90B] hover:underline uppercase tracking-wide"
                                 >
                                     {item.linkText}
                                     <ChevronRight className="w-3 h-3" />

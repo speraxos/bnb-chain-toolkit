@@ -331,7 +331,7 @@ export default function ApiReferencePage() {
             <p className="text-gray-600 dark:text-gray-400 mb-4">
               Most endpoints require an API key. Include it in the request headers:
             </p>
-            <pre className="p-4 bg-gray-900 text-gray-300 rounded-lg overflow-x-auto text-sm">
+            <pre className="p-4 bg-black text-gray-300 rounded-lg overflow-x-auto text-sm">
               <code>{`Authorization: Bearer YOUR_API_KEY`}</code>
             </pre>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
@@ -423,7 +423,7 @@ export default function ApiReferencePage() {
                       <div className="mb-6">
                         <h4 className="font-bold mb-3">Response</h4>
                         <div className="relative">
-                          <pre className="p-4 bg-gray-900 text-gray-300 rounded-lg overflow-x-auto text-sm">
+                          <pre className="p-4 bg-black text-gray-300 rounded-lg overflow-x-auto text-sm">
                             <code>{endpoint.response}</code>
                           </pre>
                           <button
@@ -445,7 +445,7 @@ export default function ApiReferencePage() {
                       <div>
                         <h4 className="font-bold mb-3">Example</h4>
                         <div className="relative">
-                          <pre className="p-4 bg-gray-900 text-gray-300 rounded-lg overflow-x-auto text-sm">
+                          <pre className="p-4 bg-black text-gray-300 rounded-lg overflow-x-auto text-sm">
                             <code>{endpoint.example}</code>
                           </pre>
                           <button

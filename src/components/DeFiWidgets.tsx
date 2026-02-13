@@ -38,7 +38,7 @@ function formatTVL(tvl: number | null | undefined): string {
 
 function ProtocolCard({ protocol, rank }: { protocol: ProtocolTVL; rank: number }) {
   return (
-    <div className="flex items-center gap-3 p-3 bg-[#0a0a0a]/50 rounded-lg hover:bg-gray-700/50 transition-colors">
+    <div className="flex items-center gap-3 p-3 bg-[#0a0a0a]/50 rounded-lg hover:bg-zinc-900/50 transition-colors">
       <span className="text-gray-500 text-sm w-6">{rank}</span>
       {protocol.logo && (
         <img src={protocol.logo} alt={protocol.name} className="w-8 h-8 rounded-full" />
@@ -63,12 +63,12 @@ function ProtocolCard({ protocol, rank }: { protocol: ProtocolTVL; rank: number 
 
 function YieldCard({ pool }: { pool: YieldPool }) {
   return (
-    <div className="flex items-center gap-3 p-3 bg-[#0a0a0a]/50 rounded-lg hover:bg-gray-700/50 transition-colors">
+    <div className="flex items-center gap-3 p-3 bg-[#0a0a0a]/50 rounded-lg hover:bg-zinc-900/50 transition-colors">
       <div className="flex-1 min-w-0">
         <div className="text-white font-medium truncate">{pool.symbol}</div>
         <div className="flex items-center gap-2 mt-1">
           <span className="text-gray-500 text-xs">{pool.project}</span>
-          <span className="bg-gray-700 text-gray-300 text-xs px-1.5 py-0.5 rounded">
+          <span className="bg-zinc-800 text-gray-300 text-xs px-1.5 py-0.5 rounded">
             {pool.chain}
           </span>
           {pool.stablecoin && (
@@ -92,7 +92,7 @@ function YieldCard({ pool }: { pool: YieldPool }) {
 
 function ChainCard({ chain, rank }: { chain: ChainTVL; rank: number }) {
   return (
-    <div className="flex items-center gap-3 p-3 bg-[#0a0a0a]/50 rounded-lg hover:bg-gray-700/50 transition-colors">
+    <div className="flex items-center gap-3 p-3 bg-[#0a0a0a]/50 rounded-lg hover:bg-zinc-900/50 transition-colors">
       <span className="text-gray-500 text-sm w-6">{rank}</span>
       <div className="flex-1 min-w-0">
         <div className="text-white font-medium truncate">{chain.name}</div>
@@ -119,7 +119,7 @@ export function TopProtocolsWidget({ className = '', limit = 5 }: DeFiWidgetProp
   const { data, loading, error } = useTopProtocols(limit);
 
   return (
-    <div className={`bg-gray-900 rounded-xl p-4 ${className}`}>
+    <div className={`bg-black rounded-xl p-4 ${className}`}>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-white font-semibold flex items-center gap-2">
           🏦 Top DeFi Protocols
@@ -132,7 +132,7 @@ export function TopProtocolsWidget({ className = '', limit = 5 }: DeFiWidgetProp
       {loading && (
         <div className="space-y-2 animate-pulse">
           {[...Array(limit)].map((_, i) => (
-            <div key={i} className="h-16 bg-gray-800 rounded-lg"></div>
+            <div key={i} className="h-16 bg-[#0a0a0a] rounded-lg"></div>
           ))}
         </div>
       )}
@@ -166,7 +166,7 @@ export function TopYieldsWidget({ className = '', limit = 5 }: DeFiWidgetProps) 
     : data;
 
   return (
-    <div className={`bg-gray-900 rounded-xl p-4 ${className}`}>
+    <div className={`bg-black rounded-xl p-4 ${className}`}>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-white font-semibold flex items-center gap-2">
           📈 Top Yields
@@ -177,7 +177,7 @@ export function TopYieldsWidget({ className = '', limit = 5 }: DeFiWidgetProps) 
             className={`text-xs px-2 py-1 rounded ${
               showStable 
                 ? 'bg-green-500/20 text-green-400' 
-                : 'bg-gray-700 text-gray-400 hover:text-white'
+                : 'bg-zinc-800 text-gray-400 hover:text-white'
             }`}
           >
             Stables
@@ -191,7 +191,7 @@ export function TopYieldsWidget({ className = '', limit = 5 }: DeFiWidgetProps) 
       {loading && (
         <div className="space-y-2 animate-pulse">
           {[...Array(limit)].map((_, i) => (
-            <div key={i} className="h-16 bg-gray-800 rounded-lg"></div>
+            <div key={i} className="h-16 bg-[#0a0a0a] rounded-lg"></div>
           ))}
         </div>
       )}
@@ -220,7 +220,7 @@ export function TopChainsWidget({ className = '', limit = 5 }: DeFiWidgetProps) 
   const { data, loading, error } = useTopChains(limit);
 
   return (
-    <div className={`bg-gray-900 rounded-xl p-4 ${className}`}>
+    <div className={`bg-black rounded-xl p-4 ${className}`}>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-white font-semibold flex items-center gap-2">
           ⛓️ Top Chains by TVL
@@ -233,7 +233,7 @@ export function TopChainsWidget({ className = '', limit = 5 }: DeFiWidgetProps) 
       {loading && (
         <div className="space-y-2 animate-pulse">
           {[...Array(limit)].map((_, i) => (
-            <div key={i} className="h-14 bg-gray-800 rounded-lg"></div>
+            <div key={i} className="h-14 bg-[#0a0a0a] rounded-lg"></div>
           ))}
         </div>
       )}
@@ -269,12 +269,12 @@ export function ChainDeFiWidget({
 
   if (loading) {
     return (
-      <div className={`bg-gray-900 rounded-xl p-4 ${className}`}>
+      <div className={`bg-black rounded-xl p-4 ${className}`}>
         <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-gray-800 rounded w-1/3"></div>
+          <div className="h-6 bg-[#0a0a0a] rounded w-1/3"></div>
           <div className="space-y-2">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-14 bg-gray-800 rounded-lg"></div>
+              <div key={i} className="h-14 bg-[#0a0a0a] rounded-lg"></div>
             ))}
           </div>
         </div>
@@ -284,14 +284,14 @@ export function ChainDeFiWidget({
 
   if (error || !data) {
     return (
-      <div className={`bg-gray-900 rounded-xl p-4 ${className}`}>
+      <div className={`bg-black rounded-xl p-4 ${className}`}>
         <p className="text-red-400 text-center py-6">Failed to load {chain} DeFi data</p>
       </div>
     );
   }
 
   return (
-    <div className={`bg-gray-900 rounded-xl p-4 ${className}`}>
+    <div className={`bg-black rounded-xl p-4 ${className}`}>
       <h3 className="text-white font-semibold mb-4">
         🌐 {chain.charAt(0).toUpperCase() + chain.slice(1)} DeFi
       </h3>

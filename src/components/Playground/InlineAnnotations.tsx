@@ -130,7 +130,7 @@ export default function InlineAnnotations({
                     </p>
 
                     {annotation.code && (
-                      <div className="bg-gray-900 dark:bg-black rounded p-3 overflow-x-auto">
+                      <div className="bg-black dark:bg-black rounded p-3 overflow-x-auto">
                         <pre className="text-xs text-gray-100 font-mono">
                           <code>{annotation.code}</code>
                         </pre>
@@ -240,7 +240,7 @@ export function AnnotationsPanel({ annotations }: { annotations: CodeAnnotation[
                   {annotation.content}
                 </p>
                 {annotation.code && (
-                  <div className="bg-gray-900 dark:bg-black rounded p-3 overflow-x-auto">
+                  <div className="bg-black dark:bg-black rounded p-3 overflow-x-auto">
                     <pre className="text-xs text-gray-100 font-mono">
                       <code>{annotation.code}</code>
                     </pre>

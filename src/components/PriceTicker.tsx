@@ -53,8 +53,8 @@ export default function PriceTicker({
       <div className="flex items-center gap-4 text-sm animate-pulse">
         {coins.map((coin) => (
           <div key={coin} className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-gray-700 rounded-full"></div>
-            <div className="w-16 h-4 bg-gray-700 rounded"></div>
+            <div className="w-4 h-4 bg-zinc-800 rounded-full"></div>
+            <div className="w-16 h-4 bg-zinc-800 rounded"></div>
           </div>
         ))}
       </div>

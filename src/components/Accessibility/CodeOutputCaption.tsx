@@ -267,7 +267,7 @@ export function ConsoleOutput({
         className
       )}
     >
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
+      <div className="flex items-center justify-between px-4 py-2 bg-[#0a0a0a] border-b border-gray-700">
         <span className="text-xs text-gray-400 uppercase tracking-wide">
           {language} Output
         </span>

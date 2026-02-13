@@ -161,16 +161,16 @@ export default function DocCategoryPage() {
       </div>
 
       {/* Hero */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-12">
+      <div className="bg-[#0a0a0a] border-b border-[#1a1a1a] text-white py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center space-x-4 mb-4">
-              <div className="p-3 bg-white/20 rounded-xl">
+              <div className="p-3 bg-[#F0B90B]/20 rounded-xl text-[#F0B90B]">
                 {category.icon}
               </div>
               <h1 className="text-3xl md:text-4xl font-black">{category.title}</h1>
             </div>
-            <p className="text-xl text-blue-100">
+            <p className="text-xl text-gray-400">
               {category.description}
             </p>
           </div>

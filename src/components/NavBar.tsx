@@ -35,7 +35,7 @@ import {
 } from 'lucide-react';
 import { useThemeStore } from '@/stores/themeStore';
 import LanguageSelector from './LanguageSelector';
-import UserButton from './UserButton';
+import WalletButton from './WalletButton';
 import { useAnnounce, useFocusTrap } from './Accessibility';
 import { cn } from '@/utils/helpers';
 
@@ -600,7 +600,7 @@ export default function NavBar() {
                 aria-hidden="true"
               />
 
-              <UserButton />
+              <WalletButton />
 
               <Link
                 to="/fullstack-demo"
@@ -748,7 +748,7 @@ export default function NavBar() {
                   </Link>
 
                   <div className="flex items-center justify-center">
-                    <UserButton />
+                    <WalletButton />
                   </div>
                 </motion.div>
               </div>

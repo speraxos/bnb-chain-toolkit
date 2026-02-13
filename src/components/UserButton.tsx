@@ -90,7 +90,7 @@ export default function UserButton() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-zinc-900 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
+        className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-zinc-900 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded-lg transition-colors"
       >
         {/* Avatar */}
         {profile?.avatar ? (

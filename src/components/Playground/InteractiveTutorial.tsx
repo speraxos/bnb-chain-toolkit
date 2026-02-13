@@ -238,7 +238,7 @@ export default function InteractiveTutorial({
         {/* Load Code Button */}
         <button
           onClick={handleLoadStepCode}
-          className="w-full py-2 px-4 bg-gray-100 dark:bg-zinc-900 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium transition-colors"
+          className="w-full py-2 px-4 bg-gray-100 dark:bg-zinc-900 hover:bg-gray-200 dark:hover:bg-zinc-800 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium transition-colors"
         >
           Load Step Code
         </button>

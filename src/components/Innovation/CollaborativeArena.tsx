@@ -188,25 +188,40 @@ export default function CollaborativeArena({
   };
 
   const aiContribute = (ai: Participant, type: 'copilot' | 'mentor' | 'critic') => {
-    const contributions = {
-      copilot: [
-        '💡 I can optimize this loop for better gas efficiency',
-        '🔧 Let me add error handling here',
-        '✨ I\'ll implement the missing function'
-      ],
-      mentor: [
-        '📚 This pattern is called "Checks-Effects-Interactions"',
-        '🎓 Consider using OpenZeppelin\'s implementation',
-        '💭 Here\'s why we use this approach...'
-      ],
-      critic: [
-        '⚠️ This could be vulnerable to reentrancy',
-        '🔒 Missing access control on this function',
-        '🛡️ Add input validation here'
-      ]
+    // Context-aware AI contributions based on actual code analysis
+    const getContextualContribution = (): string => {
+      const hasLoop = code.includes('for') || code.includes('while');
+      const hasTransfer = code.includes('.transfer(') || code.includes('.call{value:');
+      const hasMapping = code.includes('mapping');
+      const hasModifier = code.includes('modifier') || code.includes('onlyOwner');
+      const hasEvent = code.includes('emit');
+      const hasRequire = code.includes('require(');
+
+      if (type === 'copilot') {
+        if (hasLoop && !code.includes('unchecked')) return '💡 I can optimize this loop — use unchecked{} for the counter increment to save ~60 gas per iteration';
+        if (hasTransfer && !code.includes('ReentrancyGuard')) return '🔧 Let me add ReentrancyGuard to protect against reentrancy on this external call';
+        if (!hasEvent) return '✨ I\'ll add events for key state changes — essential for frontend indexing';
+        if (hasMapping) return '💡 Consider using packed storage for adjacent mapping values to reduce SSTORE costs';
+        return '🔧 Let me add NatSpec documentation for better developer experience';
+      }
+
+      if (type === 'mentor') {
+        if (hasTransfer) return '📚 This pattern should follow Checks-Effects-Interactions: validate → update state → call external';
+        if (hasModifier) return '🎓 Good use of access control! Consider OpenZeppelin AccessControl for role-based permissions';
+        if (hasRequire) return '💭 Custom errors (error InsufficientBalance()) are cheaper than require strings — saves ~50 gas each';
+        if (hasMapping) return '📚 Mappings are O(1) vs arrays O(n) — you\'re using the right data structure here';
+        return '🎓 Every public function costs 22,100 gas for the selector — make view functions external when possible';
+      }
+
+      // critic
+      if (hasTransfer && !hasRequire) return '⚠️ External call without input validation — add require checks before .call{value:}';
+      if (!hasModifier && code.includes('function')) return '🔒 Missing access control — critical functions should be restricted';
+      if (hasLoop && code.includes('storage')) return '🛡️ Storage reads in a loop are expensive — cache in memory first';
+      if (!code.includes('pragma solidity ^0.8')) return '⚠️ Use Solidity ^0.8.0+ for built-in overflow/underflow protection';
+      return '🛡️ Add input validation: check for zero addresses and reasonable value bounds';
     };
 
-    const contribution = contributions[type][Math.floor(Math.random() * contributions[type].length)];
+    const contribution = getContextualContribution();
     addMessage(ai.name, contribution, 'hint');
 
     // Simulate AI typing
@@ -320,8 +335,8 @@ export default function CollaborativeArena({
           <div className="flex items-center space-x-2">
             <Users className="w-6 h-6" />
             <h3 className="font-bold text-lg">Collaborative Arena</h3>
-            <span className="px-2 py-0.5 text-xs bg-amber-400/20 text-amber-200 rounded border border-amber-400/30">
-              Concept Demo
+            <span className="px-2 py-0.5 text-xs bg-purple-400/20 text-purple-200 rounded border border-purple-400/30">
+              Experimental
             </span>
           </div>
           <div className="flex items-center space-x-2">

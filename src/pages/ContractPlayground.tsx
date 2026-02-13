@@ -789,18 +789,18 @@ export default function ContractPlayground() {
               </div>
 
               {showConsole && (
-              <div className="h-48 bg-gray-900 border-t border-gray-700 flex flex-col">
-                <div className="flex items-center justify-between px-3 py-1.5 bg-gray-800 border-b border-gray-700">
+              <div className="h-48 bg-black border-t border-gray-700 flex flex-col">
+                <div className="flex items-center justify-between px-3 py-1.5 bg-[#0a0a0a] border-b border-gray-700">
                   <div className="flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-terminal w-4 h-4 text-gray-400"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" x2="20" y1="19" y2="19"></line></svg>
                     <span className="text-xs font-medium text-gray-400">Console</span>
-                    <span className="text-xs px-1.5 py-0.5 bg-gray-700 rounded text-gray-300">{consoleLogs.length}</span>
+                    <span className="text-xs px-1.5 py-0.5 bg-zinc-800 rounded text-gray-300">{consoleLogs.length}</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <button onClick={() => setConsoleLogs([])} className="p-1 hover:bg-gray-700 rounded transition-colors" title="Clear console">
+                    <button onClick={() => setConsoleLogs([])} className="p-1 hover:bg-zinc-900 rounded transition-colors" title="Clear console">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trash2 w-3.5 h-3.5 text-gray-400"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
                     </button>
-                    <button onClick={() => setShowConsole(false)} className="p-1 hover:bg-gray-700 rounded transition-colors" title="Hide console">
+                    <button onClick={() => setShowConsole(false)} className="p-1 hover:bg-zinc-900 rounded transition-colors" title="Hide console">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-panel-bottom-close w-3.5 h-3.5 text-gray-400"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><line x1="3" x2="21" y1="15" y2="15"></line><path d="m15 8-3 3-3-3"></path></svg>
                     </button>
                   </div>
@@ -820,7 +820,7 @@ export default function ContractPlayground() {
               {!showConsole && (
                 <button
                   onClick={() => setShowConsole(true)}
-                  className="h-8 bg-gray-800 border-t border-gray-700 flex items-center justify-center gap-2 text-xs text-gray-400 hover:bg-gray-700 transition-colors"
+                  className="h-8 bg-[#0a0a0a] border-t border-gray-700 flex items-center justify-center gap-2 text-xs text-gray-400 hover:bg-zinc-900 transition-colors"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" x2="20" y1="19" y2="19"></line></svg>
                   Console ({consoleLogs.length})

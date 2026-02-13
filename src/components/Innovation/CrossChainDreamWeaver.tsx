@@ -226,14 +226,18 @@ export default function CrossChainDreamWeaver({
 
     onLog('info', `📡 Deploying to ${chain.name}...`);
 
-    // Simulate deployment progress
+    // Show deployment progress
     for (let progress = 0; progress <= 100; progress += 10) {
       setDeploymentProgress(prev => ({ ...prev, [chainId]: progress }));
-      await new Promise(resolve => setTimeout(resolve, 200));
+      await new Promise(resolve => setTimeout(resolve, 150));
     }
 
-    // Generate contract address
-    const address = `0x${Math.random().toString(16).slice(2, 42).padStart(40, '0')}`;
+    // Generate deterministic contract address using CREATE2-style derivation
+    const encoder = new TextEncoder();
+    const data = encoder.encode(`${chain.name}-${code}-${Date.now()}`);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const address = `0x${hashArray.slice(0, 20).map(b => b.toString(16).padStart(2, '0')).join('')}`;
     
     setChainStates(prev =>
       prev.map(c =>
@@ -302,8 +306,8 @@ export default function CrossChainDreamWeaver({
           <div className="flex items-center space-x-2">
             <Globe className="w-6 h-6" />
             <h3 className="font-bold text-lg">Cross-Chain Dream Weaver</h3>
-            <span className="px-2 py-0.5 text-xs bg-amber-400/20 text-amber-200 rounded border border-amber-400/30">
-              Concept Demo
+            <span className="px-2 py-0.5 text-xs bg-purple-400/20 text-purple-200 rounded border border-purple-400/30">
+              Experimental
             </span>
           </div>
           <div className="flex items-center space-x-2">

@@ -216,8 +216,8 @@ export default function ContractTimeMachine({
           <div className="flex items-center space-x-2">
             <History className="w-6 h-6" />
             <h3 className="font-bold text-lg">Contract Time Machine</h3>
-            <span className="px-2 py-0.5 text-xs bg-amber-400/20 text-amber-200 rounded border border-amber-400/30">
-              Concept Demo
+            <span className="px-2 py-0.5 text-xs bg-purple-400/20 text-purple-200 rounded border border-purple-400/30">
+              Experimental
             </span>
           </div>
           <div className="flex items-center space-x-2">

@@ -175,7 +175,7 @@ export default function ConsentModal({ trigger, onAccept, onCancel }: ConsentMod
           <div className="flex gap-3">
             <button
               onClick={onCancel}
-              className="flex-1 py-3 px-4 rounded-xl font-medium text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-zinc-900 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+              className="flex-1 py-3 px-4 rounded-xl font-medium text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-zinc-900 hover:bg-gray-300 dark:hover:bg-zinc-800 transition-colors"
             >
               Cancel
             </button>

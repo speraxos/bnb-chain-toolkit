@@ -208,11 +208,11 @@ export function EditorSkeleton({ className }: { className?: string }) {
       <div className="space-y-2">
         {Array.from({ length: 12 }).map((_, i) => (
           <div key={i} className="flex gap-4">
-            <Skeleton width={24} height={16} className="bg-gray-800" />
+            <Skeleton width={24} height={16} className="bg-[#0a0a0a]" />
             <Skeleton 
               width={`${Math.random() * 40 + 30}%`} 
               height={16} 
-              className="bg-gray-800" 
+              className="bg-[#0a0a0a]" 
             />
           </div>
         ))}

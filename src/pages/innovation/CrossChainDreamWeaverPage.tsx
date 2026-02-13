@@ -115,7 +115,7 @@ export default function CrossChainDreamWeaverPage() {
             <textarea
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="w-full h-96 p-4 font-mono text-sm bg-gray-900 text-gray-100 resize-none focus:outline-none"
+              className="w-full h-96 p-4 font-mono text-sm bg-black text-gray-100 resize-none focus:outline-none"
               spellCheck={false}
             />
           </div>

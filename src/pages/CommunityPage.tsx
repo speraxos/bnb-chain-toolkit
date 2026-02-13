@@ -4,283 +4,245 @@
  * 💫 Your potential is limitless 🌌
  */
 
-/**
- * CommunityPage.tsx - Community page with real links
- */
-import { Link } from 'react-router-dom';
-import { useSEO } from '@/hooks/useSEO';
+import { Link } from "react-router-dom";
+import { useSEO } from "@/hooks/useSEO";
+import { cn } from "@/lib/utils";
+import { SparklesCore } from "@/components/ui/sparkles";
 import {
-  Github,
-  Twitter,
-  Users,
-  Heart,
-  BookOpen,
-  Code2,
-  ExternalLink,
-  MessageSquare,
+  Star,
   GitPullRequest,
   Bug,
   Lightbulb,
-  Star
-} from 'lucide-react';
+  Twitter,
+  ExternalLink,
+  Users,
+  BookOpen,
+  Rocket,
+} from "lucide-react";
 
-interface CommunityChannel {
-  name: string;
-  description: string;
-  icon: React.JSX.Element;
-  link: string;
-  action: string;
-  color: string;
-}
-
-const channels: CommunityChannel[] = [
+const contributeWays = [
   {
-    name: 'GitHub Repository',
-    description: 'View source code, report issues, and contribute to the project',
-    icon: <Github className="w-8 h-8" />,
-    link: 'https://github.com/nirholas/bnb-chain-toolkit',
-    action: 'View Repository',
-    color: 'bg-gray-800'
+    icon: Star,
+    title: "Star the Repository",
+    description:
+      "Show your support and help others discover the project. A star on GitHub goes a long way.",
+    link: "https://github.com/nirholas/bnb-chain-toolkit",
+    linkLabel: "Star on GitHub",
+    external: true,
   },
   {
-    name: 'GitHub Discussions',
-    description: 'Ask questions, share ideas, and connect with BNB Chain builders',
-    icon: <MessageSquare className="w-8 h-8" />,
-    link: 'https://github.com/nirholas/bnb-chain-toolkit/discussions',
-    action: 'Join Discussion',
-    color: 'bg-purple-600'
+    icon: GitPullRequest,
+    title: "Submit a Pull Request",
+    description:
+      "Found a bug or have an improvement? Fork the repo, make your changes, and open a PR. All contributions are welcome.",
+    link: "https://github.com/nirholas/bnb-chain-toolkit/pulls",
+    linkLabel: "Open a PR",
+    external: true,
   },
   {
-    name: 'Twitter / X',
-    description: 'Follow for updates, tips, and announcements',
-    icon: <Twitter className="w-8 h-8" />,
-    link: 'https://x.com/nichxbt',
-    action: 'Follow @nichxbt',
-    color: 'bg-blue-500'
-  }
+    icon: Bug,
+    title: "Report Issues",
+    description:
+      "Encountered a problem? Open a GitHub issue with clear reproduction steps and we will look into it.",
+    link: "https://github.com/nirholas/bnb-chain-toolkit/issues",
+    linkLabel: "Report a Bug",
+    external: true,
+  },
+  {
+    icon: Lightbulb,
+    title: "Suggest Features",
+    description:
+      "Have an idea for a new agent, tool, or integration? Start a discussion and let the community weigh in.",
+    link: "https://github.com/nirholas/bnb-chain-toolkit/discussions",
+    linkLabel: "Start a Discussion",
+    external: true,
+  },
+  {
+    icon: Twitter,
+    title: "Spread the Word",
+    description:
+      "Follow @nichxbt on Twitter for updates, share your builds, and tag the project to help grow the community.",
+    link: "https://x.com/nichxbt",
+    linkLabel: "Follow @nichxbt",
+    external: true,
+  },
+  {
+    icon: Rocket,
+    title: "Build with the Toolkit",
+    description:
+      "Use the agents, MCP servers, and tools in your own projects. Share what you build — we love seeing it.",
+    link: "/explore",
+    linkLabel: "Explore Components",
+    external: false,
+  },
 ];
 
-interface ContributionWay {
-  icon: React.JSX.Element;
-  title: string;
-  description: string;
-  link: string;
-  linkText: string;
-}
+const topContributors = [
+  { name: "nich", role: "Creator & Maintainer", avatar: "N", url: "https://github.com/nirholas" },
+];
 
-const contributionWays: ContributionWay[] = [
-  {
-    icon: <Code2 className="w-8 h-8" />,
-    title: 'Contribute Code',
-    description: 'Fix bugs, add features, or improve existing functionality',
-    link: 'https://github.com/nirholas/bnb-chain-toolkit/pulls',
-    linkText: 'Open a Pull Request'
-  },
-  {
-    icon: <Bug className="w-8 h-8" />,
-    title: 'Report Issues',
-    description: 'Found a bug? Let us know so we can fix it',
-    link: 'https://github.com/nirholas/bnb-chain-toolkit/issues/new',
-    linkText: 'Report an Issue'
-  },
-  {
-    icon: <BookOpen className="w-8 h-8" />,
-    title: 'Improve Docs',
-    description: 'Help us improve documentation and tutorials',
-    link: 'https://github.com/nirholas/bnb-chain-toolkit',
-    linkText: 'Edit Documentation'
-  },
-  {
-    icon: <Lightbulb className="w-8 h-8" />,
-    title: 'Suggest Features',
-    description: "Have an idea? We'd love to hear it",
-    link: 'https://github.com/nirholas/bnb-chain-toolkit/discussions/categories/ideas',
-    linkText: 'Share Your Idea'
-  }
+const helpNeeded = [
+  { title: "Add more BNB Chain agent definitions", label: "agents" },
+  { title: "Improve MCP server test coverage", label: "testing" },
+  { title: "Translate agent definitions to more languages", label: "i18n" },
+  { title: "Write getting started tutorials", label: "docs" },
+  { title: "Build example projects using the toolkit", label: "examples" },
 ];
 
 export default function CommunityPage() {
   useSEO({
-    title: 'Community',
-    description: 'Join the BNB Chain AI Toolkit community. Contribute to open source, build agents, get help from fellow developers, and shape the future of AI-powered Web3.',
-    path: '/community'
+    title: "Community",
+    description:
+      "Join the BNB Chain AI Toolkit community — contribute on GitHub, follow on Twitter, and help build the future of AI-powered Web3.",
+    path: "/community",
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Hero */}
-      <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-20">
-        <div className="container mx-auto px-4 text-center">
-          <Users className="w-16 h-16 mx-auto mb-6" />
-          <h1 className="text-4xl md:text-6xl font-black mb-4">
-            Join Our Community
+    <main className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white">
+      {/* Hero with Sparkles */}
+      <section className="relative py-24 md:py-32 px-6 overflow-hidden">
+        <div className="absolute inset-0 w-full h-full">
+          <SparklesCore
+            minSize={0.4}
+            maxSize={1}
+            particleDensity={40}
+            particleColor="#F0B90B"
+            className="w-full h-full"
+          />
+        </div>
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+            Join the Community
           </h1>
-          <p className="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
-            Connect with developers building AI-powered applications on BNB Chain.
-            72+ agents, 6 MCP servers, 900+ tools — all open source!
+          <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            BNB Chain AI Toolkit is built in the open. Every star, PR, issue
+            report, and shared build makes the project better for everyone.
           </p>
-
-          <div className="flex items-center justify-center space-x-4 flex-wrap gap-4">
-            <a
-              href="https://github.com/nirholas/bnb-chain-toolkit"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-4 bg-white text-purple-600 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all shadow-lg"
-            >
-              <Github className="w-5 h-5 inline mr-2" />
-              View on GitHub
-            </a>
-            <a
-              href="https://x.com/nichxbt"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-4 border-2 border-white/50 rounded-xl font-bold text-lg hover:bg-white/10 transition-all"
-            >
-              <Twitter className="w-5 h-5 inline mr-2" />
-              Follow on X
-            </a>
-          </div>
         </div>
-      </div>
-
-      {/* Channels */}
-      <div className="container mx-auto px-4 py-16">
-        <h2 className="text-3xl font-bold text-center mb-12">Connect With Us</h2>
-
-        <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          {channels.map((channel, index) => (
-            <a
-              key={index}
-              href={channel.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all group"
-            >
-              <div className={`${channel.color} w-16 h-16 rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform`}>
-                {channel.icon}
-              </div>
-              <h3 className="text-xl font-bold mb-2">{channel.name}</h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
-                {channel.description}
-              </p>
-              <div className="flex items-center space-x-2 text-purple-600 dark:text-purple-400 font-medium">
-                <span>{channel.action}</span>
-                <ExternalLink className="w-4 h-4" />
-              </div>
-            </a>
-          ))}
-        </div>
-      </div>
+      </section>
 
       {/* Ways to Contribute */}
-      <div className="bg-gray-100 dark:bg-gray-800/50 py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-4">Ways to Contribute</h2>
-          <p className="text-gray-600 dark:text-gray-400 text-center mb-12 max-w-2xl mx-auto">
-            Every contribution helps make Web3 education more accessible.
-            Here's how you can get involved:
-          </p>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {contributionWays.map((way, index) => (
-              <div
-                key={index}
-                className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all"
-              >
-                <div className="text-purple-600 dark:text-purple-400 mb-4">
-                  {way.icon}
-                </div>
-                <h3 className="text-lg font-bold mb-2">{way.title}</h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
-                  {way.description}
-                </p>
-                <a
-                  href={way.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-purple-600 dark:text-purple-400 font-medium text-sm hover:underline inline-flex items-center space-x-1"
+      <section className="py-20 px-6 bg-gray-50 dark:bg-[#0a0a0a]">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold mb-10">Ways to Contribute</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {contributeWays.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={item.title}
+                  className={cn(
+                    "group rounded-2xl border border-gray-200 dark:border-white/10 p-6",
+                    "bg-white dark:bg-black",
+                    "hover:border-[#F0B90B]/40 dark:hover:border-white/20",
+                    "transition-all duration-200 flex flex-col"
+                  )}
                 >
-                  <span>{way.linkText}</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </div>
-            ))}
+                  <div className="p-2.5 rounded-xl bg-gray-100 dark:bg-white/5 text-[#F0B90B] w-fit mb-4">
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-semibold mb-2">{item.title}</h3>
+                  <p className="text-sm text-gray-500 mb-4 flex-1">
+                    {item.description}
+                  </p>
+                  {item.external ? (
+                    <a
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-sm font-medium text-[#F0B90B] hover:underline"
+                    >
+                      {item.linkLabel}
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  ) : (
+                    <Link
+                      to={item.link}
+                      className="inline-flex items-center gap-1.5 text-sm font-medium text-[#F0B90B] hover:underline"
+                    >
+                      {item.linkLabel}
+                    </Link>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Creator Section */}
-      <div className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center">
-            <div className="text-6xl mb-6">👨‍💻</div>
-            <h2 className="text-3xl font-bold mb-4">Created by nich</h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              This project is maintained by <a href="https://x.com/nichxbt" target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:underline">@nichxbt</a> with
-              contributions from the open source community.
-            </p>
-            <div className="flex items-center justify-center space-x-4">
+      {/* Contributors */}
+      <section className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold mb-10">Contributors</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {topContributors.map((contributor) => (
               <a
-                href="https://github.com/nirholas"
+                key={contributor.name}
+                href={contributor.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-all"
-                aria-label="GitHub"
+                className={cn(
+                  "flex items-center gap-4 rounded-2xl border border-gray-200 dark:border-white/10 p-5",
+                  "hover:border-[#F0B90B]/40 dark:hover:border-white/20 transition-all duration-200"
+                )}
               >
-                <Github className="w-6 h-6" />
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#F0B90B] to-yellow-600 flex items-center justify-center text-black font-bold text-lg shrink-0">
+                  {contributor.avatar}
+                </div>
+                <div>
+                  <div className="font-semibold">{contributor.name}</div>
+                  <div className="text-sm text-gray-500">{contributor.role}</div>
+                </div>
               </a>
-              <a
-                href="https://x.com/nichxbt"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all"
-                aria-label="Twitter"
-              >
-                <Twitter className="w-6 h-6" />
-              </a>
+            ))}
+            <div
+              className={cn(
+                "flex items-center justify-center rounded-2xl border border-dashed border-gray-300 dark:border-white/10 p-5",
+                "text-gray-400 dark:text-gray-600"
+              )}
+            >
+              <div className="text-center">
+                <Users className="w-8 h-8 mx-auto mb-2" />
+                <p className="text-sm">Your name here</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Contributing Guide CTA */}
-      <div className="py-16 bg-gray-100 dark:bg-gray-800/50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center p-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl text-white">
-            <GitPullRequest className="w-12 h-12 mx-auto mb-4" />
-            <h2 className="text-3xl font-bold mb-4">Ready to Contribute?</h2>
-            <p className="text-purple-100 mb-6">
-              Check out our contribution guide to get started
-            </p>
-            <Link
-              to="/contribute"
-              className="inline-flex items-center space-x-2 px-6 py-3 bg-white text-purple-600 rounded-lg font-bold hover:bg-gray-100 transition-all"
+      {/* What Needs Help */}
+      <section className="py-20 px-6 bg-gray-50 dark:bg-[#0a0a0a]">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold mb-10">What Needs Help</h2>
+          <div className="space-y-3">
+            {helpNeeded.map((item) => (
+              <div
+                key={item.title}
+                className={cn(
+                  "flex items-center justify-between rounded-xl border border-gray-200 dark:border-white/10 p-4",
+                  "bg-white dark:bg-black"
+                )}
+              >
+                <span className="text-sm">{item.title}</span>
+                <span className="px-2.5 py-0.5 text-xs rounded-full bg-[#F0B90B]/10 text-[#F0B90B] font-medium shrink-0 ml-4">
+                  {item.label}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <a
+              href="https://github.com/nirholas/bnb-chain-toolkit/blob/main/CONTRIBUTING.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#F0B90B] text-black font-semibold hover:bg-[#F0B90B]/90 transition-colors"
             >
-              <span>Read Contribution Guide</span>
-            </Link>
+              <BookOpen className="w-5 h-5" />
+              Read Contributing Guide
+            </a>
           </div>
         </div>
-      </div>
-
-      {/* Star CTA */}
-      <div className="py-16">
-        <div className="container mx-auto px-4 text-center">
-          <Star className="w-12 h-12 mx-auto mb-4 text-yellow-500" />
-          <h2 className="text-2xl font-bold mb-4">Support the Project</h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
-            If you find this project helpful, consider giving it a star on GitHub!
-          </p>
-          <a
-            href="https://github.com/nirholas/bnb-chain-toolkit"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center space-x-2 px-6 py-3 bg-gray-900 text-white rounded-lg font-bold hover:bg-gray-800 transition-all"
-          >
-            <Star className="w-5 h-5" />
-            <span>Star on GitHub</span>
-          </a>
-        </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

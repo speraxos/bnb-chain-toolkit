@@ -4,335 +4,205 @@
  * 💫 You're part of something special 🎪
  */
 
-/**
- * AboutPage.tsx - About page with project information
- */
-import { Link } from 'react-router-dom';
-import { useSEO } from '@/hooks/useSEO';
+import { Link } from "react-router-dom";
+import { useSEO } from "@/hooks/useSEO";
+import { cn } from "@/lib/utils";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import {
-  Heart,
   Github,
   Twitter,
-  Globe,
   Code2,
-  Rocket,
-  Target,
-  Sparkles,
-  Shield,
-  BookOpen,
-  Coffee,
   Layers,
-  Zap,
-  FileCode,
-  Coins
-} from 'lucide-react';
+  Shield,
+  Globe,
+  Languages,
+  BookOpen,
+  ExternalLink,
+  Heart,
+} from "lucide-react";
 
-/** Platform statistics - real counts */
 const stats = [
-  { icon: <Code2 className="w-6 h-6" />, value: '72+', label: 'AI Agents' },
-  { icon: <BookOpen className="w-6 h-6" />, value: '6', label: 'MCP Servers' },
-  { icon: <Layers className="w-6 h-6" />, value: '900+', label: 'Tools' },
-  { icon: <Shield className="w-6 h-6" />, value: '60+', label: 'Chains Supported' }
+  { value: "72+", label: "AI Agents", icon: Code2 },
+  { value: "6", label: "MCP Servers", icon: Layers },
+  { value: "900+", label: "Tools", icon: Shield },
+  { value: "60+", label: "Chains", icon: Globe },
+  { value: "30+", label: "Languages", icon: Languages },
+  { value: "2", label: "Standards", icon: BookOpen },
 ];
 
-/** Core values of the platform */
-const values = [
-  {
-    icon: <BookOpen className="w-8 h-8" />,
-    title: 'AI-First',
-    description: 'Purpose-built for AI agents. 72+ agent definitions, 6 MCP servers, and 900+ tools.'
-  },
-  {
-    icon: <Shield className="w-8 h-8" />,
-    title: 'BNB Chain Native',
-    description: 'Deep integration with BSC, opBNB, and Greenfield. 30 BNB-specific agents out of the box.'
-  },
-  {
-    icon: <Sparkles className="w-8 h-8" />,
-    title: 'Production Ready',
-    description: 'Not just demos — real market data, DeFi tools, wallet management, and cross-chain support.'
-  },
-  {
-    icon: <Heart className="w-8 h-8" />,
-    title: 'Open Source',
-    description: 'MIT licensed, community-driven, and built for the BNB Chain hackathon community.'
-  }
-];
-
-/** Platform features */
-const features = [
-  {
-    icon: <FileCode className="w-6 h-6" />,
-    title: '72+ AI Agents',
-    description: 'Pre-built agent definitions for PancakeSwap, Venus, BNB Staking, and every major BNB Chain protocol.'
-  },
-  {
-    icon: <Layers className="w-6 h-6" />,
-    title: '6 MCP Servers',
-    description: 'Model Context Protocol servers for BNB Chain, Binance, Universal Crypto, Agenti, and UCAI.'
-  },
-  {
-    icon: <BookOpen className="w-6 h-6" />,
-    title: 'Market Data',
-    description: 'CoinGecko, DeFiLlama, and 200+ news sources integrated for real-time market intelligence.'
-  },
-  {
-    icon: <Code2 className="w-6 h-6" />,
-    title: 'DeFi Tools',
-    description: 'Dust sweeper, wallet toolkit, HD wallet generation, vanity addresses, and transaction signing.'
-  },
-  {
-    icon: <Coins className="w-6 h-6" />,
-    title: '60+ Chains',
-    description: 'BSC, opBNB, Greenfield primary. Plus Ethereum, Polygon, Arbitrum, Base, Solana, and 50+ more.'
-  },
-  {
-    icon: <Zap className="w-6 h-6" />,
-    title: 'Web3 Standards',
-    description: 'ERC-8004 for agent trust verification and W3AG for Web3 accessibility compliance.'
-  }
+const techStack = [
+  { name: "React", url: "https://react.dev" },
+  { name: "TypeScript", url: "https://www.typescriptlang.org" },
+  { name: "Tailwind CSS", url: "https://tailwindcss.com" },
+  { name: "Vite", url: "https://vitejs.dev" },
+  { name: "ethers.js", url: "https://docs.ethers.org" },
+  { name: "viem", url: "https://viem.sh" },
+  { name: "Zustand", url: "https://zustand-demo.pmnd.rs" },
+  { name: "Framer Motion", url: "https://www.framer.com/motion" },
 ];
 
 export default function AboutPage() {
   useSEO({
-    title: 'About BNB Chain AI Toolkit',
-    description: 'The most comprehensive open-source AI toolkit for BNB Chain. 72+ agents, 6 MCP servers, 900+ tools, 60+ chains. Built for the Good Vibes Only hackathon.',
-    path: '/about'
+    title: "About",
+    description:
+      "Learn about BNB Chain AI Toolkit — 72+ AI agents, 6 MCP servers, and 900+ tools for BNB Chain and 60+ networks.",
+    path: "/about",
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden py-20">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10" />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-6">
-              <Heart className="w-5 h-5 text-red-500" />
-              <span className="text-sm font-bold text-blue-700 dark:text-blue-300">About Us</span>
-            </div>
-
-            <h1 className="text-5xl md:text-6xl font-black mb-6 bg-gradient-to-r from-yellow-500 to-amber-500 bg-clip-text text-transparent">
-              BNB Chain AI Toolkit
-            </h1>
-
-            <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
-              The most comprehensive open-source AI toolkit for BNB Chain.
-              Created by <a href="https://x.com/nichxbt" target="_blank" rel="noopener noreferrer" className="text-yellow-600 hover:underline">nich (@nichxbt)</a> for the Good Vibes Only hackathon.
-            </p>
-
-            <div className="flex items-center justify-center space-x-4">
-              <Link
-                to="/sandbox"
-                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-bold hover:from-blue-700 hover:to-purple-700 transition-all"
-              >
-                <Rocket className="w-5 h-5 inline mr-2" />
-                Start Building
-              </Link>
-              <a
-                href="https://github.com/nirholas/bnb-chain-toolkit"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg font-bold hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
-              >
-                <Github className="w-5 h-5 inline mr-2" />
-                View Source
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="py-16 bg-white dark:bg-gray-800">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="inline-flex p-4 bg-yellow-100 dark:bg-yellow-900/30 rounded-full mb-4">
-                  <span className="text-yellow-600 dark:text-yellow-400">{stat.icon}</span>
-                </div>
-                <div className="text-4xl font-black text-gray-900 dark:text-white mb-2">
-                  {stat.value}
-                </div>
-                <div className="text-gray-600 dark:text-gray-400">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Mission & Vision */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-            <div className="p-8 bg-gradient-to-br from-yellow-500 to-amber-600 rounded-2xl text-white">
-              <Target className="w-12 h-12 mb-6" />
-              <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
-              <p className="text-lg text-yellow-100">
-                Give AI assistants superpowers on BNB Chain. Make it trivial to build, deploy,
-                and operate AI-powered DeFi applications across 60+ networks.
-              </p>
-            </div>
-
-            <div className="p-8 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl text-white">
-              <Sparkles className="w-12 h-12 mb-6" />
-              <h2 className="text-3xl font-bold mb-4">Our Vision</h2>
-              <p className="text-lg text-amber-100">
-                A world where every AI assistant can interact with BNB Chain natively —
-                trading, lending, staking, and building with full blockchain access.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-20 bg-gray-100 dark:bg-gray-800/50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-black text-center mb-4">What We Offer</h2>
-          <p className="text-xl text-gray-600 dark:text-gray-400 text-center mb-12">
-            Everything you need to build AI-powered applications on BNB Chain
+    <main className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white">
+      {/* Hero */}
+      <section className="relative py-24 md:py-32 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <TextGenerateEffect
+            words="Built for BNB Chain. Built by the Community."
+            className="text-4xl md:text-5xl font-bold tracking-tight"
+          />
+          <p className="mt-6 text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            An open-source AI toolkit that makes blockchain development
+            accessible, intelligent, and composable — across BNB Chain and 60+
+            networks.
           </p>
+        </div>
+      </section>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all"
-              >
-                <div className="text-blue-600 dark:text-blue-400 mb-4">
-                  {feature.icon}
+      {/* Mission */}
+      <section className="py-20 px-6 bg-gray-50 dark:bg-[#0a0a0a]">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold mb-8">Mission</h2>
+          <div className="space-y-6 text-gray-600 dark:text-gray-400 text-lg leading-relaxed">
+            <p>
+              We believe AI should be a force multiplier for every Web3
+              developer. The BNB Chain AI Toolkit provides pre-built agent
+              definitions, Model Context Protocol servers, and hundreds of
+              composable tools — so builders can focus on what matters rather
+              than re-inventing infrastructure.
+            </p>
+            <p>
+              Whether you&apos;re tracking whale wallets on BSC, bridging assets
+              through opBNB, staking BNB, or generating smart contracts with AI
+              — every capability is one import away. No vendor lock-in. No
+              closed ecosystems. Just open-source tools that work.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Strip */}
+      <section className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+            {stats.map((stat) => {
+              const Icon = stat.icon;
+              return (
+                <div key={stat.label} className="text-center group">
+                  <Icon className="w-6 h-6 mx-auto mb-3 text-[#F0B90B] group-hover:scale-110 transition-transform" />
+                  <div className="text-3xl md:text-4xl font-bold tracking-tight">
+                    {stat.value}
+                  </div>
+                  <div className="mt-1 text-sm text-gray-500">
+                    {stat.label}
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                <p className="text-gray-600 dark:text-gray-400">{feature.description}</p>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Author */}
+      <section className="py-20 px-6 bg-gray-50 dark:bg-[#0a0a0a]">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold mb-8">Author</h2>
+          <div className="flex flex-col sm:flex-row items-start gap-6">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#F0B90B] to-yellow-600 flex items-center justify-center text-black text-2xl font-bold shrink-0">
+              N
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold">nich</h3>
+              <p className="text-gray-500 dark:text-gray-400 mt-1">
+                Independent builder. Focused on open-source AI and Web3
+                infrastructure for the BNB Chain ecosystem.
+              </p>
+              <div className="flex items-center gap-4 mt-4">
+                <a
+                  href="https://x.com/nichxbt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-[#F0B90B] transition-colors"
+                >
+                  <Twitter className="w-4 h-4" />
+                  @nichxbt
+                </a>
+                <a
+                  href="https://github.com/nirholas"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-[#F0B90B] transition-colors"
+                >
+                  <Github className="w-4 h-4" />
+                  nirholas
+                </a>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Tech Stack */}
+      <section className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold mb-10">Tech Stack</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {techStack.map((tech) => (
+              <a
+                key={tech.name}
+                href={tech.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  "group rounded-2xl border border-gray-200 dark:border-white/10 p-5",
+                  "hover:border-[#F0B90B]/50 dark:hover:border-white/20 transition-all duration-200",
+                  "flex items-center justify-between"
+                )}
+              >
+                <span className="font-medium">{tech.name}</span>
+                <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-[#F0B90B] transition-colors" />
+              </a>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Values */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-black text-center mb-4">Our Values</h2>
-          <p className="text-xl text-gray-600 dark:text-gray-400 text-center mb-12">
-            The principles that guide everything we build
+      {/* Open Source */}
+      <section className="py-20 px-6 bg-gray-50 dark:bg-[#0a0a0a]">
+        <div className="max-w-3xl mx-auto text-center">
+          <Heart className="w-10 h-10 mx-auto mb-6 text-[#F0B90B]" />
+          <h2 className="text-3xl font-bold mb-4">Open Source, Always</h2>
+          <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed mb-8">
+            BNB Chain AI Toolkit is released under the MIT License. Every agent
+            definition, every MCP server, every tool — free to use, modify, and
+            distribute. Contributions are welcome and appreciated.
           </p>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            {values.map((value, index) => (
-              <div
-                key={index}
-                className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all text-center"
-              >
-                <div className="inline-flex p-4 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-4 text-blue-600 dark:text-blue-400">
-                  {value.icon}
-                </div>
-                <h3 className="text-xl font-bold mb-3">{value.title}</h3>
-                <p className="text-gray-600 dark:text-gray-400">{value.description}</p>
-              </div>
-            ))}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href="https://github.com/nirholas/bnb-chain-toolkit"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#F0B90B] text-black font-semibold hover:bg-[#F0B90B]/90 transition-colors"
+            >
+              <Github className="w-5 h-5" />
+              View on GitHub
+            </a>
+            <Link
+              to="/community"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-gray-300 dark:border-white/20 font-semibold hover:border-[#F0B90B]/50 transition-colors"
+            >
+              Join the Community
+            </Link>
           </div>
         </div>
       </section>
-
-      {/* Creator Section */}
-      <section className="py-20 bg-gray-100 dark:bg-gray-800/50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center">
-            <div className="text-6xl mb-6">👨‍💻</div>
-            <h2 className="text-3xl font-black mb-4">Created by nich</h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Building the most comprehensive AI toolkit for BNB Chain.
-              This project is open source and community-driven.
-            </p>
-            <div className="flex items-center justify-center space-x-4">
-              <a
-                href="https://github.com/nirholas"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-all"
-                aria-label="GitHub"
-              >
-                <Github className="w-6 h-6" />
-              </a>
-              <a
-                href="https://x.com/nichxbt"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all"
-                aria-label="Twitter"
-              >
-                <Twitter className="w-6 h-6" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Open Source Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto p-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl text-white text-center">
-            <Globe className="w-16 h-16 mx-auto mb-6" />
-            <h2 className="text-4xl font-black mb-4">100% Open Source</h2>
-            <p className="text-xl text-green-100 mb-8">
-              This project is MIT licensed and welcomes contributions from the community.
-              Help us build the future of AI-powered Web3.
-            </p>
-            <div className="flex items-center justify-center space-x-4">
-              <a
-                href="https://github.com/nirholas/bnb-chain-toolkit"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-3 bg-white text-green-600 rounded-lg font-bold hover:bg-gray-100 transition-all"
-              >
-                <Github className="w-5 h-5 inline mr-2" />
-                View on GitHub
-              </a>
-              <Link
-                to="/contribute"
-                className="px-6 py-3 border-2 border-white/50 rounded-lg font-bold hover:bg-white/10 transition-all"
-              >
-                Contribution Guide
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Join Us CTA */}
-      <section className="py-20 bg-gray-100 dark:bg-gray-800/50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center p-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl text-white">
-            <Coffee className="w-16 h-16 mx-auto mb-6" />
-            <h2 className="text-4xl font-black mb-4">Join Our Community</h2>
-            <p className="text-xl text-blue-100 mb-8">
-              Connect with other developers, share your projects, and help us improve the platform.
-            </p>
-            <div className="flex items-center justify-center space-x-4">
-              <a
-                href="https://github.com/nirholas/bnb-chain-toolkit"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-3 bg-white text-blue-600 rounded-lg font-bold hover:bg-gray-100 transition-all"
-              >
-                Contribute on GitHub
-              </a>
-              <a
-                href="https://x.com/nichxbt"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-3 border-2 border-white/50 rounded-lg font-bold hover:bg-white/10 transition-all"
-              >
-                <Twitter className="w-5 h-5 inline mr-2" />
-                Follow on X
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+    </main>
   );
 }

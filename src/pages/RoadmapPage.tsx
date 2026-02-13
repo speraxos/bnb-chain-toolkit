@@ -4,276 +4,279 @@
  * 💫 Building bridges to a better tomorrow 🌉
  */
 
-/**
- * ProjectsPage.tsx - Community Projects and Features
- */
-import { Clock, Rocket, Shield, Globe2, Users, Sparkles, CheckCircle2, ArrowRight, Code2, BookOpen, Layers, Wrench, Video, Share2, Cloud, ExternalLink, User, Key, FolderOpen, Link2 } from 'lucide-react';
-import { useSEO } from '@/hooks/useSEO';
+import { Link } from "react-router-dom";
+import { useSEO } from "@/hooks/useSEO";
+import { cn } from "@/lib/utils";
+import { TracingBeam } from "@/components/ui/tracing-beam";
+import {
+  CheckCircle2,
+  RefreshCw,
+  Timer,
+  Bot,
+  BarChart3,
+  Wrench,
+  Shield,
+  Server,
+  Users,
+} from "lucide-react";
 
-interface ProjectItem {
+interface Phase {
+  number: number;
   title: string;
+  status: "completed" | "in-progress" | "upcoming";
+  icon: React.ReactNode;
   description: string;
-  status: 'live' | 'building' | 'planned';
-  icon: React.JSX.Element;
-  badges?: string[];
+  deliverables: string[];
 }
 
-const projects: ProjectItem[] = [
-  // LIVE - Current Features
+const phases: Phase[] = [
   {
-    title: 'Universal Development Environment',
-    description: 'Browser-based UDE with Monaco Editor, live compilation, multi-language support, and testnet deployment.',
-    status: 'live',
-    icon: <Code2 className="w-5 h-5" />,
-    badges: ['Live', 'Web', 'Solidity']
+    number: 1,
+    title: "Core Toolkit",
+    status: "completed",
+    icon: <Bot className="w-5 h-5" />,
+    description:
+      "The foundational layer — 72+ AI agent definitions covering every major BNB Chain protocol, plus 6 specialized MCP servers providing 900+ composable tools for Claude, GPT, and other AI assistants.",
+    deliverables: [
+      "30 BNB Chain-specific agents (PancakeSwap, Venus, Lista DAO, Thena, etc.)",
+      "42 general DeFi agents for cross-protocol operations",
+      "bnbchain-mcp server for BNB Chain + EVM operations",
+      "binance-mcp, binance-us-mcp for exchange operations",
+      "universal-crypto-mcp for 60+ blockchain networks",
+      "agenti for EVM + Solana advanced operations",
+      "ucai ABI-to-MCP generator for custom smart contracts",
+    ],
   },
   {
-    title: 'Smart Contract Templates',
-    description: '40+ production-ready templates for tokens, NFTs, DeFi, DAOs, gaming, and security patterns.',
-    status: 'live',
-    icon: <Layers className="w-5 h-5" />,
-    badges: ['40+ Templates']
+    number: 2,
+    title: "Market Data",
+    status: "completed",
+    icon: <BarChart3 className="w-5 h-5" />,
+    description:
+      "Real-time market intelligence — price feeds, OHLCV data, market cap rankings, and AI-powered news aggregation from 200+ sources with sentiment analysis and event classification.",
+    deliverables: [
+      "CoinGecko + DeFiLlama price feed integration",
+      "Crypto news aggregator with 200+ sources",
+      "AI-powered sentiment analysis",
+      "Event classification and trend detection",
+      "Lyra Market Data package for developers",
+    ],
   },
   {
-    title: 'Tutorial System',
-    description: '50+ comprehensive tutorials from beginner to expert covering all aspects of Web3 development.',
-    status: 'live',
-    icon: <BookOpen className="w-5 h-5" />,
-    badges: ['50+ Tutorials']
-  },
-  {
-    title: 'Multi-Chain Support',
-    description: 'Deploy to Ethereum, Base, Polygon, Avalanche, BSC, Arbitrum, Solana, and Monad testnets.',
-    status: 'live',
-    icon: <Globe2 className="w-5 h-5" />,
-    badges: ['8 Chains']
-  },
-  // BUILDING - In Progress
-  {
-    title: 'Cross-Platform Export',
-    description: 'Export projects to CodePen, JSFiddle, GitHub Gist, and more with one click.',
-    status: 'building',
-    icon: <ExternalLink className="w-5 h-5" />,
-    badges: ['CodePen', 'JSFiddle', 'Gist']
-  },
-  {
-    title: 'AI Code Assistant',
-    description: 'AI-powered code suggestions, vulnerability detection, and gas optimization recommendations.',
-    status: 'building',
-    icon: <Sparkles className="w-5 h-5" />,
-    badges: ['AI', 'Security']
-  },
-  {
-    title: 'Community Features',
-    description: 'Share templates, publish tutorials, and collaborate with other developers.',
-    status: 'building',
-    icon: <Users className="w-5 h-5" />,
-    badges: ['Social', 'Sharing']
-  },
-  {
-    title: 'Mobile Optimization',
-    description: 'Improved mobile experience for learning on the go with responsive editor.',
-    status: 'building',
+    number: 3,
+    title: "DeFi Tools",
+    status: "completed",
     icon: <Wrench className="w-5 h-5" />,
-    badges: ['Mobile', 'UX']
+    description:
+      "Practical DeFi utilities — a token dust sweeper that identifies and consolidates small balances, wallet management tools, and composable building blocks for DeFi application development.",
+    deliverables: [
+      "Dust sweeper for small token balance consolidation",
+      "HD wallet generation with BIP-39 support",
+      "Vanity address generator",
+      "Offline transaction signing",
+      "Multi-chain wallet toolkit",
+    ],
   },
   {
-    title: 'More Chain Integrations',
-    description: 'Support for additional EVM chains and Layer 2 networks based on community demand.',
-    status: 'building',
-    icon: <Globe2 className="w-5 h-5" />,
-    badges: ['L2', 'EVM']
-  },
-  // PLANNED - Future
-  {
-    title: 'User Profiles & Privy Auth',
-    description: 'Create your profile with Privy login. Email, social, or wallet—your identity, your way.',
-    status: 'planned',
-    icon: <Key className="w-5 h-5" />,
-    badges: ['Privy', 'Web3 Auth', 'Profiles']
-  },
-  {
-    title: 'Project Dashboard',
-    description: 'Save, edit, and manage all your projects in one place. Fork, version, and organize your work.',
-    status: 'planned',
-    icon: <FolderOpen className="w-5 h-5" />,
-    badges: ['Save', 'Edit', 'Organize']
-  },
-  {
-    title: 'Share & Collaborate',
-    description: 'Share projects via link, invite collaborators, and build together in real-time.',
-    status: 'planned',
-    icon: <Link2 className="w-5 h-5" />,
-    badges: ['Links', 'Teams', 'Real-time']
-  },
-  {
-    title: 'Community Explore',
-    description: 'Discover and remix projects from the community. Like, comment, and feature the best creations.',
-    status: 'planned',
-    icon: <Users className="w-5 h-5" />,
-    badges: ['Discover', 'Remix', 'Social']
-  },
-  {
-    title: 'Lyra Hosting',
-    description: 'Host your web apps and dApps directly from the UDE. Custom subdomains, SSL, and CDN included.',
-    status: 'planned',
-    icon: <Cloud className="w-5 h-5" />,
-    badges: ['Hosting', 'Deploy', 'CDN']
-  },
-  {
-    title: 'Contract Registry',
-    description: 'Deploy and manage smart contracts with a permanent registry. Verified source, ABI hosting, and interaction UI.',
-    status: 'planned',
-    icon: <Share2 className="w-5 h-5" />,
-    badges: ['Contracts', 'Verification']
-  },
-  {
-    title: 'Collaborative Editing',
-    description: 'Real-time collaborative code editing for pair programming and team learning.',
-    status: 'planned',
-    icon: <Users className="w-5 h-5" />,
-    badges: ['Multiplayer']
-  },
-  {
-    title: 'On-Chain Deployment Wizard',
-    description: 'Guided mainnet deployment with gas estimation, verification, and security checks.',
-    status: 'planned',
-    icon: <Rocket className="w-5 h-5" />,
-    badges: ['Mainnet', 'Verification']
-  },
-  {
-    title: 'Certificate System',
-    description: 'Earn verifiable certificates for completing tutorial tracks and skill assessments.',
-    status: 'planned',
+    number: 4,
+    title: "Standards",
+    status: "in-progress",
     icon: <Shield className="w-5 h-5" />,
-    badges: ['Credentials']
+    description:
+      "Open standards for the AI agent ecosystem — ERC-8004 defines trust verification for on-chain agents, while W3AG establishes accessibility guidelines for Web3 applications.",
+    deliverables: [
+      "ERC-8004 specification for agent trust verification",
+      "W3AG Web3 accessibility compliance spec",
+      "Reference implementations and verifiers",
+      "Community review and feedback integration",
+    ],
   },
   {
-    title: 'Video Tutorials',
-    description: 'Step-by-step video guides integrated with interactive code examples.',
-    status: 'planned',
-    icon: <Video className="w-5 h-5" />,
-    badges: ['Video', 'Learning']
-  }
+    number: 5,
+    title: "Enhanced MCP",
+    status: "upcoming",
+    icon: <Server className="w-5 h-5" />,
+    description:
+      "Deeper protocol integrations, more granular tool coverage, and performance improvements across all 6 MCP servers — bringing the total tool count well beyond 1,000.",
+    deliverables: [
+      "Advanced DeFi protocol integrations (lending, derivatives)",
+      "Cross-chain bridge tool expansion",
+      "Real-time event streaming and webhooks",
+      "Performance optimization and caching layer",
+      "Comprehensive test suites for all servers",
+    ],
+  },
+  {
+    number: 6,
+    title: "Community",
+    status: "upcoming",
+    icon: <Users className="w-5 h-5" />,
+    description:
+      "An open marketplace for community-built agents and tools. Plugin architecture for third-party extensions, community governance for agent curation, and shared templates for rapid development.",
+    deliverables: [
+      "Agent marketplace for community contributions",
+      "Plugin system for extending MCP servers",
+      "Community governance and curation",
+      "Shared templates and starter kits",
+      "Developer documentation and tutorials",
+    ],
+  },
 ];
 
-const statusStyles: Record<ProjectItem['status'], string> = {
-  live: 'from-green-500 to-emerald-500',
-  building: 'from-blue-500 to-cyan-500',
-  planned: 'from-amber-500 to-orange-500'
-};
-
-const statusLabels: Record<ProjectItem['status'], string> = {
-  live: 'Live Now',
-  building: 'In Progress',
-  planned: 'Planned'
+const statusConfig = {
+  completed: {
+    icon: <CheckCircle2 className="w-5 h-5" />,
+    label: "Completed",
+    color: "text-green-600 dark:text-green-400",
+    bg: "bg-green-100 dark:bg-green-900/30",
+    border: "border-green-200 dark:border-green-800/50",
+    dot: "bg-green-500",
+  },
+  "in-progress": {
+    icon: <RefreshCw className="w-5 h-5" />,
+    label: "In Progress",
+    color: "text-[#F0B90B]",
+    bg: "bg-[#F0B90B]/10",
+    border: "border-[#F0B90B]/30",
+    dot: "bg-[#F0B90B]",
+  },
+  upcoming: {
+    icon: <Timer className="w-5 h-5" />,
+    label: "Upcoming",
+    color: "text-gray-500 dark:text-gray-400",
+    bg: "bg-gray-100 dark:bg-white/5",
+    border: "border-gray-200 dark:border-white/10",
+    dot: "bg-gray-400 dark:bg-gray-600",
+  },
 };
 
 export default function RoadmapPage() {
   useSEO({
-    title: 'Roadmap & Projects',
-    description: 'See what we\'re building at Lyra. Live features, current development, and planned updates. Transparent project roadmap for the Web3 community.',
-    path: '/projects'
+    title: "Projects & Roadmap",
+    description:
+      "See what has been built and what is coming next for BNB Chain AI Toolkit — from core agents and MCP servers to community marketplace and standards.",
+    path: "/projects",
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-16">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold shadow-lg">
-            <Rocket className="w-4 h-4" />
-            <span>Community Projects</span>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-black mt-4">What We're Building</h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 mt-4 max-w-3xl mx-auto">
-            A transparent view of features that are live, currently in development, and planned for the future.
+    <main className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white">
+      {/* Hero */}
+      <section className="relative py-24 md:py-32 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+            Projects &amp; Roadmap
+          </h1>
+          <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            A transparent look at where the toolkit has been and where it is
+            headed. Each phase builds on the last.
           </p>
-        </div>
 
-        <div className="grid lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {(['live', 'building', 'planned'] as const).map(bucket => (
-            <div key={bucket} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-              <div className={`px-6 py-4 bg-gradient-to-r ${statusStyles[bucket]} text-white flex items-center justify-between`}>
-                <div className="flex items-center space-x-3">
-                  {bucket === 'live' && <CheckCircle2 className="w-5 h-5" />}
-                  {bucket === 'building' && <Clock className="w-5 h-5" />}
-                  {bucket === 'planned' && <ArrowRight className="w-5 h-5" />}
-                  <span className="text-lg font-bold">{statusLabels[bucket]}</span>
-                </div>
+          {/* Status legend */}
+          <div className="flex items-center justify-center gap-6 mt-8">
+            {Object.entries(statusConfig).map(([key, config]) => (
+              <div key={key} className="flex items-center gap-2 text-sm">
+                <div className={cn("w-2.5 h-2.5 rounded-full", config.dot)} />
+                <span className={config.color}>{config.label}</span>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              <div className="divide-y divide-gray-100 dark:divide-gray-700">
-                {projects.filter(item => item.status === bucket).map(item => (
-                  <div key={item.title} className="p-6">
-                    <div className="flex items-start space-x-3">
-                      <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-purple-600 dark:text-purple-400 flex-shrink-0">
-                        {item.icon}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-bold">{item.title}</h3>
-                        <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm">{item.description}</p>
-                        {item.badges && (
-                          <div className="flex flex-wrap gap-2 mt-3">
-                            {item.badges.map(badge => (
-                              <span key={badge} className="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
-                                {badge}
-                              </span>
-                            ))}
-                          </div>
+      {/* Timeline */}
+      <section className="py-12 px-6 bg-gray-50 dark:bg-[#0a0a0a]">
+        <div className="max-w-3xl mx-auto">
+          <TracingBeam className="px-4">
+            <div className="space-y-12">
+              {phases.map((phase) => {
+                const config = statusConfig[phase.status];
+                return (
+                  <div key={phase.number} className="relative">
+                    {/* Status badge */}
+                    <div className="flex items-center gap-3 mb-4">
+                      <span
+                        className={cn(
+                          "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium",
+                          config.bg,
+                          config.color
                         )}
+                      >
+                        {config.icon}
+                        {config.label}
+                      </span>
+                      <span className="text-xs text-gray-400">
+                        Phase {phase.number}
+                      </span>
+                    </div>
+
+                    {/* Card */}
+                    <div
+                      className={cn(
+                        "rounded-2xl border p-6",
+                        "bg-white dark:bg-black",
+                        config.border
+                      )}
+                    >
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className={cn("p-2 rounded-lg", config.bg, config.color)}>
+                          {phase.icon}
+                        </div>
+                        <h3 className="text-xl font-bold">{phase.title}</h3>
                       </div>
+                      <p className="text-gray-600 dark:text-gray-400 mb-5 leading-relaxed">
+                        {phase.description}
+                      </p>
+                      <ul className="space-y-2">
+                        {phase.deliverables.map((item, i) => (
+                          <li
+                            key={i}
+                            className="flex items-start gap-2 text-sm text-gray-500"
+                          >
+                            <div
+                              className={cn(
+                                "w-1.5 h-1.5 rounded-full mt-1.5 shrink-0",
+                                config.dot
+                              )}
+                            />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
-          ))}
+          </TracingBeam>
         </div>
+      </section>
 
-        {/* Principles Section */}
-        <div className="mt-12 max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
-          <div className="flex items-center space-x-3 mb-6">
-            <Shield className="w-6 h-6 text-green-500" />
-            <h2 className="text-2xl font-bold">Our Principles</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-700">
-              <h3 className="font-bold mb-2">Education First</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                Every feature we build serves our mission of making Web3 accessible to everyone.
-              </p>
-            </div>
-            <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-700">
-              <h3 className="font-bold mb-2">Security Focused</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                Templates and tutorials emphasize best practices to help developers write safer code.
-              </p>
-            </div>
-            <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-700">
-              <h3 className="font-bold mb-2">Community Driven</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                Open source at our core with a roadmap shaped by community feedback and contributions.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Feedback CTA */}
-        <div className="mt-12 max-w-2xl mx-auto text-center">
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
-            Have a feature request or suggestion? We'd love to hear from you!
+      {/* CTA */}
+      <section className="py-20 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-4">Help Shape the Roadmap</h2>
+          <p className="text-gray-600 dark:text-gray-400 text-lg mb-8">
+            Have ideas for what should come next? Open a discussion or contribute
+            directly to any phase.
           </p>
-          <a
-            href="https://github.com/nirholas/bnb-chain-toolkit/issues"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-bold hover:from-purple-700 hover:to-pink-700 transition-all"
-          >
-            <span>Submit Feedback on GitHub</span>
-            <ArrowRight className="w-4 h-4" />
-          </a>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href="https://github.com/nirholas/bnb-chain-toolkit/discussions"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#F0B90B] text-black font-semibold hover:bg-[#F0B90B]/90 transition-colors"
+            >
+              Start a Discussion
+            </a>
+            <Link
+              to="/community"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-gray-300 dark:border-white/20 font-semibold hover:border-[#F0B90B]/50 transition-colors"
+            >
+              Join Community
+            </Link>
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

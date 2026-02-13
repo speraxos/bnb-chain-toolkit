@@ -20,6 +20,7 @@
 
 import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useThemeStore } from './stores/themeStore';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { PageLoader } from './components/LoadingStates';
@@ -121,42 +122,52 @@ function AppContent() {
         <SkipLink />
         <NavBar />
         <main id="main-content" className="pt-16 pb-20 md:pb-0" role="main" tabIndex={-1}>
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
-              <Route path="/" element={<Homepage />} />
-              <Route path="/example/:exampleId" element={<ExamplePage />} />
-              <Route path="/playground" element={<ContractPlayground />} />
-              <Route path="/sandbox" element={<InteractiveSandbox />} />
-              <Route path="/sandbox/:shareId" element={<InteractiveSandbox />} />
-              <Route path="/tutorials" element={<TutorialBrowser />} />
-              <Route path="/tutorial/:tutorialId" element={<TutorialPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/docs" element={<DocsPage />} />
-              <Route path="/docs/api" element={<ApiReferencePage />} />
-              <Route path="/docs/:categoryId" element={<DocCategoryPage />} />
-              <Route path="/docs/:categoryId/:articleId" element={<DocArticlePage />} />
-              <Route path="/faq" element={<FAQPage />} />
-              <Route path="/community" element={<CommunityPage />} />
-              <Route path="/innovation" element={<InnovationShowcase />} />
-              <Route path="/innovation/ai-whisperer" element={<AICodeWhispererPage />} />
-              <Route path="/innovation/time-machine" element={<ContractTimeMachinePage />} />
-              <Route path="/innovation/exploit-lab" element={<ExploitLabPage />} />
-              <Route path="/innovation/arena" element={<CollaborativeArenaPage />} />
-              <Route path="/innovation/gas-oracle" element={<NeuralGasOraclePage />} />
-              <Route path="/innovation/cross-chain" element={<CrossChainDreamWeaverPage />} />
-              <Route path="/projects" element={<RoadmapPage />} />
-              <Route path="/changelog" element={<ChangelogPage />} />
-              <Route path="/learn" element={<InteractiveLearningPlayground />} />
-              <Route path="/fullstack-demo" element={<FullStackDemoPage />} />
-              <Route path="/examples" element={<ExamplesPage />} />
-              <Route path="/markets" element={<MarketsPage />} />
-              <Route path="/privacy" element={<PrivacyPage />} />
-              <Route path="/terms" element={<TermsPage />} />
-              <Route path="/contribute" element={<ContributePage />} />
-              <Route path="/explore" element={<ExplorePage />} />
-              <Route path="/shared/:token" element={<SharedProjectPage />} />
-            </Routes>
-          </Suspense>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Suspense fallback={<PageLoader />}>
+                <Routes location={location}>
+                  <Route path="/" element={<Homepage />} />
+                  <Route path="/example/:exampleId" element={<ExamplePage />} />
+                  <Route path="/playground" element={<ContractPlayground />} />
+                  <Route path="/sandbox" element={<InteractiveSandbox />} />
+                  <Route path="/sandbox/:shareId" element={<InteractiveSandbox />} />
+                  <Route path="/tutorials" element={<TutorialBrowser />} />
+                  <Route path="/tutorial/:tutorialId" element={<TutorialPage />} />
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="/docs" element={<DocsPage />} />
+                  <Route path="/docs/api" element={<ApiReferencePage />} />
+                  <Route path="/docs/:categoryId" element={<DocCategoryPage />} />
+                  <Route path="/docs/:categoryId/:articleId" element={<DocArticlePage />} />
+                  <Route path="/faq" element={<FAQPage />} />
+                  <Route path="/community" element={<CommunityPage />} />
+                  <Route path="/innovation" element={<InnovationShowcase />} />
+                  <Route path="/innovation/ai-whisperer" element={<AICodeWhispererPage />} />
+                  <Route path="/innovation/time-machine" element={<ContractTimeMachinePage />} />
+                  <Route path="/innovation/exploit-lab" element={<ExploitLabPage />} />
+                  <Route path="/innovation/arena" element={<CollaborativeArenaPage />} />
+                  <Route path="/innovation/gas-oracle" element={<NeuralGasOraclePage />} />
+                  <Route path="/innovation/cross-chain" element={<CrossChainDreamWeaverPage />} />
+                  <Route path="/projects" element={<RoadmapPage />} />
+                  <Route path="/changelog" element={<ChangelogPage />} />
+                  <Route path="/learn" element={<InteractiveLearningPlayground />} />
+                  <Route path="/fullstack-demo" element={<FullStackDemoPage />} />
+                  <Route path="/examples" element={<ExamplesPage />} />
+                  <Route path="/markets" element={<MarketsPage />} />
+                  <Route path="/privacy" element={<PrivacyPage />} />
+                  <Route path="/terms" element={<TermsPage />} />
+                  <Route path="/contribute" element={<ContributePage />} />
+                  <Route path="/explore" element={<ExplorePage />} />
+                  <Route path="/shared/:token" element={<SharedProjectPage />} />
+                </Routes>
+              </Suspense>
+            </motion.div>
+          </AnimatePresence>
         </main>
         <Footer />
         <MobileBottomNav />

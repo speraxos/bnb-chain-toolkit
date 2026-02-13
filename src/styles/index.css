@@ -1,13 +1,13 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * LYRA WEB3 PLAYGROUND - Main Stylesheet
+ * BNB CHAIN AI TOOLKIT - Main Stylesheet
  * ═══════════════════════════════════════════════════════════════════════════
  * 
  * ✨ Original Author: nich
  * 🐦 Twitter/X: x.com/nichxbt
  * 🐙 GitHub: github.com/nirholas
- * 📦 Repository: github.com/nirholas/lyra-web3-playground
- * 🌐 Website: https://lyra.works
+ * 📦 Repository: github.com/nirholas/bnb-chain-toolkit
+ * 🌐 Website: https://bnbchaintoolkit.com
  * 
  * Copyright (c) 2024-2026 nirholas (nich)
  * Licensed under MIT License
@@ -25,6 +25,33 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ======================================
+   DESIGN TOKEN CSS CUSTOM PROPERTIES
+   For Aceternity UI / shadcn integration
+   ====================================== */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+  }
+}
+
 @layer base {
   /* Prevent text size adjustment on orientation change in iOS */
   html {
@@ -39,6 +66,12 @@
     color-scheme: dark;
   }
 
+  /* Anti-aliased font rendering */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
     @apply bg-white text-gray-900;
     @apply dark:bg-black dark:text-white;
@@ -46,6 +79,17 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  /* BNB yellow accent selection colors */
+  ::selection {
+    background-color: rgba(240, 185, 11, 0.3);
+    color: inherit;
+  }
+
+  ::-moz-selection {
+    background-color: rgba(240, 185, 11, 0.3);
+    color: inherit;
   }
 
   /* Better headings with tighter tracking */
@@ -376,9 +420,9 @@
   min-height: 44px;
 }
 
-/* Visual focus for interactive elements */
+/* Visual focus for interactive elements — uses design token ring color */
 .focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
 }
 
 /* Slide-in animation for toasts (respects reduced motion) */
@@ -779,5 +823,37 @@ textarea:focus-visible,
 
   .text-subtle {
     @apply text-gray-400 dark:text-gray-500;
+  }
+}
+
+/* ======================================
+   ACETERNITY UI UTILITY CLASSES
+   ====================================== */
+
+@layer utilities {
+  /* Gradient text utility */
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(to right, #F0B90B, #FFE670, #F0B90B);
+  }
+
+  /* Glass morphism utility */
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Dot pattern background */
+  .bg-dot-pattern {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+
+  /* Grid pattern background */
+  .bg-grid-pattern {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
   }
 }

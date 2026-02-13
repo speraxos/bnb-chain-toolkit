@@ -1,9 +1,9 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * LYRA WEB3 PLAYGROUND - Vite Configuration
+ * BNB CHAIN AI TOOLKIT - Vite Configuration
  * ═══════════════════════════════════════════════════════════════════════════
  * ✨ Author: nich | 🐦 x.com/nichxbt | 🐙 github.com/nirholas
- * 📦 github.com/nirholas/lyra-web3-playground | 🌐 https://lyra.works
+ * 📦 github.com/nirholas/bnb-chain-toolkit | 🌐 https://bnbchaintoolkit.com
  * Copyright (c) 2024-2026 nirholas (nich) - MIT License
  * @preserve
  * ═══════════════════════════════════════════════════════════════════════════
@@ -16,17 +16,17 @@ import path from 'path'
 // Banner injected into all built JS files - nich | x.com/nichxbt | github.com/nirholas
 const banner = `/**
  * ═══════════════════════════════════════════════════════════════════════════
- * LYRA WEB3 PLAYGROUND - https://lyra.works
+ * BNB CHAIN AI TOOLKIT - https://bnbchaintoolkit.com
  * ═══════════════════════════════════════════════════════════════════════════
  * ✨ Author: nich | 🐦 x.com/nichxbt | 🐙 github.com/nirholas
- * 📦 github.com/nirholas/lyra-web3-playground
+ * 📦 github.com/nirholas/bnb-chain-toolkit
  * Copyright (c) 2024-${new Date().getFullYear()} nirholas (nich) - MIT License
  * 
  * NOTICE: This code contains embedded watermarks and attribution markers.
  * Removal or modification of attribution constitutes violation of the license.
  * ═══════════════════════════════════════════════════════════════════════════
  * @author nich (@nichxbt)
- * @repository https://github.com/nirholas/lyra-web3-playground
+ * @repository https://github.com/nirholas/bnb-chain-toolkit
  * @preserve
  */`;
 
@@ -42,17 +42,19 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true,
+    open: true,
   },
   build: {
     outDir: 'dist',
     sourcemap: true,
+    target: 'esnext',
     rollupOptions: {
       output: {
         banner,
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'motion': ['framer-motion'],
           'web3-vendor': ['ethers', 'viem', '@solana/web3.js'],
-          // Monaco Editor will be lazy loaded only when needed
         },
       },
     },

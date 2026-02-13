@@ -4,9 +4,11 @@
  * 💫 Your dedication inspires others 🌠
  */
 
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useSEO } from '@/hooks/useSEO';
+import { useState, useMemo } from "react";
+import { Link } from "react-router-dom";
+import { useSEO } from "@/hooks/useSEO";
+import { cn } from "@/lib/utils";
+import { Spotlight } from "@/components/ui/spotlight";
 import {
   BookOpen,
   Search,
@@ -14,353 +16,267 @@ import {
   Shield,
   Zap,
   Wallet,
-  FileCode,
   Terminal,
   ChevronRight,
-  ExternalLink,
-  Copy,
-  CheckCircle,
-  Sparkles,
-  Users,
   Rocket,
   HelpCircle,
-  ArrowRight
-} from 'lucide-react';
+  ArrowRight,
+  Layers,
+  BarChart3,
+} from "lucide-react";
 
 interface DocCategory {
   id: string;
   title: string;
-  icon: React.JSX.Element;
   description: string;
-  articles: DocArticle[];
-}
-
-interface DocArticle {
-  id: string;
-  title: string;
-  description: string;
-  readTime: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  content?: string;
+  icon: React.ReactNode;
+  articleCount: number;
 }
 
 const docCategories: DocCategory[] = [
   {
-    id: 'getting-started',
-    title: 'Getting Started',
+    id: "getting-started",
+    title: "Getting Started",
+    description:
+      "Setup your environment, install dependencies, and build your first AI-powered Web3 project in minutes.",
     icon: <Rocket className="w-6 h-6" />,
-    description: 'New to the platform? Start here',
-    articles: [
-      { id: 'intro', title: 'Introduction to BNB Chain AI Toolkit', description: 'Learn what 72+ agents, 6 MCP servers, and 900+ tools can do', readTime: '5 min', difficulty: 'beginner' },
-      { id: 'first-contract', title: 'Your First Smart Contract', description: 'Write, compile, and deploy in 10 minutes', readTime: '10 min', difficulty: 'beginner' },
-      { id: 'sandbox-basics', title: 'Understanding the Sandbox', description: 'Navigate the interactive development environment', readTime: '7 min', difficulty: 'beginner' },
-      { id: 'innovation-mode', title: 'Connecting MCP Servers', description: 'Connect AI assistants to BNB Chain', readTime: '5 min', difficulty: 'beginner' }
-    ]
+    articleCount: 5,
   },
   {
-    id: 'solidity',
-    title: 'Solidity Fundamentals',
+    id: "agents",
+    title: "AI Agents",
+    description:
+      "Explore 72+ pre-built agent definitions for PancakeSwap, Venus Protocol, BNB Staking, and more.",
     icon: <Code2 className="w-6 h-6" />,
-    description: 'Master the language of smart contracts',
-    articles: [
-      { id: 'solidity-basics', title: 'Solidity Syntax Basics', description: 'Variables, types, and functions', readTime: '15 min', difficulty: 'beginner' },
-      { id: 'data-structures', title: 'Data Structures', description: 'Arrays, mappings, and structs', readTime: '12 min', difficulty: 'intermediate' },
-      { id: 'inheritance', title: 'Contract Inheritance', description: 'Building on existing contracts', readTime: '10 min', difficulty: 'intermediate' },
-      { id: 'modifiers', title: 'Function Modifiers', description: 'Access control and reusability', readTime: '8 min', difficulty: 'intermediate' },
-      { id: 'events', title: 'Events and Logging', description: 'Communicate with the frontend', readTime: '10 min', difficulty: 'intermediate' }
-    ]
+    articleCount: 12,
   },
   {
-    id: 'security',
-    title: 'Smart Contract Security',
-    icon: <Shield className="w-6 h-6" />,
-    description: 'Build secure, auditable contracts',
-    articles: [
-      { id: 'common-vulnerabilities', title: 'Common Vulnerabilities', description: 'Top 10 smart contract security issues', readTime: '20 min', difficulty: 'intermediate' },
-      { id: 'reentrancy', title: 'Reentrancy Attacks Explained', description: 'How they work and how to prevent them', readTime: '15 min', difficulty: 'advanced' },
-      { id: 'access-control', title: 'Access Control Patterns', description: 'Secure your contract functions', readTime: '12 min', difficulty: 'intermediate' },
-      { id: 'audit-checklist', title: 'Security Audit Checklist', description: 'Pre-deployment security review', readTime: '10 min', difficulty: 'advanced' }
-    ]
+    id: "mcp-servers",
+    title: "MCP Servers",
+    description:
+      "Configure and deploy 6 Model Context Protocol servers for BNB Chain, Binance, and universal crypto operations.",
+    icon: <Terminal className="w-6 h-6" />,
+    articleCount: 8,
   },
   {
-    id: 'gas-optimization',
-    title: 'Gas Optimization',
+    id: "market-data",
+    title: "Market Data",
+    description:
+      "Integrate real-time price feeds from CoinGecko, DeFiLlama, and 200+ news sources for market intelligence.",
+    icon: <BarChart3 className="w-6 h-6" />,
+    articleCount: 6,
+  },
+  {
+    id: "defi-tools",
+    title: "DeFi Tools",
+    description:
+      "Dust sweeper, token utilities, and composable DeFi building blocks for BNB Chain applications.",
     icon: <Zap className="w-6 h-6" />,
-    description: 'Write efficient, cost-effective code',
-    articles: [
-      { id: 'gas-basics', title: 'Understanding Gas', description: 'How BNB Chain gas pricing works', readTime: '10 min', difficulty: 'beginner' },
-      { id: 'storage-optimization', title: 'Storage Optimization', description: 'Reduce costly storage operations', readTime: '15 min', difficulty: 'intermediate' },
-      { id: 'loop-optimization', title: 'Optimizing Loops', description: 'Avoid expensive iterations', readTime: '12 min', difficulty: 'intermediate' },
-      { id: 'packed-storage', title: 'Packed Storage', description: 'Advanced variable packing', readTime: '10 min', difficulty: 'advanced' }
-    ]
+    articleCount: 4,
   },
   {
-    id: 'defi',
-    title: 'DeFi Development',
+    id: "wallets",
+    title: "Wallets",
+    description:
+      "Offline wallet generation, HD wallets, vanity addresses, and secure transaction signing utilities.",
     icon: <Wallet className="w-6 h-6" />,
-    description: 'Build decentralized finance applications',
-    articles: [
-      { id: 'defi-intro', title: 'Introduction to DeFi', description: 'Understand the DeFi ecosystem', readTime: '15 min', difficulty: 'beginner' },
-      { id: 'token-creation', title: 'Creating ERC-20 Tokens', description: 'Build your own fungible token', readTime: '20 min', difficulty: 'intermediate' },
-      { id: 'liquidity-pools', title: 'Liquidity Pools', description: 'How AMMs work', readTime: '18 min', difficulty: 'advanced' },
-      { id: 'yield-farming', title: 'Yield Farming Mechanics', description: 'Staking and rewards', readTime: '15 min', difficulty: 'advanced' }
-    ]
+    articleCount: 5,
   },
   {
-    id: 'templates',
-    title: 'Templates & Playground',
-    icon: <FileCode className="w-6 h-6" />,
-    description: 'How to use contract templates and the interactive playground',
-    articles: [
-      { id: 'using-templates', title: 'Using Contract Templates', description: 'Browse, customize, and deploy templates', readTime: '8 min', difficulty: 'beginner' },
-      { id: 'deploy-testnets', title: 'Deploying to Testnets', description: 'Guide to deploying contracts to BSC Testnet and opBNB Testnet', readTime: '10 min', difficulty: 'intermediate' },
-      { id: 'tutorials-guide', title: 'Following Tutorials', description: 'How tutorial progress and checkpoints work', readTime: '6 min', difficulty: 'beginner' },
-      { id: 'contributing-docs', title: 'Contributing to Docs & Templates', description: 'How to submit improvements and new templates', readTime: '6 min', difficulty: 'beginner' }
-    ]
-  }
-];
-
-const quickLinks = [
-  { title: 'Quick Start Guide', path: '/docs/getting-started/intro', icon: <Rocket /> },
-  { title: 'API Reference', path: '/docs/api', icon: <FileCode /> },
-  { title: 'Example Contracts', path: '/examples', icon: <Code2 /> },
-  { title: 'FAQ', path: '/faq', icon: <HelpCircle /> }
+    id: "standards",
+    title: "Standards",
+    description:
+      "ERC-8004 for agent trust verification and W3AG for Web3 accessibility — two open standards for the ecosystem.",
+    icon: <Shield className="w-6 h-6" />,
+    articleCount: 3,
+  },
+  {
+    id: "architecture",
+    title: "Architecture",
+    description:
+      "Repository structure, design decisions, monorepo layout, and how all the pieces fit together.",
+    icon: <Layers className="w-6 h-6" />,
+    articleCount: 4,
+  },
+  {
+    id: "troubleshooting",
+    title: "Troubleshooting",
+    description:
+      "Common issues, error solutions, FAQ, and debugging tips for every part of the toolkit.",
+    icon: <HelpCircle className="w-6 h-6" />,
+    articleCount: 7,
+  },
 ];
 
 export default function DocsPage() {
+  const [search, setSearch] = useState("");
+
   useSEO({
-    title: 'Documentation',
-    description: 'Comprehensive documentation for BNB Chain AI Toolkit. Learn about agents, MCP servers, DeFi tools, market data, and smart contract development.',
-    path: '/docs'
+    title: "Documentation",
+    description:
+      "Comprehensive documentation for BNB Chain AI Toolkit — guides for AI agents, MCP servers, market data, DeFi tools, and more.",
+    path: "/docs",
   });
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [copiedCode, setCopiedCode] = useState<string | null>(null);
-
-  const filteredCategories = docCategories.filter(category => {
-    if (!searchQuery) return true;
-    const query = searchQuery.toLowerCase();
-    return (
-      category.title.toLowerCase().includes(query) ||
-      category.articles.some(article =>
-        article.title.toLowerCase().includes(query) ||
-        article.description.toLowerCase().includes(query)
-      )
+  const filteredCategories = useMemo(() => {
+    if (!search.trim()) return docCategories;
+    const q = search.toLowerCase();
+    return docCategories.filter(
+      (cat) =>
+        cat.title.toLowerCase().includes(q) ||
+        cat.description.toLowerCase().includes(q)
     );
-  });
-
-  const copyCode = (code: string) => {
-    navigator.clipboard.writeText(code);
-    setCopiedCode(code);
-    setTimeout(() => setCopiedCode(null), 2000);
-  };
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300';
-      case 'advanced': return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300';
-      default: return 'bg-gray-100 text-gray-700';
-    }
-  };
+  }, [search]);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <main className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white">
       {/* Hero */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <BookOpen className="w-16 h-16 mx-auto mb-6 opacity-80" />
-            <h1 className="text-4xl md:text-5xl font-black mb-4">Documentation</h1>
-            <p className="text-xl text-blue-100 mb-8">
-              Everything you need to build AI-powered applications on BNB Chain
-            </p>
-
-            {/* Search */}
-            <div className="relative max-w-2xl mx-auto">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Search documentation..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 rounded-xl text-gray-900 dark:text-white bg-white dark:bg-gray-800 shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-12">
-        {/* Quick Links */}
-        <div className="max-w-6xl mx-auto mb-12">
-          <h2 className="text-lg font-bold mb-4 text-gray-600 dark:text-gray-400">Quick Links</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {quickLinks.map((link, index) => (
-              <Link
-                key={index}
-                to={link.path}
-                className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-all flex items-center space-x-3 group"
-              >
-                <span className="text-blue-600 dark:text-blue-400">{link.icon}</span>
-                <span className="font-medium group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  {link.title}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Categories Grid */}
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredCategories.map((category) => (
-              <div
-                key={category.id}
-                className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all"
-              >
-                {/* Category Header */}
-                <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-                  <div className="flex items-center space-x-3 mb-3">
-                    <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-blue-600 dark:text-blue-400">
-                      {category.icon}
-                    </div>
-                    <h3 className="text-xl font-bold">{category.title}</h3>
-                  </div>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">
-                    {category.description}
-                  </p>
-                </div>
-
-                {/* Articles List */}
-                <div className="p-4">
-                  {category.articles.slice(0, 4).map((article) => (
-                    <Link
-                      key={article.id}
-                      to={`/docs/${category.id}/${article.id}`}
-                      className="block p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group"
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h4 className="font-medium mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                            {article.title}
-                          </h4>
-                          <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">
-                            {article.description}
-                          </p>
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 flex-shrink-0 mt-1" />
-                      </div>
-                      <div className="flex items-center space-x-2 mt-2">
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(article.difficulty)}`}>
-                          {article.difficulty}
-                        </span>
-                        <span className="text-xs text-gray-400">
-                          {article.readTime}
-                        </span>
-                      </div>
-                    </Link>
-                  ))}
-
-                  {category.articles.length > 4 && (
-                    <Link
-                      to={`/docs/${category.id}`}
-                      className="block text-center py-3 text-blue-600 dark:text-blue-400 font-medium hover:underline"
-                    >
-                      View all {category.articles.length} articles →
-                    </Link>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Sample Code Section */}
-        <div className="max-w-6xl mx-auto mt-16">
-          <h2 className="text-2xl font-bold mb-6">Quick Code Examples</h2>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Example 1 */}
-            <div className="bg-gray-900 rounded-xl overflow-hidden">
-              <div className="flex items-center justify-between px-4 py-2 bg-gray-800">
-                <span className="text-sm text-gray-400">Simple Token</span>
-                <button
-                  onClick={() => copyCode('pragma solidity ^0.8.19;\n\nimport "@openzeppelin/contracts/token/ERC20/ERC20.sol";\n\ncontract MyToken is ERC20 {\n    constructor() ERC20("MyToken", "MTK") {\n        _mint(msg.sender, 1000000 * 10 ** decimals());\n    }\n}')}
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  {copiedCode ? <CheckCircle className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
-                </button>
-              </div>
-              <pre className="p-4 text-sm text-gray-300 overflow-x-auto">
-                <code>{`pragma solidity ^0.8.19;
-
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-
-contract MyToken is ERC20 {
-    constructor() ERC20("MyToken", "MTK") {
-        _mint(msg.sender, 1000000 * 10 ** decimals());
-    }
-}`}</code>
-              </pre>
-            </div>
-
-            {/* Example 2 */}
-            <div className="bg-gray-900 rounded-xl overflow-hidden">
-              <div className="flex items-center justify-between px-4 py-2 bg-gray-800">
-                <span className="text-sm text-gray-400">Simple NFT</span>
-                <button
-                  onClick={() => copyCode('pragma solidity ^0.8.19;\n\nimport "@openzeppelin/contracts/token/ERC721/ERC721.sol";\n\ncontract MyNFT is ERC721 {\n    uint256 private _tokenIdCounter;\n\n    constructor() ERC721("MyNFT", "MNFT") {}\n\n    function mint() public {\n        _safeMint(msg.sender, _tokenIdCounter++);\n    }\n}')}
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  {copiedCode ? <CheckCircle className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
-                </button>
-              </div>
-              <pre className="p-4 text-sm text-gray-300 overflow-x-auto">
-                <code>{`pragma solidity ^0.8.19;
-
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-
-contract MyNFT is ERC721 {
-    uint256 private _tokenIdCounter;
-
-    constructor() ERC721("MyNFT", "MNFT") {}
-
-    function mint() public {
-        _safeMint(msg.sender, _tokenIdCounter++);
-    }
-}`}</code>
-              </pre>
-            </div>
-          </div>
-        </div>
-
-        {/* Help CTA */}
-        <div className="max-w-4xl mx-auto mt-16 text-center p-12 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl">
-          <Users className="w-12 h-12 mx-auto mb-4 text-blue-600 dark:text-blue-400" />
-          <h2 className="text-2xl font-bold mb-4">Can't find what you're looking for?</h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Join our community and get help from thousands of developers
+      <section className="relative py-24 md:py-32 px-6">
+        <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" />
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+            Documentation
+          </h1>
+          <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Everything you need to integrate AI agents, MCP servers, and Web3
+            tools into your BNB Chain projects.
           </p>
-          <div className="flex items-center justify-center space-x-4">
-            <a
-              href="https://github.com/nirholas/bnb-chain-toolkit/discussions"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-all"
-            >
-              Ask on GitHub
-            </a>
+
+          {/* Search */}
+          <div className="relative max-w-xl mx-auto mt-10">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search documentation..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className={cn(
+                "w-full pl-12 pr-4 py-3.5 rounded-2xl",
+                "bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10",
+                "focus:outline-none focus:ring-2 focus:ring-[#F0B90B]/50 focus:border-[#F0B90B]/50",
+                "placeholder:text-gray-400 dark:placeholder:text-gray-600",
+                "text-gray-900 dark:text-white"
+              )}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Start */}
+      <section className="px-6 pb-12">
+        <div className="max-w-6xl mx-auto">
+          <Link
+            to="/docs/getting-started"
+            className={cn(
+              "group block rounded-2xl p-8",
+              "bg-gradient-to-r from-[#F0B90B]/10 to-[#F0B90B]/5",
+              "border border-[#F0B90B]/20 hover:border-[#F0B90B]/40",
+              "transition-all duration-200"
+            )}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F0B90B]/20 text-[#F0B90B] text-sm font-medium mb-4">
+                  <Rocket className="w-4 h-4" />
+                  Recommended
+                </div>
+                <h2 className="text-2xl font-bold mb-2">Quick Start Guide</h2>
+                <p className="text-gray-600 dark:text-gray-400 max-w-xl">
+                  Get up and running in under 5 minutes. Install the toolkit,
+                  configure your first MCP server, and deploy an AI agent on BNB
+                  Chain.
+                </p>
+              </div>
+              <ArrowRight className="w-6 h-6 text-gray-400 group-hover:text-[#F0B90B] group-hover:translate-x-1 transition-all shrink-0" />
+            </div>
+          </Link>
+        </div>
+      </section>
+
+      {/* Categories Grid */}
+      <section className="py-20 px-6 bg-gray-50 dark:bg-[#0a0a0a]">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold mb-10">Browse by Category</h2>
+
+          {search.trim() && filteredCategories.length === 0 ? (
+            <div className="text-center py-16 text-gray-500">
+              <HelpCircle className="w-12 h-12 mx-auto mb-4 opacity-50" />
+              <p className="text-lg">
+                No results for &ldquo;{search}&rdquo;
+              </p>
+              <button
+                onClick={() => setSearch("")}
+                className="mt-4 text-[#F0B90B] hover:underline"
+              >
+                Clear search
+              </button>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {filteredCategories.map((cat) => (
+                <Link
+                  key={cat.id}
+                  to={`/docs/${cat.id}`}
+                  className={cn(
+                    "group rounded-2xl border border-gray-200 dark:border-white/10 p-6",
+                    "hover:border-[#F0B90B]/40 dark:hover:border-white/20",
+                    "bg-white dark:bg-black transition-all duration-200"
+                  )}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="p-2.5 rounded-xl bg-gray-100 dark:bg-white/5 text-[#F0B90B] shrink-0">
+                      {cat.icon}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <h3 className="font-semibold group-hover:text-[#F0B90B] transition-colors">
+                          {cat.title}
+                        </h3>
+                        <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#F0B90B] group-hover:translate-x-0.5 transition-all shrink-0" />
+                      </div>
+                      <p className="text-sm text-gray-500 line-clamp-2">
+                        {cat.description}
+                      </p>
+                      <span className="inline-block mt-3 text-xs text-gray-400">
+                        {cat.articleCount} articles
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Help CTA */}
+      <section className="py-20 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <BookOpen className="w-10 h-10 mx-auto mb-6 text-[#F0B90B]" />
+          <h2 className="text-3xl font-bold mb-4">Can&apos;t find what you need?</h2>
+          <p className="text-gray-600 dark:text-gray-400 text-lg mb-8">
+            Check the FAQ, open a GitHub issue, or reach out on Twitter. We
+            respond to every question.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/faq"
-              className="px-6 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg font-bold hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#F0B90B] text-black font-semibold hover:bg-[#F0B90B]/90 transition-colors"
             >
+              <HelpCircle className="w-5 h-5" />
               View FAQ
             </Link>
+            <a
+              href="https://github.com/nirholas/bnb-chain-toolkit/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-gray-300 dark:border-white/20 font-semibold hover:border-[#F0B90B]/50 transition-colors"
+            >
+              Open an Issue
+            </a>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

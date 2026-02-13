@@ -11,20 +11,35 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Moon, Sun, Menu, X, Zap, BookOpen, Users,
-  Compass, ChevronDown, Code2, GraduationCap, Rocket,
-  FileCode, Terminal, Layers, ArrowRight, Play, Sparkles,
-  FlaskConical, Code
+  Moon,
+  Sun,
+  Menu,
+  X,
+  Zap,
+  BookOpen,
+  ChevronDown,
+  GraduationCap,
+  FileCode,
+  Terminal,
+  Layers,
+  Play,
+  Sparkles,
+  FlaskConical,
+  Code,
+  TrendingUp,
+  Users,
+  HelpCircle,
+  Info,
 } from 'lucide-react';
 import { useThemeStore } from '@/stores/themeStore';
-import { useWalletStore } from '@/stores/walletStore';
-import { truncateAddress } from '@/utils/helpers';
-import WalletConnect from './WalletConnect';
 import LanguageSelector from './LanguageSelector';
 import UserButton from './UserButton';
-import { useAnnounce } from './Accessibility';
-import useI18n from '@/stores/i18nStore';
+import { useAnnounce, useFocusTrap } from './Accessibility';
+import { cn } from '@/utils/helpers';
+
+/* ─── Types ──────────────────────────────────────────────────────────── */
 
 interface DropdownItem {
   label: string;
@@ -35,24 +50,40 @@ interface DropdownItem {
   iconColor?: string;
 }
 
-interface NavDropdownProps {
+interface NavGroup {
   label: string;
   items: DropdownItem[];
-  icon?: React.ElementType;
+  featured?: { title: string; description: string; href: string };
 }
 
-function NavDropdown({ label, items, icon: Icon }: NavDropdownProps) {
-  const [isOpen, setIsOpen] = useState(false);
+/* ─── Dropdown sub-component ─────────────────────────────────────────── */
+
+interface NavDropdownProps {
+  group: NavGroup;
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}
+
+function NavDropdown({ group, isOpen, onOpen, onClose }: NavDropdownProps) {
+  const location = useLocation();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const timeoutRef = useRef<NodeJS.Timeout>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Check if any child route is currently active
+  const hasActiveChild = group.items.some(
+    (item) =>
+      location.pathname === item.href ||
+      location.pathname.startsWith(item.href + '/')
+  );
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setIsOpen(true);
+    onOpen();
   };
 
   const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => setIsOpen(false), 150);
+    timeoutRef.current = setTimeout(onClose, 150);
   };
 
   useEffect(() => {
@@ -61,87 +92,359 @@ function NavDropdown({ label, items, icon: Icon }: NavDropdownProps) {
     };
   }, []);
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      onClose();
+    }
+  };
+
   return (
     <div
       ref={dropdownRef}
       className="relative"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onKeyDown={handleKeyDown}
     >
       <button
-        className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${isOpen
-            ? 'text-gray-900 dark:text-white bg-gray-100/80 dark:bg-white/10'
-            : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/60 dark:hover:bg-white/5'
-          }`}
+        className={cn(
+          'relative flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200',
+          isOpen
+            ? 'text-gray-900 dark:text-white'
+            : hasActiveChild
+              ? 'text-gray-900 dark:text-white'
+              : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+        )}
         aria-expanded={isOpen}
         aria-haspopup="true"
+        onClick={() => (isOpen ? onClose() : onOpen())}
       >
-        {Icon && <Icon className="w-4 h-4" />}
-        <span>{label}</span>
-        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+        <span>{group.label}</span>
+        <ChevronDown
+          className={cn(
+            'w-3.5 h-3.5 transition-transform duration-200',
+            isOpen && 'rotate-180'
+          )}
+        />
+        {/* Active route indicator dot */}
+        {hasActiveChild && !isOpen && (
+          <span
+            className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#F0B90B]"
+            aria-hidden="true"
+          />
+        )}
       </button>
 
-      {/* Dropdown Panel */}
-      <div
-        className={`absolute top-full left-0 mt-1 w-80 origin-top-left transition-all duration-200 ${isOpen
-            ? 'opacity-100 scale-100 translate-y-0'
-            : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'
-          }`}
-      >
-        <div className="bg-white dark:bg-black rounded-xl shadow-xl shadow-black/10 dark:shadow-[0_0_30px_rgba(255,255,255,0.05)] border border-gray-200/80 dark:border-white/10 overflow-hidden backdrop-blur-xl">
-          <div className="p-2">
-            {items.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group"
-                onClick={() => setIsOpen(false)}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[540px] z-50"
+          >
+            <div className="rounded-xl border border-gray-200/80 dark:border-white/10 bg-white dark:bg-black shadow-xl shadow-black/10 dark:shadow-[0_8px_40px_rgba(0,0,0,0.5)] overflow-hidden">
+              <div
+                className={cn(
+                  'grid gap-0',
+                  group.featured ? 'grid-cols-[1fr_200px]' : 'grid-cols-1'
+                )}
               >
-                {item.icon && (
-                  <div className={`flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-gray-100 to-gray-50 dark:from-white/5 dark:to-white/[0.02] flex items-center justify-center group-hover:from-violet-100 group-hover:to-violet-50 dark:group-hover:from-violet-900/30 dark:group-hover:to-violet-800/20 transition-colors`}>
-                    <item.icon className={`w-4 h-4 ${item.iconColor || 'text-gray-600 dark:text-gray-400'} group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors`} />
+                {/* Main items */}
+                <div className="p-2">
+                  {group.items.map((item) => (
+                    <Link
+                      key={item.href + item.label}
+                      to={item.href}
+                      className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group/item"
+                      onClick={onClose}
+                    >
+                      {item.icon && (
+                        <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-gray-100 dark:bg-white/5 flex items-center justify-center transition-colors">
+                          <item.icon
+                            className={cn(
+                              'w-4 h-4 transition-colors',
+                              item.iconColor || 'text-gray-500 dark:text-gray-400'
+                            )}
+                          />
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">
+                            {item.label}
+                          </span>
+                          {item.badge && (
+                            <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide rounded-full bg-[#F0B90B]/15 text-[#F0B90B]">
+                              {item.badge}
+                            </span>
+                          )}
+                        </div>
+                        {item.description && (
+                          <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
+                            {item.description}
+                          </p>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Featured sidebar */}
+                {group.featured && (
+                  <div className="border-l border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-white/[0.02] p-4 flex flex-col justify-center">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2">
+                      Featured
+                    </p>
+                    <Link
+                      to={group.featured.href}
+                      onClick={onClose}
+                      className="group/feat"
+                    >
+                      <p className="text-sm font-medium text-gray-900 dark:text-white group-hover/feat:text-[#F0B90B] transition-colors">
+                        {group.featured.title}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        {group.featured.description}
+                      </p>
+                    </Link>
                   </div>
                 )}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
-                      {item.label}
-                    </span>
-                    {item.badge && (
-                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white">
-                        {item.badge}
-                      </span>
-                    )}
-                  </div>
-                  {item.description && (
-                    <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
-                      {item.description}
-                    </p>
-                  )}
-                </div>
-                <ArrowRight className="w-4 h-4 mt-0.5 text-gray-300 dark:text-gray-600 group-hover:text-violet-500 group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100" />
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
+/* ─── Mobile accordion ───────────────────────────────────────────────── */
+
+function MobileAccordion({
+  group,
+  onNavigate,
+}: {
+  group: NavGroup;
+  onNavigate: () => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between px-4 py-3 text-left"
+        aria-expanded={isOpen}
+      >
+        <span className="text-sm font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+          {group.label}
+        </span>
+        <ChevronDown
+          className={cn(
+            'w-4 h-4 text-gray-400 transition-transform duration-200',
+            isOpen && 'rotate-180'
+          )}
+        />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div className="px-2 pb-2 space-y-0.5">
+              {group.items.map((item) => (
+                <Link
+                  key={item.href + item.label}
+                  to={item.href}
+                  onClick={onNavigate}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+                >
+                  {item.icon && (
+                    <div className="w-9 h-9 rounded-lg bg-gray-100 dark:bg-white/5 flex items-center justify-center">
+                      <item.icon
+                        className={cn(
+                          'w-4 h-4',
+                          item.iconColor || 'text-gray-400'
+                        )}
+                      />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">
+                        {item.label}
+                      </span>
+                      {item.badge && (
+                        <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide rounded-full bg-[#F0B90B]/15 text-[#F0B90B]">
+                          {item.badge}
+                        </span>
+                      )}
+                    </div>
+                    {item.description && (
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-1">
+                        {item.description}
+                      </p>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/* ─── Main NavBar ────────────────────────────────────────────────────── */
+
 export default function NavBar() {
   const { mode, toggleTheme } = useThemeStore();
-  const { address, isConnected } = useWalletStore();
-  const { t } = useI18n();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showWalletModal, setShowWalletModal] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const { announce } = useAnnounce();
 
-  // Handle scroll effect
+  // Focus trap for mobile menu — handles Tab cycling, Escape, and initial focus
+  const mobileMenuRef = useFocusTrap<HTMLDivElement>({
+    isActive: isMenuOpen,
+    onEscape: () => {
+      setIsMenuOpen(false);
+      menuButtonRef.current?.focus();
+      announce('Navigation menu closed', 'polite');
+    },
+    returnFocusTo: menuButtonRef.current,
+  });
+
+  // ── Navigation data ───────────────────────────────────────────────
+
+  const navGroups: NavGroup[] = [
+    {
+      label: 'Learn',
+      items: [
+        {
+          label: 'Documentation',
+          href: '/docs',
+          icon: BookOpen,
+          description: 'Comprehensive guides for agents, MCP servers & tools',
+          iconColor: 'text-blue-500',
+        },
+        {
+          label: 'Interactive Tutorials',
+          href: '/tutorials',
+          icon: GraduationCap,
+          description: 'Step-by-step BNB Chain integration walkthroughs',
+          iconColor: 'text-emerald-500',
+        },
+        {
+          label: 'Examples Gallery',
+          href: '/projects',
+          icon: FileCode,
+          description: 'Community projects and smart contract templates',
+          badge: 'Popular',
+          iconColor: 'text-amber-500',
+        },
+        {
+          label: 'API Reference',
+          href: '/docs/api',
+          icon: Code,
+          description: 'Complete API documentation and endpoints',
+          iconColor: 'text-cyan-500',
+        },
+      ],
+      featured: {
+        title: 'Getting Started',
+        description: 'New to BNB Chain AI Toolkit? Start here.',
+        href: '/docs',
+      },
+    },
+    {
+      label: 'Build',
+      items: [
+        {
+          label: 'Code Playground',
+          href: '/playground',
+          icon: Terminal,
+          description: 'Interactive code editor with live preview',
+          iconColor: 'text-violet-500',
+        },
+        {
+          label: 'Sandbox IDE',
+          href: '/sandbox',
+          icon: Sparkles,
+          description: 'AI-powered BNB Chain dev environment',
+          badge: 'New',
+          iconColor: 'text-pink-500',
+        },
+        {
+          label: 'Full-Stack Builder',
+          href: '/fullstack-demo',
+          icon: Layers,
+          description: 'Contract + Frontend on BNB Chain',
+          iconColor: 'text-green-500',
+        },
+        {
+          label: 'Contract Templates',
+          href: '/playground',
+          icon: FileCode,
+          description: 'Pre-built smart contract templates for BSC',
+          iconColor: 'text-orange-500',
+        },
+      ],
+    },
+    {
+      label: 'Explore',
+      items: [
+        {
+          label: 'Innovation Lab',
+          href: '/innovation',
+          icon: FlaskConical,
+          description: 'MCP tools & experimental features',
+          badge: 'Beta',
+          iconColor: 'text-fuchsia-500',
+        },
+        {
+          label: 'Markets',
+          href: '/markets',
+          icon: TrendingUp,
+          description: 'Live crypto prices and market data',
+          iconColor: 'text-emerald-500',
+        },
+        {
+          label: 'Community',
+          href: '/community',
+          icon: Users,
+          description: 'Connect with builders and developers',
+          iconColor: 'text-blue-500',
+        },
+        {
+          label: 'About',
+          href: '/about',
+          icon: Info,
+          description: 'Learn about BNB Chain AI Toolkit',
+          iconColor: 'text-gray-400',
+        },
+        {
+          label: 'FAQ',
+          href: '/faq',
+          icon: HelpCircle,
+          description: 'Frequently asked questions',
+          iconColor: 'text-yellow-500',
+        },
+      ],
+    },
+  ];
+
+  // ── Scroll effect ──────────────────────────────────────────────────
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -150,34 +453,41 @@ export default function NavBar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close menu on Escape key
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Escape' && isMenuOpen) {
-      setIsMenuOpen(false);
-      menuButtonRef.current?.focus();
-      announce('Navigation menu closed', 'polite');
-    }
-  }, [isMenuOpen, announce]);
+  // ── Close mobile menu on route change ──────────────────────────────
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
+
+  // ── Escape key for desktop dropdowns ────────────────────────────────
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && openDropdown) {
+        setOpenDropdown(null);
+      }
+    },
+    [openDropdown]
+  );
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 
-  // Trap focus in mobile menu when open
+  // ── Announce mobile menu open/close ─────────────────────────────────
+
   useEffect(() => {
-    if (isMenuOpen && mobileMenuRef.current) {
-      const focusableElements = mobileMenuRef.current.querySelectorAll<HTMLElement>(
-        'a, button, input, [tabindex]:not([tabindex="-1"])'
+    if (isMenuOpen) {
+      announce(
+        'Navigation menu opened. Use Tab to navigate, Escape to close.',
+        'polite'
       );
-      if (focusableElements.length > 0) {
-        focusableElements[0].focus();
-      }
-      announce('Navigation menu opened. Use arrow keys or Tab to navigate.', 'polite');
     }
   }, [isMenuOpen, announce]);
 
-  // Lock body scroll when mobile menu is open
+  // ── Lock body scroll when mobile menu is open ──────────────────────
+
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -189,310 +499,264 @@ export default function NavBar() {
     };
   }, [isMenuOpen]);
 
-  // Announce theme change
+  // ── Theme toggle handler ──────────────────────────────────────────
+
   const handleThemeToggle = () => {
     toggleTheme();
-    announce(`Switched to ${mode === 'dark' ? 'light' : 'dark'} mode`, 'polite');
+    announce(
+      `Switched to ${mode === 'dark' ? 'light' : 'dark'} mode`,
+      'polite'
+    );
   };
 
-  // Navigation items for dropdowns
-  const learnItems: DropdownItem[] = [
-    { label: 'Documentation', href: '/docs', icon: BookOpen, description: 'Guides for agents, MCP servers & tools', iconColor: 'text-blue-500' },
-    { label: 'Tutorials', href: '/tutorials', icon: GraduationCap, description: 'Step-by-step BNB Chain integration', iconColor: 'text-emerald-500' },
-    { label: 'Examples', href: '/playground', icon: FileCode, description: 'Smart contract templates for BSC', iconColor: 'text-amber-500' },
-  ];
-
-  const buildItems: DropdownItem[] = [
-    { label: 'AI Sandbox', href: '/sandbox', icon: Sparkles, description: 'AI-powered BNB Chain dev environment', badge: 'New', iconColor: 'text-violet-500' },
-    { label: 'Web Sandbox', href: '/ide?type=web', icon: Terminal, description: 'HTML, CSS, JS, React, Vue', iconColor: 'text-blue-500' },
-    { label: 'Solidity IDE', href: '/ide?type=solidity', icon: Code, description: 'BSC smart contract development', iconColor: 'text-purple-500' },
-    { label: 'Full-Stack Playground', href: '/fullstack-demo', icon: Layers, description: 'Contract + Frontend on BNB Chain', iconColor: 'text-green-500' },
-    { label: 'Innovation Lab', href: '/innovation', icon: FlaskConical, description: 'MCP tools & experimental features', badge: 'Beta', iconColor: 'text-pink-500' },
-  ];
-
-  const isActiveLink = (path: string) => location.pathname === path || location.pathname.startsWith(path + '/');
+  // ── Render ─────────────────────────────────────────────────────────
 
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-            ? 'bg-white/80 dark:bg-black/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-white/5 shadow-sm shadow-black/5 dark:shadow-[0_1px_20px_rgba(255,255,255,0.03)]'
-            : 'bg-white/60 dark:bg-black/60 backdrop-blur-md'
-          }`}
+        className={cn(
+          'fixed top-0 left-0 right-0 z-50 h-16 transition-all duration-200',
+          isScrolled
+            ? 'bg-white/80 dark:bg-black/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-white/5'
+            : 'bg-transparent'
+        )}
         role="navigation"
         aria-label="Main navigation"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+          <div className="flex items-center justify-between h-full">
+            {/* ── Brand ────────────────────────────────────────── */}
             <Link
               to="/"
-              className="flex items-center gap-2.5 group"
+              className="flex items-center gap-2 group"
               aria-label="BNB Chain AI Toolkit - Home"
             >
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-xl blur-lg opacity-40 group-hover:opacity-60 transition-opacity" />
-                <div className="relative p-2 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-xl group-hover:scale-105 transition-transform duration-200">
-                  <Zap className="w-5 h-5 text-white" />
-                </div>
+              <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#F0B90B] group-hover:scale-105 transition-transform duration-200">
+                <Zap className="w-4 h-4 text-black" />
               </div>
-              <div className="flex flex-col">
-                <span className="font-bold text-lg tracking-tight text-gray-900 dark:text-white">
-                  BNB Chain
-                </span>
-                <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400 -mt-0.5 tracking-wide hidden sm:block">
-                  AI Toolkit
-                </span>
-              </div>
+              <span className="font-semibold text-base tracking-tight text-gray-900 dark:text-white hidden sm:block">
+                BNB Chain AI Toolkit
+              </span>
+              <span className="font-semibold text-base tracking-tight text-gray-900 dark:text-white sm:hidden">
+                BNBT
+              </span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-1">
-              <NavDropdown label="Learn" items={learnItems} icon={GraduationCap} />
-              <NavDropdown label="Build" items={buildItems} icon={Code2} />
-
-              <Link
-                to="/explore"
-                className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${isActiveLink('/explore')
-                    ? 'text-gray-900 dark:text-white bg-gray-100/80 dark:bg-white/10'
-                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/60 dark:hover:bg-white/5'
-                  }`}
-              >
-                <Compass className="w-4 h-4" />
-                <span>Explore</span>
-              </Link>
-
-              <Link
-                to="/community"
-                className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${isActiveLink('/community')
-                    ? 'text-gray-900 dark:text-white bg-gray-100/80 dark:bg-white/10'
-                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/60 dark:hover:bg-white/5'
-                  }`}
-              >
-                <Users className="w-4 h-4" />
-                <span>{t('nav.community')}</span>
-              </Link>
+            {/* ── Desktop navigation ───────────────────────────── */}
+            <div className="hidden lg:flex items-center gap-0.5">
+              {navGroups.map((group) => (
+                <NavDropdown
+                  key={group.label}
+                  group={group}
+                  isOpen={openDropdown === group.label}
+                  onOpen={() => setOpenDropdown(group.label)}
+                  onClose={() => setOpenDropdown(null)}
+                />
+              ))}
             </div>
 
-            {/* Right Side Actions */}
-            <div className="hidden lg:flex items-center gap-2">
+            {/* ── Right side actions ───────────────────────────── */}
+            <div className="hidden lg:flex items-center gap-1">
               <LanguageSelector compact />
 
-              <button
+              {/* Theme toggle */}
+              <motion.button
                 onClick={handleThemeToggle}
-                className="p-2.5 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/60 dark:hover:bg-white/5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:ring-offset-2 dark:focus:ring-offset-black"
-                aria-label={mode === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+                className="relative p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/60 dark:hover:bg-white/5 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#F0B90B]/50 focus:ring-offset-2 dark:focus:ring-offset-black"
+                aria-label={
+                  mode === 'dark'
+                    ? 'Switch to light theme'
+                    : 'Switch to dark theme'
+                }
                 aria-pressed={mode === 'dark'}
               >
-                {mode === 'dark' ? (
-                  <Sun className="w-5 h-5" />
-                ) : (
-                  <Moon className="w-5 h-5" />
-                )}
-              </button>
+                <AnimatePresence mode="wait" initial={false}>
+                  {mode === 'dark' ? (
+                    <motion.div
+                      key="sun"
+                      initial={{ rotate: -180, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 180, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <Sun className="w-[18px] h-[18px]" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="moon"
+                      initial={{ rotate: 180, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: -180, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <Moon className="w-[18px] h-[18px]" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.button>
 
-              <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1" />
+              <div
+                className="w-px h-5 bg-gray-200 dark:bg-white/10 mx-1"
+                aria-hidden="true"
+              />
 
               <UserButton />
 
               <Link
                 to="/sandbox"
-                className="group relative flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-gradient-to-r from-yellow-500 to-amber-500 text-white shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                className="ml-1 flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg bg-[#F0B90B] text-black hover:bg-[#F0B90B]/90 active:scale-[0.98] transition-all duration-200"
               >
-                <Play className="w-4 h-4" />
+                <Play className="w-3.5 h-3.5" />
                 <span>Start Building</span>
-                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-yellow-400 to-amber-400 opacity-0 group-hover:opacity-100 blur-xl transition-opacity -z-10" />
               </Link>
             </div>
 
-            {/* Mobile Menu Button */}
-            <div className="flex lg:hidden items-center gap-2">
-              <button
+            {/* ── Mobile right actions ─────────────────────────── */}
+            <div className="flex lg:hidden items-center gap-1">
+              <motion.button
                 onClick={handleThemeToggle}
-                className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
-                aria-label={mode === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+                className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                aria-label={
+                  mode === 'dark'
+                    ? 'Switch to light theme'
+                    : 'Switch to dark theme'
+                }
               >
-                {mode === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </button>
+                <AnimatePresence mode="wait" initial={false}>
+                  {mode === 'dark' ? (
+                    <motion.div
+                      key="sun-m"
+                      initial={{ rotate: -180, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 180, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <Sun className="w-5 h-5" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="moon-m"
+                      initial={{ rotate: 180, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: -180, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <Moon className="w-5 h-5" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.button>
 
               <button
                 ref={menuButtonRef}
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500/50"
-                aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#F0B90B]/50"
+                aria-label={
+                  isMenuOpen
+                    ? 'Close navigation menu'
+                    : 'Open navigation menu'
+                }
                 aria-expanded={isMenuOpen}
                 aria-controls="mobile-menu"
               >
-                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                <AnimatePresence mode="wait" initial={false}>
+                  {isMenuOpen ? (
+                    <motion.div
+                      key="close"
+                      initial={{ rotate: -90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 90, opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <X className="w-6 h-6" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="menu"
+                      initial={{ rotate: 90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: -90, opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <Menu className="w-6 h-6" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </button>
             </div>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        <div
-          id="mobile-menu"
-          ref={mobileMenuRef}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Navigation menu"
-          className={`lg:hidden fixed inset-x-0 top-16 bottom-0 bg-white dark:bg-black transition-all duration-300 ease-out ${isMenuOpen
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 -translate-y-4 pointer-events-none'
-            }`}
-          aria-hidden={!isMenuOpen}
-        >
-          <nav className="h-full overflow-y-auto overscroll-contain px-4 py-6 space-y-6">
-            {/* Learn Section */}
-            <div>
-              <h3 className="px-3 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">
-                Learn
-              </h3>
-              <div className="space-y-1">
-                {learnItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    to={item.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group"
-                  >
-                    {item.icon && (
-                      <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center group-hover:bg-violet-100 dark:group-hover:bg-violet-900/30 transition-colors">
-                        <item.icon className={`w-5 h-5 ${item.iconColor || 'text-gray-600 dark:text-gray-400'}`} />
-                      </div>
-                    )}
-                    <div>
-                      <div className="font-medium text-gray-900 dark:text-white">{item.label}</div>
-                      {item.description && (
-                        <div className="text-sm text-gray-500 dark:text-gray-400">{item.description}</div>
-                      )}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Build Section */}
-            <div>
-              <h3 className="px-3 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">
-                Build
-              </h3>
-              <div className="space-y-1">
-                {buildItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    to={item.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group"
-                  >
-                    {item.icon && (
-                      <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center group-hover:bg-violet-100 dark:group-hover:bg-violet-900/30 transition-colors">
-                        <item.icon className={`w-5 h-5 ${item.iconColor || 'text-gray-600 dark:text-gray-400'}`} />
-                      </div>
-                    )}
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-gray-900 dark:text-white">{item.label}</span>
-                        {item.badge && (
-                          <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white">
-                            {item.badge}
-                          </span>
-                        )}
-                      </div>
-                      {item.description && (
-                        <div className="text-sm text-gray-500 dark:text-gray-400">{item.description}</div>
-                      )}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Quick Links */}
-            <div>
-              <h3 className="px-3 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">
-                Explore
-              </h3>
-              <div className="space-y-1">
-                <Link
-                  to="/explore"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                    <Compass className="w-5 h-5 text-cyan-500" />
-                  </div>
-                  <div>
-                    <div className="font-medium text-gray-900 dark:text-white">Explore</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Discover community projects</div>
-                  </div>
-                </Link>
-                <Link
-                  to="/community"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                    <Users className="w-5 h-5 text-orange-500" />
-                  </div>
-                  <div>
-                    <div className="font-medium text-gray-900 dark:text-white">Community</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Connect with developers</div>
-                  </div>
-                </Link>
-                <Link
-                  to="/about"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                    <Rocket className="w-5 h-5 text-red-500" />
-                  </div>
-                  <div>
-                    <div className="font-medium text-gray-900 dark:text-white">About</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Learn about BNB Chain AI Toolkit</div>
-                  </div>
-                </Link>
-              </div>
-            </div>
-
-            {/* Divider */}
-            <div className="border-t border-gray-200 dark:border-gray-800" />
-
-            {/* Actions */}
-            <div className="space-y-3 pb-20">
-              <LanguageSelector />
-
-              <Link
-                to="/sandbox"
-                onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-center gap-2 w-full px-4 py-3.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-500 text-white font-semibold shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40 transition-all"
-              >
-                <Play className="w-5 h-5" />
-                <span>Start Building</span>
-              </Link>
-
-              <div className="flex items-center justify-center">
-                <UserButton />
-              </div>
-            </div>
-          </nav>
-        </div>
       </nav>
 
-      {/* Mobile menu backdrop */}
-      {isMenuOpen && (
-        <div
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
-          onClick={() => setIsMenuOpen(false)}
-          aria-hidden="true"
-        />
-      )}
+      {/* ── Mobile full-screen overlay menu ───────────────────────── */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            id="mobile-menu"
+            ref={mobileMenuRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation menu"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 lg:hidden bg-white dark:bg-black pt-16"
+          >
+            <motion.nav
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.05 }}
+              className="h-[calc(100%-4rem)] overflow-y-auto overscroll-contain"
+            >
+              <div className="px-2 py-6 space-y-1">
+                {navGroups.map((group, idx) => (
+                  <motion.div
+                    key={group.label}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: 0.05 + idx * 0.05,
+                    }}
+                  >
+                    <MobileAccordion
+                      group={group}
+                      onNavigate={() => setIsMenuOpen(false)}
+                    />
+                  </motion.div>
+                ))}
 
-      {/* Wallet Modal */}
-      {showWalletModal && (
-        <WalletConnect onClose={() => setShowWalletModal(false)} />
-      )}
+                <div className="border-t border-gray-200 dark:border-white/5 my-4" />
+
+                {/* Actions in mobile */}
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.3, delay: 0.2 }}
+                  className="px-4 space-y-4 pb-24"
+                >
+                  <LanguageSelector />
+
+                  <Link
+                    to="/sandbox"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3.5 rounded-xl bg-[#F0B90B] text-black font-medium transition-all active:scale-[0.98]"
+                  >
+                    <Play className="w-5 h-5" />
+                    <span>Start Building</span>
+                  </Link>
+
+                  <div className="flex items-center justify-center">
+                    <UserButton />
+                  </div>
+                </motion.div>
+              </div>
+            </motion.nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </>
   );
 }

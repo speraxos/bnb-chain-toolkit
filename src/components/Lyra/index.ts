@@ -5,24 +5,29 @@
  */
 
 /**
- * Lyra UI Component Library
+ * BNB Chain AI Toolkit - Brand UI Component Library
  * 
- * Exports Lyra-branded components and icons.
+ * Exports BNB Chain branded components and icons.
  * Uses Lucide for UI icons and Simple Icons for brand icons.
  */
 
 // =============================================================================
 // ICONS - Re-export from our icon wrapper
 // =============================================================================
-export * from './LyraIcons';
+export * from './BrandIcons';
 
 // =============================================================================
-// LYRA BRANDING
+// BNB CHAIN BRANDING
 // =============================================================================
-export { LyraLogo, LyraBrand, LyraLoading } from './LyraBrand';
+export { BNBLogo, BNBBrand, BNBLoading } from './BNBBrand';
 
 // =============================================================================
-// LYRA CHAT (Custom implementation)
+// AI CHAT (Custom implementation)
 // =============================================================================
-export { LyraChatMessage, LyraChatPanel } from './LyraChat';
-export type { LyraChatMessageProps, LyraChatPanelProps } from './LyraChat';
+export { AIChatMessage, AIChatPanel } from './AIChat';
+export type { AIChatMessageProps, AIChatPanelProps } from './AIChat';
+
+// Legacy aliases for backward compatibility
+export { BNBLogo as LyraLogo, BNBBrand as LyraBrand, BNBLoading as LyraLoading } from './BNBBrand';
+export { AIChatMessage as LyraChatMessage, AIChatPanel as LyraChatPanel } from './AIChat';
+export type { AIChatMessageProps as LyraChatMessageProps, AIChatPanelProps as LyraChatPanelProps } from './AIChat';

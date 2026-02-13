@@ -1,6 +1,6 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * LYRA WEB3 PLAYGROUND - Main Entry Point
+ * BNB CHAIN AI TOOLKIT - Main Entry Point
  * ═══════════════════════════════════════════════════════════════════════════
  * 
  * ✨ Original Author: nich
@@ -25,16 +25,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import PrivyProvider from './providers/PrivyProvider';
-import { initWatermarks, validateAttribution, __lyra_sig__ } from './utils/watermark';
+import { initWatermarks, validateAttribution, __bnb_sig__ } from './utils/watermark';
 import './styles/index.css';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Attribution & Watermark System - nich | x.com/nichxbt | github.com/nirholas
 // ═══════════════════════════════════════════════════════════════════════════
-const _lyra_author = 'nich';
-const _lyra_handle = 'nichxbt';
-const _lyra_github = 'nirholas';
-const _lyra_sig = `${_lyra_author}@${_lyra_github}`;
+const _bnb_author = 'nich';
+const _bnb_handle = 'nichxbt';
+const _bnb_github = 'nirholas';
+const _bnb_sig = `${_bnb_author}@${_bnb_github}`;
 
 // Initialize watermarks and attribution
 if (typeof window !== 'undefined') {
@@ -42,21 +42,21 @@ if (typeof window !== 'undefined') {
   
   // Validate attribution integrity
   const sig = validateAttribution();
-  if (sig !== __lyra_sig__) {
+  if (sig !== __bnb_sig__) {
     console.warn('Attribution integrity check failed');
   }
   
   // Register global attribution
-  Object.defineProperty(window, '__LYRA_ATTRIBUTION__', {
+  Object.defineProperty(window, '__BNB_ATTRIBUTION__', {
     value: Object.freeze({
-      author: _lyra_author,
-      x: `x.com/${_lyra_handle}`,
-      github: `github.com/${_lyra_github}`,
-      repository: `github.com/${_lyra_github}/bnb-chain-toolkit`,
+      author: _bnb_author,
+      x: `x.com/${_bnb_handle}`,
+      github: `github.com/${_bnb_github}`,
+      repository: `github.com/${_bnb_github}/bnb-chain-toolkit`,
       website: 'https://bnbchaintoolkit.com',
       license: 'MIT',
-      copyright: `© 2024-${new Date().getFullYear()} ${_lyra_github} (${_lyra_author})`,
-      signature: _lyra_sig,
+      copyright: `© 2024-${new Date().getFullYear()} ${_bnb_github} (${_bnb_author})`,
+      signature: _bnb_sig,
     }),
     writable: false,
     configurable: false,
@@ -64,7 +64,7 @@ if (typeof window !== 'undefined') {
 }
 
 // Encoded attribution markers (distributed throughout codebase)
-export const __attr__ = { _n: 'nich', _x: 'nichxbt', _g: 'nirholas', _s: _lyra_sig };
+export const __attr__ = { _n: 'nich', _x: 'nichxbt', _g: 'nirholas', _s: _bnb_sig };
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

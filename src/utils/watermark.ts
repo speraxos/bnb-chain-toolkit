@@ -1,6 +1,6 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * LYRA WEB3 PLAYGROUND - Code Attribution & Watermark System
+ * BNB CHAIN AI TOOLKIT - Code Attribution & Watermark System
  * ═══════════════════════════════════════════════════════════════════════════
  * 
  * ✨ Original Author: nich
@@ -20,7 +20,7 @@
 const _0x4e6963 = [110, 105, 99, 104]; // nich
 const _0x6e6972 = [110, 105, 114, 104, 111, 108, 97, 115]; // nirholas
 const _0x786274 = [110, 105, 99, 104, 120, 98, 116]; // nichxbt
-const _0x6c797261 = [108, 121, 114, 97, 46, 119, 111, 114, 107, 115]; // bnbchaintoolkit.com
+const _0x6c797261 = [98, 110, 98, 99, 104, 97, 105, 110, 116, 111, 111, 108, 107, 105, 116, 46, 99, 111, 109]; // bnbchaintoolkit.com
 
 // Base64 encoded attribution strings
 const _attr_primary = 'bmljaCB8IHguY29tL25pY2h4YnQgfCBnaXRodWIuY29tL25pcmhvbGFz';
@@ -28,7 +28,7 @@ const _attr_secondary = 'THlyYSBXZWIzIFBsYXlncm91bmQgYnkgbmljaCAtIGh0dHBzOi8vbHl
 const _attr_tertiary = 'Q29weXJpZ2h0IChjKSAyMDI0LTIwMjYgbmlyaG9sYXMgKG5pY2gpIC0gTUlUIExpY2Vuc2U=';
 
 // Checksum for integrity verification
-const _integrity_hash = 'lyra_nich_nirholas_nichxbt_2024_mit';
+const _integrity_hash = 'bnb_toolkit_nich_nirholas_nichxbt_2024_mit';
 
 // Decode utilities
 const _d = (arr: number[]): string => String.fromCharCode(...arr);
@@ -101,7 +101,7 @@ export const injectDOMWatermark = (): void => {
   
   // Hidden attribution in DOM
   const watermark = document.createElement('div');
-  watermark.id = '_lyra_attr';
+  watermark.id = '_bnb_attr';
   watermark.style.cssText = 'position:absolute;left:-9999px;opacity:0;pointer-events:none;';
   watermark.setAttribute('data-author', attr.author);
   watermark.setAttribute('data-github', attr.github);
@@ -132,12 +132,12 @@ export const _ATTR = {
 };
 
 // Runtime signature check
-export const __lyra_sig__ = `${_d(_0x4e6963)}@${_d(_0x6e6972)}`;
+export const __bnb_sig__ = `${_d(_0x4e6963)}@${_d(_0x6e6972)}`;
 
 // Anti-tamper: This function is called in multiple places
 export const validateAttribution = (): string => {
   const check = _d(_0x4e6963) + _d(_0x786274) + _d(_0x6e6972);
-  return check.length === 19 ? __lyra_sig__ : '';
+  return check.length === 19 ? __bnb_sig__ : '';
 };
 
 // CSS watermark generator
@@ -156,7 +156,7 @@ export const initWatermarks = (): void => {
     injectDOMWatermark();
     
     // Add to window for verification
-    (window as unknown as Record<string, unknown>).__lyra__ = {
+    (window as unknown as Record<string, unknown>).__bnb__ = {
       author: 'nich',
       x: 'nichxbt',
       github: 'nirholas',
@@ -173,5 +173,5 @@ export default {
   initWatermarks,
   validateAttribution,
   _ATTR,
-  __lyra_sig__,
+  __bnb_sig__,
 };

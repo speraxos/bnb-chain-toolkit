@@ -4,4 +4,4 @@
  * 💫 Your work matters more than you know 💎
  */
 
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'

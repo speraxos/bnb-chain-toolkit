@@ -6,7 +6,7 @@
     "emitDeclarationOnly": true,
     "declaration": true,
     "outDir": "./dist/test",
-    "types": ["vitest/globals", "@testing-library/jest-dom"],
+    "types": ["vitest/globals"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]

@@ -4,450 +4,325 @@
  * 💫 Every bug fixed is a lesson learned 🎓
  */
 
-/**
- * ExplorePage.tsx - Discover shared projects, templates, and tutorials
- */
-import { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { useSEO } from '@/hooks/useSEO';
+import { useState, useMemo } from "react";
+import { useSEO } from "@/hooks/useSEO";
+import { cn } from "@/lib/utils";
+import { Spotlight } from "@/components/ui/spotlight";
 import {
   Search,
-  Filter,
-  Grid,
-  List,
-  Heart,
-  Eye,
-  GitFork,
-  Clock,
-  TrendingUp,
-  Sparkles,
-  Code2,
-  FileCode,
-  BookOpen,
-  Layers,
-  User,
-  ChevronDown,
+  Bot,
+  Server,
+  Wrench,
   ExternalLink,
-  Loader2
-} from 'lucide-react';
-import { cn } from '@/utils/helpers';
-import { getPublicProjects, SharedProject } from '@/services/community';
-import { useAuthStore } from '@/stores/authStore';
+} from "lucide-react";
 
-type Category = 'all' | 'sandbox' | 'template' | 'tutorial' | 'example';
-type SortBy = 'recent' | 'popular' | 'likes';
-type ViewMode = 'grid' | 'list';
+type Tab = "agents" | "servers" | "tools";
 
-const categories: { id: Category; label: string; icon: any }[] = [
-  { id: 'all', label: 'All', icon: Layers },
-  { id: 'sandbox', label: 'Sandboxes', icon: Code2 },
-  { id: 'template', label: 'Templates', icon: FileCode },
-  { id: 'tutorial', label: 'Tutorials', icon: BookOpen },
-  { id: 'example', label: 'Examples', icon: Sparkles },
+interface AgentItem {
+  name: string;
+  description: string;
+  category: string;
+}
+
+interface ServerItem {
+  name: string;
+  description: string;
+  toolCount: number;
+  language: string;
+}
+
+interface ToolItem {
+  name: string;
+  description: string;
+  category: string;
+}
+
+const agents: AgentItem[] = [
+  { name: "PancakeSwap Expert", description: "Swap, LP, and yield farming on PancakeSwap V3", category: "DeFi" },
+  { name: "Venus Protocol Expert", description: "Lending, borrowing, and liquidation on Venus", category: "DeFi" },
+  { name: "BNB Staking Advisor", description: "Staking strategies, validators, and rewards on BNB Chain", category: "Staking" },
+  { name: "BSC Developer", description: "Smart contract development, deployment, and verification on BSC", category: "Dev" },
+  { name: "BSC Security Auditor", description: "Audit smart contracts for vulnerabilities and best practices", category: "Security" },
+  { name: "BNB Chain Expert", description: "General BNB Chain knowledge, architecture, and ecosystem", category: "General" },
+  { name: "opBNB L2 Expert", description: "Layer 2 scaling, transactions, and bridging on opBNB", category: "L2" },
+  { name: "BNB Greenfield Expert", description: "Decentralized storage on BNB Greenfield", category: "Storage" },
+  { name: "BSC Whale Tracker", description: "Track large wallet movements and whale activity on BSC", category: "Analytics" },
+  { name: "BNB Bridge Expert", description: "Cross-chain bridging between BSC, opBNB, and other networks", category: "Bridge" },
+  { name: "BNB NFT Expert", description: "NFT minting, trading, and marketplace operations on BNB Chain", category: "NFT" },
+  { name: "BNB Governance Expert", description: "On-chain governance, proposals, and voting on BNB Chain", category: "Governance" },
+  { name: "BNB Liquid Staking", description: "Liquid staking derivatives and strategies on BNB Chain", category: "Staking" },
+  { name: "Lista DAO Expert", description: "Lista DAO operations, staking, and CDP management", category: "DeFi" },
+  { name: "Thena DEX Expert", description: "Trading, LP, and ve(3,3) mechanics on Thena", category: "DeFi" },
+  { name: "Alpaca Finance Expert", description: "Leveraged yield farming and lending on Alpaca Finance", category: "DeFi" },
+  { name: "BSCScan Analytics", description: "On-chain analytics, contract verification, and transaction tracking", category: "Analytics" },
+  { name: "BSC MEV Gas Expert", description: "MEV strategies, gas optimization, and block building on BSC", category: "Advanced" },
+  { name: "BNB DeFi Aggregator", description: "Multi-protocol yield and swap aggregation across BNB DeFi", category: "DeFi" },
+  { name: "BNB Gaming Expert", description: "GameFi protocols, in-game economies, and NFT gaming on BNB", category: "Gaming" },
+  { name: "Binance Spot Trader", description: "Spot trading, order management, and market analysis on Binance", category: "CEX" },
+  { name: "Binance Futures Expert", description: "Futures, margin, and perpetual trading on Binance", category: "CEX" },
+  { name: "Binance Earn Advisor", description: "Savings, staking, and yield products on Binance Earn", category: "CEX" },
+  { name: "Binance Web3 Wallet", description: "Binance Web3 Wallet operations, dApp browsing, and token management", category: "Wallet" },
 ];
 
-const sortOptions: { id: SortBy; label: string; icon: any }[] = [
-  { id: 'recent', label: 'Most Recent', icon: Clock },
-  { id: 'popular', label: 'Most Viewed', icon: TrendingUp },
-  { id: 'likes', label: 'Most Liked', icon: Heart },
+const servers: ServerItem[] = [
+  { name: "bnbchain-mcp", description: "BNB Chain + EVM operations — balances, transfers, contract calls, and token analytics", toolCount: 150, language: "TypeScript" },
+  { name: "binance-mcp", description: "Binance.com exchange — spot trading, futures, earn products, and account management", toolCount: 200, language: "TypeScript" },
+  { name: "binance-us-mcp", description: "Binance.US exchange — regulated US trading, deposits, and withdrawals", toolCount: 120, language: "TypeScript" },
+  { name: "universal-crypto-mcp", description: "60+ blockchain networks — universal crypto operations across chains", toolCount: 300, language: "TypeScript" },
+  { name: "agenti", description: "Universal EVM + Solana — advanced agent operations, DeFi protocols, and NFTs", toolCount: 100, language: "TypeScript" },
+  { name: "ucai", description: "ABI-to-MCP generator — create custom MCP tools from any smart contract ABI", toolCount: 30, language: "Python" },
+];
+
+const tools: ToolItem[] = [
+  { name: "Crypto Market Data", description: "Real-time price feeds, OHLCV data, and market cap rankings from CoinGecko and DeFiLlama", category: "Market Data" },
+  { name: "Crypto News", description: "Aggregated news from 200+ sources with AI-powered sentiment analysis and event classification", category: "Market Data" },
+  { name: "Dust Sweeper", description: "Identify and consolidate small token balances across wallets on BNB Chain", category: "DeFi" },
+  { name: "HD Wallet Generator", description: "Generate hierarchical deterministic wallets with BIP-39 mnemonics offline", category: "Wallets" },
+  { name: "Vanity Address Generator", description: "Create custom wallet addresses with specific prefixes or suffixes", category: "Wallets" },
+  { name: "Transaction Signer", description: "Sign and broadcast transactions offline with hardware wallet support", category: "Wallets" },
+  { name: "ERC-8004 Verifier", description: "Verify agent trust metadata following the ERC-8004 standard", category: "Standards" },
+  { name: "W3AG Checker", description: "Web3 accessibility compliance checker based on the W3AG specification", category: "Standards" },
 ];
 
 export default function ExplorePage() {
+  const [activeTab, setActiveTab] = useState<Tab>("agents");
+  const [search, setSearch] = useState("");
+
   useSEO({
-    title: 'Explore Projects',
-    description: 'Discover community-built smart contracts, dApps, and tutorials. Browse, fork, and learn from real BNB Chain projects.',
-    path: '/explore'
+    title: "Explore",
+    description:
+      "Discover 72+ AI agents, 6 MCP servers, and 900+ tools in the BNB Chain AI Toolkit — browse, search, and find the right component for your project.",
+    path: "/explore",
   });
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { user } = useAuthStore();
+  const filteredAgents = useMemo(() => {
+    if (!search.trim()) return agents;
+    const q = search.toLowerCase();
+    return agents.filter(
+      (a) =>
+        a.name.toLowerCase().includes(q) ||
+        a.description.toLowerCase().includes(q) ||
+        a.category.toLowerCase().includes(q)
+    );
+  }, [search]);
 
-  const [projects, setProjects] = useState<SharedProject[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [total, setTotal] = useState(0);
+  const filteredServers = useMemo(() => {
+    if (!search.trim()) return servers;
+    const q = search.toLowerCase();
+    return servers.filter(
+      (s) =>
+        s.name.toLowerCase().includes(q) ||
+        s.description.toLowerCase().includes(q)
+    );
+  }, [search]);
 
-  const [search, setSearch] = useState(searchParams.get('q') || '');
-  const [category, setCategory] = useState<Category>((searchParams.get('category') as Category) || 'all');
-  const [sortBy, setSortBy] = useState<SortBy>((searchParams.get('sort') as SortBy) || 'recent');
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
-  const [showFilters, setShowFilters] = useState(false);
+  const filteredTools = useMemo(() => {
+    if (!search.trim()) return tools;
+    const q = search.toLowerCase();
+    return tools.filter(
+      (t) =>
+        t.name.toLowerCase().includes(q) ||
+        t.description.toLowerCase().includes(q) ||
+        t.category.toLowerCase().includes(q)
+    );
+  }, [search]);
 
-  const [page, setPage] = useState(1);
-  const limit = 20;
-
-  useEffect(() => {
-    loadProjects();
-  }, [category, sortBy, page]);
-
-  const loadProjects = async () => {
-    setLoading(true);
-
-    const { data, total: totalCount } = await getPublicProjects({
-      category: category === 'all' ? undefined : category,
-      sortBy,
-      limit,
-      offset: (page - 1) * limit
-    });
-
-    setProjects(data);
-    setTotal(totalCount);
-    setLoading(false);
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSearchParams({ q: search, category, sort: sortBy });
-    // In a real implementation, this would filter projects
-  };
-
-  const handleCategoryChange = (newCategory: Category) => {
-    setCategory(newCategory);
-    setPage(1);
-    setSearchParams({ category: newCategory, sort: sortBy });
-  };
-
-  const handleSortChange = (newSort: SortBy) => {
-    setSortBy(newSort);
-    setPage(1);
-    setSearchParams({ category, sort: newSort });
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return 'Yesterday';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-    return date.toLocaleDateString();
-  };
-
-  const getCategoryIcon = (cat: string) => {
-    switch (cat) {
-      case 'sandbox': return <Code2 className="w-4 h-4" />;
-      case 'template': return <FileCode className="w-4 h-4" />;
-      case 'tutorial': return <BookOpen className="w-4 h-4" />;
-      case 'example': return <Sparkles className="w-4 h-4" />;
-      default: return <Layers className="w-4 h-4" />;
-    }
-  };
+  const tabs: { id: Tab; label: string; icon: React.ReactNode; count: number }[] = [
+    { id: "agents", label: "AI Agents", icon: <Bot className="w-4 h-4" />, count: filteredAgents.length },
+    { id: "servers", label: "MCP Servers", icon: <Server className="w-4 h-4" />, count: filteredServers.length },
+    { id: "tools", label: "Tools & Utilities", icon: <Wrench className="w-4 h-4" />, count: filteredTools.length },
+  ];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black">
+    <main className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white">
       {/* Hero */}
-      <div className="bg-gray-900 dark:bg-gray-900 text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-black mb-4 text-white">
-              Explore the Community
-            </h1>
-            <p className="text-xl text-gray-300 mb-8">
-              Discover shared projects, templates, and tutorials from developers around the world
-            </p>
+      <section className="relative py-24 md:py-32 px-6">
+        <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" />
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+            Explore the Toolkit
+          </h1>
+          <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Browse every agent, server, and tool in the ecosystem. Find exactly
+            what you need for your next project.
+          </p>
 
-            {/* Search Bar */}
-            <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search projects, templates, tutorials..."
-                  className="w-full pl-12 pr-4 py-4 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-600"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 bg-white text-gray-900 rounded-lg font-medium hover:bg-gray-200 transition-colors"
-                >
-                  Search
-                </button>
-              </div>
-            </form>
+          {/* Search */}
+          <div className="relative max-w-xl mx-auto mt-10">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search agents, servers, tools..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className={cn(
+                "w-full pl-12 pr-4 py-3.5 rounded-2xl",
+                "bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10",
+                "focus:outline-none focus:ring-2 focus:ring-[#F0B90B]/50 focus:border-[#F0B90B]/50",
+                "placeholder:text-gray-400 dark:placeholder:text-gray-600",
+                "text-gray-900 dark:text-white"
+              )}
+            />
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Filters */}
-      <div className="sticky top-16 z-20 bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between py-3">
-            {/* Categories */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-1">
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => handleCategoryChange(cat.id)}
-                  className={cn(
-                    "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors",
-                    category === cat.id
-                      ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
-                      : "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700"
-                  )}
-                >
-                  <cat.icon className="w-4 h-4" />
-                  {cat.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Right side controls */}
-            <div className="flex items-center gap-3">
-              {/* Sort dropdown */}
-              <div className="relative">
-                <button
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="flex items-center gap-2 px-3 py-2 bg-gray-200 dark:bg-gray-800 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  <Filter className="w-4 h-4" />
-                  {sortOptions.find(s => s.id === sortBy)?.label}
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-
-                {showFilters && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-lg shadow-xl border border-gray-200 dark:border-gray-800 py-1 z-30">
-                    {sortOptions.map((option) => (
-                      <button
-                        key={option.id}
-                        onClick={() => {
-                          handleSortChange(option.id);
-                          setShowFilters(false);
-                        }}
-                        className={cn(
-                          "flex items-center gap-2 w-full px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800",
-                          sortBy === option.id && "text-gray-900 dark:text-white font-semibold"
-                        )}
-                      >
-                        <option.icon className="w-4 h-4" />
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
+      {/* Tabs */}
+      <section className="px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-2 border-b border-gray-200 dark:border-white/10">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={cn(
+                  "flex items-center gap-2 px-5 py-3 text-sm font-medium border-b-2 -mb-px transition-colors",
+                  activeTab === tab.id
+                    ? "border-[#F0B90B] text-[#F0B90B]"
+                    : "border-transparent text-gray-500 hover:text-gray-900 dark:hover:text-white"
                 )}
-              </div>
-
-              {/* View mode toggle */}
-              <div className="flex items-center bg-gray-200 dark:bg-gray-800 rounded-lg p-1">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={cn(
-                    "p-2 rounded text-gray-600 dark:text-gray-400",
-                    viewMode === 'grid' && "bg-white dark:bg-gray-700 shadow text-gray-900 dark:text-white"
-                  )}
-                >
-                  <Grid className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={cn(
-                    "p-2 rounded text-gray-600 dark:text-gray-400",
-                    viewMode === 'list' && "bg-white dark:bg-gray-700 shadow text-gray-900 dark:text-white"
-                  )}
-                >
-                  <List className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
+              >
+                {tab.icon}
+                {tab.label}
+                <span className="ml-1 px-2 py-0.5 text-xs rounded-full bg-gray-100 dark:bg-white/5 text-gray-500">
+                  {tab.count}
+                </span>
+              </button>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-8">
-        {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-gray-600 dark:text-gray-400" />
-          </div>
-        ) : projects.length === 0 ? (
-          <div className="text-center py-20">
-            <Layers className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">No projects found</h3>
-            <p className="text-gray-500 dark:text-gray-400 mb-6">
-              Be the first to share something!
-            </p>
-            <Link
-              to="/ide"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
-            >
-              <Code2 className="w-5 h-5" />
-              Create a Project
-            </Link>
-          </div>
-        ) : (
-          <>
-            {/* Results count */}
-            <div className="mb-6 text-sm text-gray-500 dark:text-gray-400">
-              Showing {projects.length} of {total} projects
+      <section className="py-12 px-6 bg-gray-50 dark:bg-[#0a0a0a]">
+        <div className="max-w-6xl mx-auto">
+          {/* Agents */}
+          {activeTab === "agents" && (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredAgents.map((agent) => (
+                <div
+                  key={agent.name}
+                  className={cn(
+                    "rounded-2xl border border-gray-200 dark:border-white/10 p-5",
+                    "bg-white dark:bg-black",
+                    "hover:border-[#F0B90B]/40 dark:hover:border-white/20 transition-all duration-200"
+                  )}
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <Bot className="w-4 h-4 text-[#F0B90B] shrink-0" />
+                    <h3 className="font-semibold text-sm">{agent.name}</h3>
+                  </div>
+                  <p className="text-sm text-gray-500 mb-3">
+                    {agent.description}
+                  </p>
+                  <span className="inline-block px-2 py-0.5 text-xs rounded-full bg-[#F0B90B]/10 text-[#F0B90B]">
+                    {agent.category}
+                  </span>
+                </div>
+              ))}
+              {filteredAgents.length === 0 && (
+                <div className="col-span-full text-center py-12 text-gray-500">
+                  No agents match your search.
+                </div>
+              )}
+              {filteredAgents.length > 0 && (
+                <div className="col-span-full text-center pt-8">
+                  <p className="text-sm text-gray-500">
+                    Showing {filteredAgents.length} of 72+ agents.{" "}
+                    <a
+                      href="https://github.com/nirholas/bnb-chain-toolkit/tree/main/agents"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#F0B90B] hover:underline inline-flex items-center gap-1"
+                    >
+                      Browse all on GitHub
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </p>
+                </div>
+              )}
             </div>
+          )}
 
-            {/* Grid View */}
-            {viewMode === 'grid' && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {projects.map((project) => (
-                  <Link
-                    key={project.id}
-                    to={`/shared/${project.share_token}`}
-                    className="group bg-gray-50 dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-lg hover:border-gray-400 dark:hover:border-gray-600 transition-all"
-                  >
-                    {/* Preview placeholder */}
-                    <div className="aspect-video bg-gray-200 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gray-300 dark:bg-gray-700 group-hover:opacity-100 opacity-0 transition-opacity" />
-                      {getCategoryIcon(project.category)}
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-4">
-                      <div className="flex items-start justify-between mb-2">
-                        <h3 className="font-semibold text-gray-900 dark:text-white group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors line-clamp-1">
-                          {project.title}
-                        </h3>
-                        <span className="flex items-center gap-1 text-xs text-gray-500 bg-gray-200 dark:bg-gray-800 px-2 py-0.5 rounded">
-                          {getCategoryIcon(project.category)}
-                        </span>
-                      </div>
-
-                      {project.description && (
-                        <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-3">
-                          {project.description}
-                        </p>
-                      )}
-
-                      {/* Tags */}
-                      {project.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mb-3">
-                          {project.tags.slice(0, 3).map((tag, i) => (
-                            <span
-                              key={i}
-                              className="text-xs px-2 py-0.5 bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Footer */}
-                      <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-800">
-                        <div className="flex items-center gap-2">
-                          {project.author?.avatar_url ? (
-                            <img
-                              src={project.author.avatar_url}
-                              alt={project.author.username || 'Author'}
-                              className="w-6 h-6 rounded-full"
-                            />
-                          ) : (
-                            <div className="w-6 h-6 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center">
-                              <User className="w-3 h-3 text-gray-500" />
-                            </div>
-                          )}
-                          <span className="text-xs text-gray-500 dark:text-gray-400">
-                            {project.author?.username || 'Anonymous'}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-3 text-xs text-gray-400">
-                          <span className="flex items-center gap-1">
-                            <Heart className="w-3 h-3" />
-                            {project.likes_count}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Eye className="w-3 h-3" />
-                            {project.views_count}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-
-            {/* List View */}
-            {viewMode === 'list' && (
-              <div className="space-y-4">
-                {projects.map((project) => (
-                  <Link
-                    key={project.id}
-                    to={`/shared/${project.share_token}`}
-                    className="flex items-center gap-4 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-4 hover:shadow-lg hover:border-gray-400 dark:hover:border-gray-600 transition-all"
-                  >
-                    {/* Icon */}
-                    <div className="w-16 h-16 bg-gray-200 dark:bg-gray-800 rounded-lg flex items-center justify-center flex-shrink-0">
-                      {getCategoryIcon(project.category)}
-                    </div>
-
-                    {/* Content */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-semibold text-gray-900 dark:text-white truncate">
-                          {project.title}
-                        </h3>
-                        <span className="text-xs px-2 py-0.5 bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded capitalize">
-                          {project.category}
-                        </span>
-                      </div>
-                      {project.description && (
-                        <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                          {project.description}
-                        </p>
-                      )}
-                      <div className="flex items-center gap-4 mt-2 text-xs text-gray-400">
-                        <span className="flex items-center gap-1">
-                          <User className="w-3 h-3" />
-                          {project.author?.username || 'Anonymous'}
-                        </span>
-                        <span>{formatDate(project.created_at)}</span>
-                      </div>
-                    </div>
-
-                    {/* Stats */}
-                    <div className="flex items-center gap-4 text-sm text-gray-400">
-                      <span className="flex items-center gap-1">
-                        <Heart className="w-4 h-4" />
-                        {project.likes_count}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Eye className="w-4 h-4" />
-                        {project.views_count}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <GitFork className="w-4 h-4" />
-                        {project.forks_count}
-                      </span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-
-            {/* Pagination */}
-            {total > limit && (
-              <div className="flex items-center justify-center gap-2 mt-8">
-                <button
-                  onClick={() => setPage(p => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                  className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 disabled:opacity-50"
+          {/* Servers */}
+          {activeTab === "servers" && (
+            <div className="grid md:grid-cols-2 gap-5">
+              {filteredServers.map((server) => (
+                <div
+                  key={server.name}
+                  className={cn(
+                    "rounded-2xl border border-gray-200 dark:border-white/10 p-6",
+                    "bg-white dark:bg-black",
+                    "hover:border-[#F0B90B]/40 dark:hover:border-white/20 transition-all duration-200"
+                  )}
                 >
-                  Previous
-                </button>
-                <span className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400">
-                  Page {page} of {Math.ceil(total / limit)}
-                </span>
-                <button
-                  onClick={() => setPage(p => p + 1)}
-                  disabled={page * limit >= total}
-                  className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 disabled:opacity-50"
+                  <div className="flex items-center gap-3 mb-3">
+                    <Server className="w-5 h-5 text-[#F0B90B] shrink-0" />
+                    <h3 className="font-semibold">{server.name}</h3>
+                    <span className="ml-auto px-2 py-0.5 text-xs rounded-full bg-gray-100 dark:bg-white/5 text-gray-500">
+                      {server.language}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-500 mb-4">
+                    {server.description}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-[#F0B90B]">
+                      {server.toolCount}+ tools
+                    </span>
+                    <a
+                      href={`https://github.com/nirholas/bnb-chain-toolkit/tree/main/mcp-servers/${server.name}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-gray-400 hover:text-[#F0B90B] inline-flex items-center gap-1 transition-colors"
+                    >
+                      View source
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                </div>
+              ))}
+              {filteredServers.length === 0 && (
+                <div className="col-span-full text-center py-12 text-gray-500">
+                  No servers match your search.
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Tools */}
+          {activeTab === "tools" && (
+            <div className="grid md:grid-cols-2 gap-4">
+              {filteredTools.map((tool) => (
+                <div
+                  key={tool.name}
+                  className={cn(
+                    "rounded-2xl border border-gray-200 dark:border-white/10 p-5",
+                    "bg-white dark:bg-black",
+                    "hover:border-[#F0B90B]/40 dark:hover:border-white/20 transition-all duration-200"
+                  )}
                 >
-                  Next
-                </button>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-    </div>
+                  <div className="flex items-center gap-3 mb-2">
+                    <Wrench className="w-4 h-4 text-[#F0B90B] shrink-0" />
+                    <h3 className="font-semibold text-sm">{tool.name}</h3>
+                    <span className="ml-auto px-2 py-0.5 text-xs rounded-full bg-gray-100 dark:bg-white/5 text-gray-500">
+                      {tool.category}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-500">
+                    {tool.description}
+                  </p>
+                </div>
+              ))}
+              {filteredTools.length === 0 && (
+                <div className="col-span-full text-center py-12 text-gray-500">
+                  No tools match your search.
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+    </main>
   );
 }

@@ -19,10 +19,10 @@ export type { TutorialProgress };
  * Storage keys for different data types
  */
 const STORAGE_KEYS = {
-  TUTORIAL_PROGRESS: 'lyra-tutorial-progress-v2',
-  LEARNING_PROGRESS: 'lyra-learning-progress-v1',
-  BOOKMARKS: 'lyra-tutorial-bookmarks-v1',
-  ACHIEVEMENTS: 'lyra-achievements-v1'
+  TUTORIAL_PROGRESS: 'bnb-toolkit-tutorial-progress-v2',
+  LEARNING_PROGRESS: 'bnb-toolkit-learning-progress-v1',
+  BOOKMARKS: 'bnb-toolkit-tutorial-bookmarks-v1',
+  ACHIEVEMENTS: 'bnb-toolkit-achievements-v1'
 } as const;
 
 /**

@@ -11,6 +11,10 @@ import { cn } from "@/lib/utils";
 import { Spotlight } from "@/components/ui/spotlight";
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import { BackgroundGradient } from "@/components/ui/background-gradient";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
+import { HoverEffect } from "@/components/ui/card-hover-effect";
+import { MovingBorder } from "@/components/ui/moving-border";
+import { BackgroundBeams } from "@/components/ui/background-beams";
 import {
   BookOpen,
   Search,
@@ -159,9 +163,10 @@ export default function DocsPage() {
       <section className="relative py-24 md:py-32 px-6">
         <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" />
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            Documentation
-          </h1>
+          <TextGenerateEffect
+            words="Documentation"
+            className="text-4xl md:text-5xl font-bold tracking-tight"
+          />
           <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Everything you need to integrate 72+ AI agents, 6 MCP servers, and
             900+ tools into your BNB Chain projects.
@@ -270,36 +275,18 @@ export default function DocsPage() {
         </div>
       </section>
 
-      {/* Quick Links */}
+      {/* Quick Links — HoverEffect */}
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold mb-4">Popular Guides</h2>
-          <p className="text-gray-500 mb-10">Jump straight to the most-used documentation.</p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {quickLinks.map((item) => (
-              <Link
-                key={item.title}
-                to={item.link}
-                className={cn(
-                  "group flex items-start gap-4 rounded-2xl border border-gray-200 dark:border-white/10 p-5",
-                  "hover:border-[#F0B90B]/40 dark:hover:border-white/20",
-                  "bg-white dark:bg-black transition-all duration-200"
-                )}
-              >
-                <div className="p-2 rounded-lg bg-gray-100 dark:bg-white/5 text-[#F0B90B] shrink-0">
-                  {item.icon}
-                </div>
-                <div>
-                  <h3 className="font-semibold text-sm group-hover:text-[#F0B90B] transition-colors mb-1">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-gray-500">
-                    {item.description}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <p className="text-gray-500 mb-6">Jump straight to the most-used documentation.</p>
+          <HoverEffect
+            items={quickLinks.map((item) => ({
+              title: item.title,
+              description: item.description,
+              link: item.link,
+            }))}
+          />
         </div>
       </section>
 
@@ -339,9 +326,10 @@ export default function DocsPage() {
         </div>
       </section>
 
-      {/* Help CTA */}
-      <section className="py-20 px-6">
-        <div className="max-w-3xl mx-auto text-center">
+      {/* Help CTA — BackgroundBeams + MovingBorder */}
+      <section className="relative py-20 px-6 overflow-hidden">
+        <BackgroundBeams />
+        <div className="max-w-3xl mx-auto text-center relative z-10">
           <BookOpen className="w-10 h-10 mx-auto mb-6 text-[#F0B90B]" />
           <h2 className="text-3xl font-bold mb-4">Can&apos;t find what you need?</h2>
           <p className="text-gray-600 dark:text-gray-400 text-lg mb-8">
@@ -349,13 +337,16 @@ export default function DocsPage() {
             respond to every question.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              to="/faq"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#F0B90B] text-black font-semibold hover:bg-[#F0B90B]/90 transition-colors"
+            <MovingBorder
+              as="a"
+              duration={3}
+              containerClassName="h-12"
+              className="bg-[#F0B90B] text-black font-semibold"
+              {...{ href: "/faq" } as any}
             >
-              <HelpCircle className="w-5 h-5" />
+              <HelpCircle className="w-5 h-5 mr-2" />
               View FAQ
-            </Link>
+            </MovingBorder>
             <a
               href="https://github.com/nirholas/bnb-chain-toolkit/issues"
               target="_blank"

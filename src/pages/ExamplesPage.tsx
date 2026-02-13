@@ -11,6 +11,9 @@ import { cn } from "@/lib/utils";
 import { Spotlight } from "@/components/ui/spotlight";
 import { CardContainer, CardBody, CardItem } from "@/components/ui/3d-card";
 import { BackgroundGradient } from "@/components/ui/background-gradient";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
+import { SparklesCore } from "@/components/ui/sparkles";
+import { MovingBorder } from "@/components/ui/moving-border";
 import {
   Search,
   Coins,
@@ -287,9 +290,10 @@ export default function ExamplesPage() {
       <section className="relative py-24 md:py-32 px-6">
         <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" />
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            Examples
-          </h1>
+          <TextGenerateEffect
+            words="Examples"
+            className="text-4xl md:text-5xl font-bold tracking-tight"
+          />
           <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Production-ready code samples — from MCP server setup to gasless
             dust sweeping, from AI agents to cross-chain bridges.
@@ -417,57 +421,63 @@ export default function ExamplesPage() {
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
               {(showFeatured ? nonFeatured : filtered).map((ex) => (
-                <Link
+                <BackgroundGradient
                   key={ex.id}
-                  to={`/example/${ex.id}`}
-                  className={cn(
-                    "group rounded-2xl border border-gray-200 dark:border-white/10 p-6",
-                    "bg-white dark:bg-black",
-                    "hover:border-[#F0B90B]/40 dark:hover:border-white/20",
-                    "transition-all duration-200"
-                  )}
+                  className="rounded-2xl p-6 bg-white dark:bg-black"
+                  containerClassName="h-full"
                 >
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 rounded-lg bg-gray-100 dark:bg-white/5 text-[#F0B90B]">
-                      {ex.icon}
+                  <Link to={`/example/${ex.id}`} className="block group h-full">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="p-2 rounded-lg bg-gray-100 dark:bg-white/5 text-[#F0B90B]">
+                        {ex.icon}
+                      </div>
+                      <h3 className="font-semibold group-hover:text-[#F0B90B] transition-colors">
+                        {ex.title}
+                      </h3>
                     </div>
-                    <h3 className="font-semibold group-hover:text-[#F0B90B] transition-colors">
-                      {ex.title}
-                    </h3>
-                  </div>
-                  <p className="text-sm text-gray-500 mb-4 line-clamp-2">
-                    {ex.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex flex-wrap gap-1.5">
-                      {ex.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-2 py-0.5 text-xs rounded-full bg-gray-100 dark:bg-white/5 text-gray-500"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                    <p className="text-sm text-gray-500 mb-4 line-clamp-2">
+                      {ex.description}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap gap-1.5">
+                        {ex.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="px-2 py-0.5 text-xs rounded-full bg-gray-100 dark:bg-white/5 text-gray-500"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      <span
+                        className={cn(
+                          "px-2 py-0.5 text-xs font-medium rounded-full shrink-0 ml-2",
+                          difficultyColor[ex.difficulty]
+                        )}
+                      >
+                        {ex.difficulty}
+                      </span>
                     </div>
-                    <span
-                      className={cn(
-                        "px-2 py-0.5 text-xs font-medium rounded-full shrink-0 ml-2",
-                        difficultyColor[ex.difficulty]
-                      )}
-                    >
-                      {ex.difficulty}
-                    </span>
-                  </div>
-                </Link>
+                  </Link>
+                </BackgroundGradient>
               ))}
             </div>
           )}
         </div>
       </section>
 
-      {/* Build Your Own CTA */}
-      <section className="py-20 px-6">
-        <div className="max-w-3xl mx-auto text-center">
+      {/* Build Your Own CTA — SparklesCore + MovingBorder */}
+      <section className="relative py-20 px-6 overflow-hidden">
+        <div className="absolute inset-0 w-full h-full">
+          <SparklesCore
+            minSize={0.4}
+            maxSize={1}
+            particleDensity={40}
+            className="w-full h-full"
+            particleColor="#F0B90B"
+          />
+        </div>
+        <div className="max-w-3xl mx-auto text-center relative z-10">
           <Code2 className="w-10 h-10 mx-auto mb-6 text-[#F0B90B]" />
           <h2 className="text-3xl font-bold mb-4">Build Something New</h2>
           <p className="text-gray-600 dark:text-gray-400 text-lg mb-8">
@@ -475,12 +485,15 @@ export default function ExamplesPage() {
             the only limit is your imagination. Share your builds with the community.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              to="/docs/getting-started"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#F0B90B] text-black font-semibold hover:bg-[#F0B90B]/90 transition-colors"
+            <MovingBorder
+              as="a"
+              duration={3}
+              containerClassName="h-12"
+              className="bg-[#F0B90B] text-black font-semibold"
+              {...{ href: "/docs/getting-started" } as any}
             >
               Get Started
-            </Link>
+            </MovingBorder>
             <Link
               to="/explore"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-gray-300 dark:border-white/20 font-semibold hover:border-[#F0B90B]/50 transition-colors"

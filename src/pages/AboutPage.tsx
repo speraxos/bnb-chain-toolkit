@@ -10,6 +10,11 @@ import { cn } from "@/lib/utils";
 import { LampContainer } from "@/components/ui/lamp";
 import { BackgroundGradient } from "@/components/ui/background-gradient";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
+import { HoverEffect } from "@/components/ui/card-hover-effect";
+import { MovingBorder } from "@/components/ui/moving-border";
+import { SparklesCore } from "@/components/ui/sparkles";
+import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import {
   Github,
   Twitter,
@@ -114,11 +119,10 @@ export default function AboutPage() {
       {/* Hero with Lamp */}
       <LampContainer className="min-h-[60vh] md:min-h-[70vh]">
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight bg-gradient-to-b from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent">
-            Built for BNB Chain.
-            <br />
-            Built by nich.
-          </h1>
+          <TextGenerateEffect
+            words="Built for BNB Chain. Built by nich."
+            className="text-4xl md:text-6xl font-bold tracking-tight"
+          />
           <p className="mt-6 text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
             The most comprehensive open-source AI toolkit for blockchain — 72+
             agents, 6 MCP servers, 900+ tools, 2 open standards, and counting.
@@ -126,28 +130,28 @@ export default function AboutPage() {
         </div>
       </LampContainer>
 
-      {/* Stats Strip */}
+      {/* Stats Strip — BentoGrid */}
       <section className="py-20 px-6 bg-gray-50 dark:bg-[#0a0a0a]">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <BentoGrid className="md:auto-rows-[12rem] md:grid-cols-4">
             {stats.map((stat) => {
               const Icon = stat.icon;
               return (
-                <div key={stat.label} className="text-center group">
-                  <Icon className="w-6 h-6 mx-auto mb-3 text-[#F0B90B] group-hover:scale-110 transition-transform" />
-                  <div className="text-3xl md:text-4xl font-bold tracking-tight">
-                    {stat.value}
-                  </div>
-                  <div className="mt-1 text-sm font-medium text-gray-700 dark:text-gray-300">
-                    {stat.label}
-                  </div>
-                  <div className="mt-0.5 text-xs text-gray-500">
-                    {stat.description}
-                  </div>
-                </div>
+                <BentoGridItem
+                  key={stat.label}
+                  title={<span className="text-2xl md:text-3xl font-bold">{stat.value}</span>}
+                  description={
+                    <div>
+                      <div className="font-medium text-sm text-gray-700 dark:text-gray-300">{stat.label}</div>
+                      <div className="text-xs text-gray-500 mt-0.5">{stat.description}</div>
+                    </div>
+                  }
+                  icon={<Icon className="w-6 h-6 text-[#F0B90B]" />}
+                  className="text-center"
+                />
               );
             })}
-          </div>
+          </BentoGrid>
         </div>
       </section>
 
@@ -220,15 +224,12 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Standards */}
+      {/* Standards — BackgroundGradient cards */}
       <section className="py-20 px-6 bg-gray-50 dark:bg-[#0a0a0a]">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold mb-10">Open Standards</h2>
           <div className="grid md:grid-cols-2 gap-6">
-            <div className={cn(
-              "rounded-2xl border border-gray-200 dark:border-white/10 p-8",
-              "bg-white dark:bg-black"
-            )}>
+            <BackgroundGradient className="rounded-2xl p-8 bg-white dark:bg-black">
               <div className="flex items-center gap-3 mb-4">
                 <Shield className="w-6 h-6 text-[#F0B90B]" />
                 <h3 className="text-xl font-bold">ERC-8004</h3>
@@ -245,11 +246,8 @@ export default function AboutPage() {
                 <div>IdentityRegistry: 0x8004A169...</div>
                 <div>ReputationRegistry: 0x8004BAa1...</div>
               </div>
-            </div>
-            <div className={cn(
-              "rounded-2xl border border-gray-200 dark:border-white/10 p-8",
-              "bg-white dark:bg-black"
-            )}>
+            </BackgroundGradient>
+            <BackgroundGradient className="rounded-2xl p-8 bg-white dark:bg-black">
               <div className="flex items-center gap-3 mb-4">
                 <Eye className="w-6 h-6 text-[#F0B90B]" />
                 <h3 className="text-xl font-bold">W3AG</h3>
@@ -266,20 +264,17 @@ export default function AboutPage() {
               <div className="text-xs text-gray-400">
                 Level A (minimum) → Level AA (recommended) → Level AAA (enhanced)
               </div>
-            </div>
+            </BackgroundGradient>
           </div>
         </div>
       </section>
 
-      {/* Wallets + DeFi Tools */}
+      {/* Wallets + DeFi Tools — BackgroundGradient */}
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold mb-10">Beyond Agents</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <div className={cn(
-              "rounded-2xl border border-gray-200 dark:border-white/10 p-6",
-              "bg-white dark:bg-black"
-            )}>
+            <BackgroundGradient className="rounded-2xl p-6 bg-white dark:bg-black">
               <Wallet className="w-6 h-6 text-[#F0B90B] mb-4" />
               <h3 className="font-bold mb-2">Wallet Toolkit</h3>
               <p className="text-sm text-gray-500 mb-3">
@@ -288,11 +283,8 @@ export default function AboutPage() {
                 transactions, V3 keystores. All fully offline.
               </p>
               <span className="text-xs text-gray-400">348 tests passing</span>
-            </div>
-            <div className={cn(
-              "rounded-2xl border border-gray-200 dark:border-white/10 p-6",
-              "bg-white dark:bg-black"
-            )}>
+            </BackgroundGradient>
+            <BackgroundGradient className="rounded-2xl p-6 bg-white dark:bg-black">
               <Wrench className="w-6 h-6 text-[#F0B90B] mb-4" />
               <h3 className="font-bold mb-2">Dust Sweeper</h3>
               <p className="text-sm text-gray-500 mb-3">
@@ -301,11 +293,8 @@ export default function AboutPage() {
                 yields. MEV-protected through CoW Protocol batch auctions.
               </p>
               <span className="text-xs text-gray-400">8 chains supported</span>
-            </div>
-            <div className={cn(
-              "rounded-2xl border border-gray-200 dark:border-white/10 p-6",
-              "bg-white dark:bg-black"
-            )}>
+            </BackgroundGradient>
+            <BackgroundGradient className="rounded-2xl p-6 bg-white dark:bg-black">
               <Database className="w-6 h-6 text-[#F0B90B] mb-4" />
               <h3 className="font-bold mb-2">Market Data</h3>
               <p className="text-sm text-gray-500 mb-3">
@@ -314,7 +303,7 @@ export default function AboutPage() {
                 sources with AI sentiment analysis. Free API, no auth.
               </p>
               <span className="text-xs text-gray-400">25 req/min smart caching</span>
-            </div>
+            </BackgroundGradient>
           </div>
         </div>
       </section>
@@ -359,37 +348,32 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Tech Stack */}
+      {/* Tech Stack — HoverEffect */}
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold mb-10">Tech Stack</h2>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {techStack.map((tech) => (
-              <a
-                key={tech.name}
-                href={tech.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(
-                  "group rounded-2xl border border-gray-200 dark:border-white/10 p-5",
-                  "hover:border-[#F0B90B]/50 dark:hover:border-white/20 transition-all duration-200",
-                  "flex flex-col"
-                )}
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-medium text-sm">{tech.name}</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#F0B90B] transition-colors" />
-                </div>
-                <span className="text-xs text-gray-400">{tech.description}</span>
-              </a>
-            ))}
-          </div>
+          <HoverEffect
+            items={techStack.map((tech) => ({
+              title: tech.name,
+              description: tech.description,
+              link: tech.url,
+            }))}
+          />
         </div>
       </section>
 
-      {/* Open Source */}
-      <section className="py-20 px-6 bg-gray-50 dark:bg-[#0a0a0a]">
-        <div className="max-w-3xl mx-auto text-center">
+      {/* Open Source — SparklesCore bg + MovingBorder CTA */}
+      <section className="relative py-20 px-6 bg-gray-50 dark:bg-[#0a0a0a] overflow-hidden">
+        <div className="absolute inset-0 w-full h-full">
+          <SparklesCore
+            minSize={0.3}
+            maxSize={0.8}
+            particleDensity={30}
+            particleColor="#F0B90B"
+            className="w-full h-full"
+          />
+        </div>
+        <div className="max-w-3xl mx-auto text-center relative z-10">
           <Heart className="w-10 h-10 mx-auto mb-6 text-[#F0B90B]" />
           <h2 className="text-3xl font-bold mb-4">Open Source, Always</h2>
           <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed mb-8">
@@ -398,15 +382,20 @@ export default function AboutPage() {
             distribute.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="https://github.com/nirholas/bnb-chain-toolkit"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#F0B90B] text-black font-semibold hover:bg-[#F0B90B]/90 transition-colors"
+            <MovingBorder
+              as="a"
+              duration={3}
+              containerClassName="h-12"
+              className="bg-black dark:bg-white text-white dark:text-black font-semibold"
+              {...{
+                href: "https://github.com/nirholas/bnb-chain-toolkit",
+                target: "_blank",
+                rel: "noopener noreferrer",
+              } as any}
             >
-              <Github className="w-5 h-5" />
+              <Github className="w-5 h-5 mr-2" />
               View on GitHub
-            </a>
+            </MovingBorder>
             <Link
               to="/community"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-gray-300 dark:border-white/20 font-semibold hover:border-[#F0B90B]/50 transition-colors"

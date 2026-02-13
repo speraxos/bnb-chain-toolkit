@@ -10,6 +10,11 @@ import { cn } from "@/lib/utils";
 import { SparklesCore } from "@/components/ui/sparkles";
 import { BackgroundGradient } from "@/components/ui/background-gradient";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
+import { Spotlight } from "@/components/ui/spotlight";
+import { HoverEffect } from "@/components/ui/card-hover-effect";
+import { MovingBorder } from "@/components/ui/moving-border";
+import { CardContainer, CardBody, CardItem } from "@/components/ui/3d-card";
 import {
   Star,
   GitPullRequest,
@@ -135,6 +140,7 @@ export default function CommunityPage() {
     <main className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white">
       {/* Hero with Sparkles */}
       <section className="relative py-24 md:py-32 px-6 overflow-hidden">
+        <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" />
         <div className="absolute inset-0 w-full h-full">
           <SparklesCore
             minSize={0.4}
@@ -145,9 +151,10 @@ export default function CommunityPage() {
           />
         </div>
         <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            Join the Community
-          </h1>
+          <TextGenerateEffect
+            words="Join the Community"
+            className="text-4xl md:text-5xl font-bold tracking-tight"
+          />
           <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             BNB Chain AI Toolkit is built in the open. 72+ agents, 6 MCP
             servers, 900+ tools — every contribution makes the ecosystem
@@ -215,82 +222,72 @@ export default function CommunityPage() {
         </div>
       </section>
 
-      {/* Contributors */}
+      {/* Contributors — 3D Card */}
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold mb-10">Contributors</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {topContributors.map((contributor) => (
-              <a
-                key={contributor.name}
-                href={contributor.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(
-                  "flex items-center gap-4 rounded-2xl border border-gray-200 dark:border-white/10 p-5",
-                  "hover:border-[#F0B90B]/40 dark:hover:border-white/20 transition-all duration-200"
-                )}
-              >
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#F0B90B] to-yellow-600 flex items-center justify-center text-black font-bold text-lg shrink-0">
-                  {contributor.avatar}
-                </div>
-                <div>
-                  <div className="font-semibold">{contributor.name}</div>
-                  <div className="text-sm text-gray-500">{contributor.role}</div>
-                </div>
-              </a>
+              <CardContainer key={contributor.name} containerClassName="py-0">
+                <CardBody className="relative group/card rounded-2xl border border-gray-200 dark:border-white/10 p-5 bg-white dark:bg-black h-full">
+                  <CardItem translateZ="40">
+                    <a
+                      href={contributor.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-4"
+                    >
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#F0B90B] to-yellow-600 flex items-center justify-center text-black font-bold text-lg shrink-0">
+                        {contributor.avatar}
+                      </div>
+                      <div>
+                        <div className="font-semibold">{contributor.name}</div>
+                        <div className="text-sm text-gray-500">{contributor.role}</div>
+                      </div>
+                    </a>
+                  </CardItem>
+                </CardBody>
+              </CardContainer>
             ))}
-            <div
-              className={cn(
-                "flex items-center justify-center rounded-2xl border border-dashed border-gray-300 dark:border-white/10 p-5",
-                "text-gray-400 dark:text-gray-600"
-              )}
-            >
-              <div className="text-center">
-                <Users className="w-8 h-8 mx-auto mb-2" />
-                <p className="text-sm">Your name here</p>
-              </div>
-            </div>
+            <CardContainer containerClassName="py-0">
+              <CardBody className="relative group/card flex items-center justify-center rounded-2xl border border-dashed border-gray-300 dark:border-white/10 p-5 text-gray-400 dark:text-gray-600 h-full">
+                <CardItem translateZ="30">
+                  <div className="text-center">
+                    <Users className="w-8 h-8 mx-auto mb-2" />
+                    <p className="text-sm">Your name here</p>
+                  </div>
+                </CardItem>
+              </CardBody>
+            </CardContainer>
           </div>
         </div>
       </section>
 
-      {/* What Needs Help — expanded with difficulty levels */}
+      {/* What Needs Help — HoverEffect + MovingBorder CTA */}
       <section className="py-20 px-6 bg-gray-50 dark:bg-[#0a0a0a]">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold mb-4">What Needs Help</h2>
           <p className="text-sm text-gray-500 mb-8">
             Good first issues and advanced tasks — pick what fits your skills.
           </p>
-          <div className="space-y-3">
-            {helpNeeded.map((item) => (
-              <div
-                key={item.title}
-                className={cn(
-                  "flex items-center justify-between gap-3 rounded-xl border border-gray-200 dark:border-white/10 p-4",
-                  "bg-white dark:bg-black"
-                )}
-              >
-                <span className="text-sm flex-1">{item.title}</span>
-                <span className={cn("px-2 py-0.5 text-xs rounded-full font-medium shrink-0", difficultyColors[item.difficulty])}>
-                  {item.difficulty}
-                </span>
-                <span className="px-2.5 py-0.5 text-xs rounded-full bg-[#F0B90B]/10 text-[#F0B90B] font-medium shrink-0">
-                  {item.label}
-                </span>
-              </div>
-            ))}
-          </div>
+          <HoverEffect
+            items={helpNeeded.map((item) => ({
+              title: `${item.title}`,
+              description: `${item.difficulty} • ${item.label}`,
+              link: "https://github.com/nirholas/bnb-chain-toolkit/issues",
+            }))}
+          />
           <div className="mt-10 text-center">
-            <a
-              href="https://github.com/nirholas/bnb-chain-toolkit/blob/main/CONTRIBUTING.md"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#F0B90B] text-black font-semibold hover:bg-[#F0B90B]/90 transition-colors"
+            <MovingBorder
+              as="a"
+              duration={3}
+              containerClassName="h-12"
+              className="bg-[#F0B90B] text-black font-semibold"
+              {...{ href: "https://github.com/nirholas/bnb-chain-toolkit/blob/main/CONTRIBUTING.md", target: "_blank", rel: "noopener noreferrer" } as any}
             >
-              <BookOpen className="w-5 h-5" />
+              <BookOpen className="w-5 h-5 mr-2" />
               Read Contributing Guide
-            </a>
+            </MovingBorder>
           </div>
         </div>
       </section>

@@ -57,6 +57,9 @@ const ContributePage = lazy(() => import('./pages/ContributePage'));
 const ExplorePage = lazy(() => import('./pages/ExplorePage'));
 const SharedProjectPage = lazy(() => import('./pages/SharedProjectPage'));
 const MarketsPage = lazy(() => import('./pages/MarketsPage'));
+const MCPServersPage = lazy(() => import('./pages/MCPServersPage'));
+const MCPServerPage = lazy(() => import('./pages/MCPServerPage'));
+const ToolCatalogPage = lazy(() => import('./pages/ToolCatalogPage'));
 
 // Innovation pages (experimental features - lazy loaded)
 const AICodeWhispererPage = lazy(() => import('./pages/innovation/AICodeWhispererPage'));
@@ -163,6 +166,9 @@ function AppContent() {
                   <Route path="/terms" element={<TermsPage />} />
                   <Route path="/contribute" element={<ContributePage />} />
                   <Route path="/explore" element={<ExplorePage />} />
+                  <Route path="/mcp" element={<MCPServersPage />} />
+                  <Route path="/mcp/:serverId" element={<MCPServerPage />} />
+                  <Route path="/tools" element={<ToolCatalogPage />} />
                   <Route path="/shared/:token" element={<SharedProjectPage />} />
                 </Routes>
               </Suspense>
